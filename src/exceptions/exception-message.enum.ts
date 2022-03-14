@@ -1,0 +1,15 @@
+export enum ExceptionMessage {
+  Authentication = 'Email or password not found.',
+  RefreshTokenRevoked = 'Your refresh token is revoked.',
+  RefreshTokenTempered = 'Your refresh token is invalid.',
+  AccessTokenExpired = 'Your access token is expired.',
+  UserExist = 'User with the same email exists in the database. Please try another email.',
+  PasswordNotProvided = 'Password should be provided to register new user.',
+  EmailNotProvided = 'Email should be provided to register new user.',
+  WeakPassword = 'The password is too weak. Your password should contain at least 1 upper case letter, 1 lower case letter and 1 number or special character',
+  DeleteOwnAccount = 'You should not be deleting your own account!',
+  InvalidImageData = 'Image data received is invalid.',
+  AccountNotExist = 'Your account does not exist. Please try again.',
+  UserNotFound = 'User not found. Please try again.',
+  CannotDelete = 'Unable to delete this entry. Please try again.',
+}
