@@ -21,7 +21,6 @@ import { Roles } from './roles';
 import { RequirePermissions } from './permissions.decorator';
 import { PermissionsGuard } from './permissions.guard';
 import { JwtAuthGuard } from './jwt-auth/jwt-auth.guard';
-import cookieSettings from './cookie-settings';
 import { JwtExceptionFilter } from 'src/filters/jwt-exception.filter';
 import { JwtResetPasswordGuard } from './jwt-reset-password/jwt-reset-password.guard';
 import { User as UserSchema } from 'src/schemas/user.schema';
@@ -38,8 +37,8 @@ export class AuthController {
   @UseFilters(JwtExceptionFilter)
   async login(@Req() req, @Res({ passthrough: true }) response: Response) {
     const reqUser: UserSchema = req.user;
-    const [cookies, user] = await this.authService.login(reqUser);
-    return cookies;
+    const [tokens, user] = await this.authService.login(reqUser);
+    return tokens;
   }
 
   @Post('refresh')
