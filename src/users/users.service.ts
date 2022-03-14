@@ -63,7 +63,7 @@ export class UsersService {
 
   async deleteOneUserByUserId(
     userId: mongoose.Types.ObjectId,
-    authenticatedUserId: string,
+    authenticatedUserId: string | undefined | null,
   ): Promise<User> {
     // prevent user from deleted their own account when they are authenticated
     if (authenticatedUserId === userId.toString()) {

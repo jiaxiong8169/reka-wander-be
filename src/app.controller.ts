@@ -10,12 +10,12 @@ import { User as UserSchema } from './schemas/user.schema';
 import { UsersService } from './users/users.service';
 
 @Controller()
-@UseGuards(JwtAuthGuard, PermissionsGuard)
 export class AppController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('profile')
   @RequirePermissions(Permission.ReadProfile)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
   getProfile(@User() user: DecodedJwtPayload): Promise<UserSchema> {
     const { id } = user;
     return this.usersService.findOneUserById(id);

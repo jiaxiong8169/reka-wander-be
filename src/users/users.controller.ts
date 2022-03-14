@@ -9,7 +9,7 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
+  // UseGuards,
 } from '@nestjs/common';
 import { Permission } from 'src/auth/permission.enum';
 import { RequirePermissions } from 'src/auth/permissions.decorator';
@@ -18,11 +18,12 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { UsersService } from './users.service';
 import * as mongoose from 'mongoose';
 import { CreateUserDto } from 'src/dto/create-user.dto';
-import { PermissionsGuard } from 'src/auth/permissions.guard';
-import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
+// import { PermissionsGuard } from 'src/auth/permissions.guard';
+// import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard, PermissionsGuard)
+// TODO: use guards to implement auth
+// @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
@@ -72,10 +73,8 @@ export class UsersController {
     @User() reqUser,
     @Param('userId') userId: mongoose.Types.ObjectId,
   ) {
-    const { id, role } = reqUser;
-    let query = {};
     return this.usersService
-      .deleteOneUserByUserId(userId, reqUser.id)
+      .deleteOneUserByUserId(userId, reqUser?.id)
       .catch((e: any) => {
         throw new NotFoundException(e.message);
       });
