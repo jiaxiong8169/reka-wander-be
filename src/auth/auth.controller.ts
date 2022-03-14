@@ -21,7 +21,6 @@ import { Roles } from './roles';
 import { RequirePermissions } from './permissions.decorator';
 import { PermissionsGuard } from './permissions.guard';
 import { JwtAuthGuard } from './jwt-auth/jwt-auth.guard';
-import { JwtExceptionFilter } from 'src/filters/jwt-exception.filter';
 import { JwtResetPasswordGuard } from './jwt-reset-password/jwt-reset-password.guard';
 import { User as UserSchema } from 'src/schemas/user.schema';
 import { DecodedJwtPayload } from 'src/dto/payloads.dto';
@@ -32,9 +31,8 @@ import { User } from 'src/decorators/user.decorator';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
-  @UseFilters(JwtExceptionFilter)
+  @UseGuards(LocalAuthGuard)
   async login(@Req() req, @Res({ passthrough: true }) response: Response) {
     const reqUser: UserSchema = req.user;
     const [tokens, user] = await this.authService.login(reqUser);
@@ -42,7 +40,6 @@ export class AuthController {
   }
 
   @Post('refresh')
-  @UseFilters(JwtExceptionFilter)
   @UseGuards(JwtRefreshGuard)
   async refresh(@User() user, @Body() req: { refresh_token: string }) {
     const reqUser: DecodedJwtPayload = user;
