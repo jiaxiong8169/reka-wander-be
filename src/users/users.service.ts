@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Body, Controller } from '@nestjs/common';
+import { Body } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { CreateUserDto } from 'src/dto/create-user.dto';
@@ -111,7 +111,7 @@ export class UsersService {
     return query.exec();
   }
 
-  async getUsersResultCount(params: SearchQueryDto): Promise<Number> {
+  async getUsersResultCount(params: SearchQueryDto): Promise<number> {
     const { filter = {} } = params;
     const effectiveFilter = processSearchAndFilter(
       filter,
@@ -142,7 +142,7 @@ export class UsersService {
 
   checkEmailAndPasswordStrength(
     userDto: CreateUserDto | UpdateUserDto,
-    strictChecking: boolean = false,
+    strictChecking = false,
   ): void {
     // `strictChecking` - if true, will check if the field exists (not undefined)
     const { email, password } = userDto;

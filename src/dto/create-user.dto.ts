@@ -1,5 +1,3 @@
-import * as mongoose from 'mongoose';
-
 export class CreateUserDto {
   name?: string;
 
