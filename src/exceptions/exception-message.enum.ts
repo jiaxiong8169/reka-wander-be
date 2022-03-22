@@ -12,4 +12,6 @@ export enum ExceptionMessage {
   AccountNotExist = 'Your account does not exist. Please try again.',
   UserNotFound = 'User not found. Please try again.',
   CannotDelete = 'Unable to delete this entry. Please try again.',
+  CommentNotFound = 'Comment not found. Please try again.',
+  CommentExist = 'Comment already exists.',
 }

@@ -24,6 +24,7 @@ export class UsersService {
       .findOne({
         _id: userId,
       })
+      .populate('comments')
       .orFail(new Error(ExceptionMessage.UserNotFound));
   }
 
@@ -86,6 +87,7 @@ export class UsersService {
       .findOne({
         email,
       })
+      .populate('comments')
       .orFail(new Error(ExceptionMessage.UserNotFound));
   }
 
@@ -97,7 +99,7 @@ export class UsersService {
       filter,
       SEARCH_FIELDS['users'],
     );
-    let query = this.userModel.find(effectiveFilter);
+    let query = this.userModel.find(effectiveFilter).populate('comments');
     if (sort) {
       query = query.sort(sort);
     }

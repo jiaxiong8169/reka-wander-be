@@ -8,4 +8,6 @@ export class UpdateUserDto {
   password?: string;
 
   phoneNumber?: string;
+
+  comments?: string[];
 }
