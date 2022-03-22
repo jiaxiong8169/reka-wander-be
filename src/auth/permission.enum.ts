@@ -6,4 +6,10 @@ export enum Permission {
   UpdateUser = 'updateUser',
   DeleteUser = 'deleteUser',
   ReadUser = 'readUser',
+  // comments
+  CreateComment = 'createComment',
+  ReadAllComments = 'readAllComments',
+  UpdateComment = 'updateComment',
+  DeleteComment = 'deleteComment',
+  ReadComment = 'readComment',
 }

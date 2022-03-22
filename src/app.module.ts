@@ -7,9 +7,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
+    CommentsModule,
     AuthModule,
     UsersModule,
     ConfigModule.forRoot({
