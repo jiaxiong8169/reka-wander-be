@@ -8,12 +8,24 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
 import { CommentsModule } from './comments/comments.module';
+import { TripsModule } from './trips/trips.module';
+import { RatesModule } from './rates/rates.module';
+import { InterestsModule } from './interests/interests.module';
+import { AttractionsModule } from './attractions/attractions.module';
+import { VictualsModule } from './victuals/victuals.module';
+import { AccommodationsModule } from './accommodations/accommodations.module';
 
 @Module({
   imports: [
-    CommentsModule,
     AuthModule,
     UsersModule,
+    CommentsModule,
+    TripsModule,
+    RatesModule,
+    InterestsModule,
+    AttractionsModule,
+    VictualsModule,
+    AccommodationsModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
