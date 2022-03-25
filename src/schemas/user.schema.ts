@@ -51,9 +51,6 @@ export class User {
 
   @Prop()
   currentHashedRefreshToken: string;
-
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }])
-  comments: mongoose.Schema.Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
