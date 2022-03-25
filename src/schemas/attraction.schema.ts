@@ -1,7 +1,7 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
-export type AttractionsDocument = Attractions & mongoose.Document;
+export type AttractionDocument = Attraction & mongoose.Document;
 
 @Schema({
   id: true,
@@ -14,7 +14,7 @@ export type AttractionsDocument = Attractions & mongoose.Document;
     },
   },
 })
-export class Attractions {
+export class Attraction {
   _id: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
@@ -23,11 +23,13 @@ export class Attractions {
   @Prop({ required: true })
   city: string;
 
-  @Prop({ index: '2dsphere' })
-  loc: {
-    type: { type: string };
-    coordinates: [number];
-  };
+  @Prop(
+    raw({
+      type: { type: String },
+      coordinates: [Number],
+    }),
+  )
+  loc: Record<string, any>;
 
   @Prop()
   rateCount: number;
@@ -41,15 +43,17 @@ export class Attractions {
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }])
   comments: mongoose.Schema.Types.ObjectId[];
 
-  @Prop()
-  recommenderFeatures: {
-    maxPax: number;
-    minBudget: number;
-    interests: string[];
-    kids: boolean;
-    rentCar: boolean;
-    rentHomestay: false;
-  };
+  @Prop(
+    raw({
+      maxPax: Number,
+      minBudget: Number,
+      interests: [String],
+      kids: Boolean,
+      rentCar: Boolean,
+      rentHomestay: Boolean,
+    }),
+  )
+  recommenderFeatures: Record<string, any>;
 
   @Prop()
   durationHrs: number;
@@ -76,4 +80,4 @@ export class Attractions {
   likes: number;
 }
 
-export const AttractionsSchema = SchemaFactory.createForClass(Attractions);
+export const AttractionSchema = SchemaFactory.createForClass(Attraction);

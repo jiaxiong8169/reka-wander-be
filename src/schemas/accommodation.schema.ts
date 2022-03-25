@@ -1,7 +1,7 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
-export type VictualsDocument = Victuals & mongoose.Document;
+export type AccommodationDocument = Accommodation & mongoose.Document;
 
 @Schema({
   id: true,
@@ -14,7 +14,7 @@ export type VictualsDocument = Victuals & mongoose.Document;
     },
   },
 })
-export class Victuals {
+export class Accommodation {
   _id: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
@@ -23,11 +23,13 @@ export class Victuals {
   @Prop({ required: true })
   city: string;
 
-  @Prop({ index: '2dsphere' })
-  loc: {
-    type: { type: string };
-    coordinates: [number];
-  };
+  @Prop(
+    raw({
+      type: { type: String },
+      coordinates: [Number],
+    }),
+  )
+  loc: Record<string, any>;
 
   @Prop()
   rateCount: number;
@@ -41,15 +43,17 @@ export class Victuals {
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }])
   comments: mongoose.Schema.Types.ObjectId[];
 
-  @Prop()
-  recommenderFeatures: {
-    maxPax: number;
-    minBudget: number;
-    interests: string[];
-    kids: boolean;
-    rentCar: boolean;
-    rentHomestay: false;
-  };
+  @Prop(
+    raw({
+      maxPax: Number,
+      minBudget: Number,
+      interests: [String],
+      kids: Boolean,
+      rentCar: Boolean,
+      rentHomestay: Boolean,
+    }),
+  )
+  recommenderFeatures: Record<string, any>;
 
   @Prop()
   durationHrs: number;
@@ -76,4 +80,4 @@ export class Victuals {
   likes: number;
 }
 
-export const VictualsSchema = SchemaFactory.createForClass(Victuals);
+export const AccommodationSchema = SchemaFactory.createForClass(Accommodation);
