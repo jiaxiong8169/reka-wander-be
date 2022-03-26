@@ -36,7 +36,7 @@ export class AuthController {
   async login(@Req() req, @Res({ passthrough: true }) response: Response) {
     const reqUser: UserSchema = req.user;
     const [tokens, user] = await this.authService.login(reqUser);
-    return tokens;
+    return { tokens, user };
   }
 
   @Post('refresh')
