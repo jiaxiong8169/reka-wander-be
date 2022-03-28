@@ -17,8 +17,8 @@ export type RateDocument = Rate & mongoose.Document;
 export class Rate {
   _id: mongoose.Schema.Types.ObjectId;
 
-  @Prop({ required: true })
-  userId: string;
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }])
+  userId: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
   spotId: string;
