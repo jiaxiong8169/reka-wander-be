@@ -17,11 +17,22 @@ import { VictualsService } from './victuals.service';
 import * as mongoose from 'mongoose';
 import { VictualDto } from 'src/dto/victual.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 
 @ApiTags('victuals')
 @Controller('victuals')
 export class VictualsController {
   constructor(private victualsService: VictualsService) {}
+
+  @Get('nearby')
+  @RequirePermissions(Permission.ReadAllVictuals)
+  async getNearbyVictuals(@Query() query: NearbyParamsDto) {
+    const nearbyVictuals = await this.victualsService.findNearbyVictuals(query);
+    return {
+      data: nearbyVictuals,
+      total: nearbyVictuals.length,
+    };
+  }
 
   @Get()
   @RequirePermissions(Permission.ReadAllVictuals)

@@ -8,6 +8,7 @@ import { Attraction, AttractionDocument } from 'src/schemas/attraction.schema';
 import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 
 @Injectable()
 export class AttractionsService {
@@ -80,5 +81,23 @@ export class AttractionsService {
       SEARCH_FIELDS['attractions'],
     );
     return this.attractionModel.find(effectiveFilter).countDocuments();
+  }
+
+  async findNearbyAttractions(params: NearbyParamsDto): Promise<Attraction[]> {
+    const { long, lat, distance } = params;
+    // find nearby with nearSphere
+    const query = this.attractionModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [long, lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: distance ? distance : 5000, // default 5000 meters
+        },
+      },
+    });
+    return query.exec();
   }
 }

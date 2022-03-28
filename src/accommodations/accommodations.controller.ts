@@ -17,11 +17,23 @@ import { AccommodationsService } from './accommodations.service';
 import * as mongoose from 'mongoose';
 import { AccommodationDto } from 'src/dto/accommodation.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 
 @ApiTags('accommodations')
 @Controller('accommodations')
 export class AccommodationsController {
   constructor(private accommodationsService: AccommodationsService) {}
+
+  @Get('nearby')
+  @RequirePermissions(Permission.ReadAllAccommodations)
+  async getNearbyAccommodations(@Query() query: NearbyParamsDto) {
+    const nearbyAccommodations =
+      await this.accommodationsService.findNearbyAccommodations(query);
+    return {
+      data: nearbyAccommodations,
+      total: nearbyAccommodations.length,
+    };
+  }
 
   @Get()
   @RequirePermissions(Permission.ReadAllAccommodations)
