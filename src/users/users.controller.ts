@@ -18,9 +18,11 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { UsersService } from './users.service';
 import * as mongoose from 'mongoose';
 import { CreateUserDto } from 'src/dto/create-user.dto';
+import { ApiTags } from '@nestjs/swagger';
 // import { PermissionsGuard } from 'src/auth/permissions.guard';
 // import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
 
+@ApiTags('users')
 @Controller('users')
 // TODO: use guards to implement auth
 // @UseGuards(JwtAuthGuard, PermissionsGuard)

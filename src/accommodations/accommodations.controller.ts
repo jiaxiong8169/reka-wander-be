@@ -16,7 +16,9 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { AccommodationsService } from './accommodations.service';
 import * as mongoose from 'mongoose';
 import { AccommodationDto } from 'src/dto/accommodation.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('accommodations')
 @Controller('accommodations')
 export class AccommodationsController {
   constructor(private accommodationsService: AccommodationsService) {}

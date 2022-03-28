@@ -35,7 +35,7 @@ $ npm install
 ## Running the app
 
 ```bash
-# development
+# development (remove the dist folder if having issues generating API specs)
 $ npm run start
 
 # watch mode

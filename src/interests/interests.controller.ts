@@ -16,7 +16,9 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { InterestsService } from './interests.service';
 import * as mongoose from 'mongoose';
 import { InterestDto } from 'src/dto/interest.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('interests')
 @Controller('interests')
 export class InterestsController {
   constructor(private interestsService: InterestsService) {}

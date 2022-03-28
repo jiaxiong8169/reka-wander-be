@@ -16,7 +16,9 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { RatesService } from './rates.service';
 import * as mongoose from 'mongoose';
 import { RateDto } from 'src/dto/rate.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('rates')
 @Controller('rates')
 export class RatesController {
   constructor(private ratesService: RatesService) {}

@@ -26,7 +26,9 @@ import { User as UserSchema } from 'src/schemas/user.schema';
 import { DecodedJwtPayload } from 'src/dto/payloads.dto';
 import * as mongoose from 'mongoose';
 import { User } from 'src/decorators/user.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}

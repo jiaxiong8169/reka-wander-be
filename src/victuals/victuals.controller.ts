@@ -16,7 +16,9 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { VictualsService } from './victuals.service';
 import * as mongoose from 'mongoose';
 import { VictualDto } from 'src/dto/victual.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('victuals')
 @Controller('victuals')
 export class VictualsController {
   constructor(private victualsService: VictualsService) {}
