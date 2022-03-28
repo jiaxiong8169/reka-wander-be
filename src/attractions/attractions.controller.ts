@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  // UseGuards,
 } from '@nestjs/common';
 import { Permission } from 'src/auth/permission.enum';
 import { RequirePermissions } from 'src/auth/permissions.decorator';
@@ -18,11 +19,31 @@ import * as mongoose from 'mongoose';
 import { AttractionDto } from 'src/dto/attraction.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
+import { RateDto } from 'src/dto/rate.dto';
+import { User } from 'src/decorators/user.decorator';
+// import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
+// import { PermissionsGuard } from 'src/auth/permissions.guard';
 
 @ApiTags('attractions')
 @Controller('attractions')
+// @UseGuards(JwtAuthGuard, PermissionsGuard)
 export class AttractionsController {
   constructor(private attractionsService: AttractionsService) {}
+
+  @Post('rate')
+  @RequirePermissions(Permission.CreateRate)
+  async rateAttraction(@Body() req: RateDto, @User() reqUser) {
+    req.timestamp = new Date();
+    req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
+    // request must be associated with user ID
+    if (!req.userId) throw new BadRequestException('Invalid User ID');
+    try {
+      const attraction = await this.attractionsService.rateAttraction(req);
+      return attraction;
+    } catch (e: any) {
+      throw new BadRequestException(e.message);
+    }
+  }
 
   @Get('nearby')
   @RequirePermissions(Permission.ReadAllAttractions)
