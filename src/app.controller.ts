@@ -1,4 +1,5 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from './auth/jwt-auth/jwt-auth.guard';
 import { Permission } from './auth/permission.enum';
 import { RequirePermissions } from './auth/permissions.decorator';
@@ -8,6 +9,7 @@ import { DecodedJwtPayload } from './dto/payloads.dto';
 import { User as UserSchema } from './schemas/user.schema';
 import { UsersService } from './users/users.service';
 
+@ApiTags('profile')
 @Controller()
 export class AppController {
   constructor(private readonly usersService: UsersService) {}

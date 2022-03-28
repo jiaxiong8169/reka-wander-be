@@ -1,12 +1,16 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Loc } from './loc.dto';
+import { RecommenderFeatures } from './recommender-features.dto';
+
 export class AccommodationDto {
   name: string;
 
   city: string;
 
-  loc: {
-    type: { type: string };
-    coordinates: [number];
-  };
+  @ApiProperty({
+    enum: Loc,
+  })
+  loc: Loc;
 
   rateCount: number;
 
@@ -16,14 +20,10 @@ export class AccommodationDto {
 
   comments: string[];
 
-  recommenderFeatures: {
-    maxPax: number;
-    minBudget: number;
-    interests: string[];
-    kids: boolean;
-    rentCar: boolean;
-    rentHomestay: false;
-  };
+  @ApiProperty({
+    enum: RecommenderFeatures,
+  })
+  recommenderFeatures: RecommenderFeatures;
 
   durationHrs: number;
 

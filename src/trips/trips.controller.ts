@@ -16,7 +16,9 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { TripsService } from './trips.service';
 import * as mongoose from 'mongoose';
 import { TripDto } from 'src/dto/trip.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('trips')
 @Controller('trips')
 export class TripsController {
   constructor(private tripsService: TripsService) {}

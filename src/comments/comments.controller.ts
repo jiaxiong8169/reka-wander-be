@@ -16,7 +16,9 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { CommentsService } from './comments.service';
 import * as mongoose from 'mongoose';
 import { CommentDto } from 'src/dto/comment.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('comments')
 @Controller('comments')
 export class CommentsController {
   constructor(private commentsService: CommentsService) {}
