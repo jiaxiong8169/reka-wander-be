@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Body } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { AttractionDto } from 'src/dto/attraction.dto';
 import { ExceptionMessage } from 'src/exceptions/exception-message.enum';
@@ -9,12 +9,17 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
+import { Rate, RateDocument } from 'src/schemas/rate.schema';
+import { RateDto } from 'src/dto/rate.dto';
 
 @Injectable()
 export class AttractionsService {
   constructor(
     @InjectModel(Attraction.name)
     private attractionModel: mongoose.Model<AttractionDocument>,
+    @InjectModel(Rate.name)
+    private rateModel: mongoose.Model<RateDocument>,
+    @InjectConnection() private readonly connection: mongoose.Connection,
   ) {}
 
   async findOneAttractionById(
@@ -99,5 +104,52 @@ export class AttractionsService {
       },
     });
     return query.exec();
+  }
+
+  async rateAttraction(@Body() rateDto: RateDto) {
+    const session = await this.connection.startSession();
+
+    await session.withTransaction(async () => {
+      // check if attraction exists
+      const attraction = await this.attractionModel.findOne({
+        _id: rateDto.spotId,
+      });
+      if (!attraction) {
+        throw new BadRequestException('Invalid Attraction');
+      }
+      // get rate document if exists
+      const rate = await this.rateModel.findOne({
+        spotId: rateDto.spotId,
+        userId: rateDto.userId,
+      });
+      // if exists, update rate document, rateCount and rateValue
+      if (rate) {
+        const diff = rateDto.value - rate.value;
+        // update rate document
+        await this.rateModel.updateOne(
+          { _id: rate.id },
+          { $inc: { value: diff } },
+        );
+
+        // update attraction
+        return await this.attractionModel.updateOne(
+          { _id: rateDto.spotId },
+          { $inc: { rateValue: diff } },
+        );
+      } else {
+        // if not exists, create rate document, rateCount and rateValue
+        // create rate document
+        const createdRate = new this.rateModel(rateDto);
+        await createdRate.save();
+
+        // update attraction
+        return await this.attractionModel.updateOne(
+          { _id: rateDto.spotId },
+          { $inc: { rateCount: 1, rateValue: rateDto.value } },
+        );
+      }
+    });
+
+    session.endSession();
   }
 }

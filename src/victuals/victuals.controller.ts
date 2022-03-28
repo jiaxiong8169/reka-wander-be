@@ -18,11 +18,28 @@ import * as mongoose from 'mongoose';
 import { VictualDto } from 'src/dto/victual.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
+import { RateDto } from 'src/dto/rate.dto';
+import { User } from 'src/decorators/user.decorator';
 
 @ApiTags('victuals')
 @Controller('victuals')
 export class VictualsController {
   constructor(private victualsService: VictualsService) {}
+
+  @Post('rate')
+  @RequirePermissions(Permission.CreateRate)
+  async rateVictual(@Body() req: RateDto, @User() reqUser) {
+    req.timestamp = new Date();
+    req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
+    // request must be associated with user ID
+    if (!req.userId) throw new BadRequestException('Invalid User ID');
+    try {
+      const victual = await this.victualsService.rateVictual(req);
+      return victual;
+    } catch (e: any) {
+      throw new BadRequestException(e.message);
+    }
+  }
 
   @Get('nearby')
   @RequirePermissions(Permission.ReadAllVictuals)

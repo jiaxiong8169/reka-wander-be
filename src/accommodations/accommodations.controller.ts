@@ -18,11 +18,30 @@ import * as mongoose from 'mongoose';
 import { AccommodationDto } from 'src/dto/accommodation.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
+import { RateDto } from 'src/dto/rate.dto';
+import { User } from 'src/decorators/user.decorator';
 
 @ApiTags('accommodations')
 @Controller('accommodations')
 export class AccommodationsController {
   constructor(private accommodationsService: AccommodationsService) {}
+
+  @Post('rate')
+  @RequirePermissions(Permission.CreateRate)
+  async rateAccommodation(@Body() req: RateDto, @User() reqUser) {
+    req.timestamp = new Date();
+    req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
+    // request must be associated with user ID
+    if (!req.userId) throw new BadRequestException('Invalid User ID');
+    try {
+      const accommodation = await this.accommodationsService.rateAccommodation(
+        req,
+      );
+      return accommodation;
+    } catch (e: any) {
+      throw new BadRequestException(e.message);
+    }
+  }
 
   @Get('nearby')
   @RequirePermissions(Permission.ReadAllAccommodations)

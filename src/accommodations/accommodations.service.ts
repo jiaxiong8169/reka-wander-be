@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Body } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { AccommodationDto } from 'src/dto/accommodation.dto';
 import { ExceptionMessage } from 'src/exceptions/exception-message.enum';
@@ -12,12 +12,17 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
+import { Rate, RateDocument } from 'src/schemas/rate.schema';
+import { RateDto } from 'src/dto/rate.dto';
 
 @Injectable()
 export class AccommodationsService {
   constructor(
     @InjectModel(Accommodation.name)
     private accommodationModel: mongoose.Model<AccommodationDocument>,
+    @InjectModel(Rate.name)
+    private rateModel: mongoose.Model<RateDocument>,
+    @InjectConnection() private readonly connection: mongoose.Connection,
   ) {}
 
   async findOneAccommodationById(
@@ -112,5 +117,52 @@ export class AccommodationsService {
       },
     });
     return query.exec();
+  }
+
+  async rateAccommodation(@Body() rateDto: RateDto) {
+    const session = await this.connection.startSession();
+
+    await session.withTransaction(async () => {
+      // check if accommodation exists
+      const accommodation = await this.accommodationModel.findOne({
+        _id: rateDto.spotId,
+      });
+      if (!accommodation) {
+        throw new BadRequestException('Invalid Accommodation');
+      }
+      // get rate document if exists
+      const rate = await this.rateModel.findOne({
+        spotId: rateDto.spotId,
+        userId: rateDto.userId,
+      });
+      // if exists, update rate document, rateCount and rateValue
+      if (rate) {
+        const diff = rateDto.value - rate.value;
+        // update rate document
+        await this.rateModel.updateOne(
+          { _id: rate.id },
+          { $inc: { value: diff } },
+        );
+
+        // update accommodation
+        return await this.accommodationModel.updateOne(
+          { _id: rateDto.spotId },
+          { $inc: { rateValue: diff } },
+        );
+      } else {
+        // if not exists, create rate document, rateCount and rateValue
+        // create rate document
+        const createdRate = new this.rateModel(rateDto);
+        await createdRate.save();
+
+        // update accommodation
+        return await this.accommodationModel.updateOne(
+          { _id: rateDto.spotId },
+          { $inc: { rateCount: 1, rateValue: rateDto.value } },
+        );
+      }
+    });
+
+    session.endSession();
   }
 }

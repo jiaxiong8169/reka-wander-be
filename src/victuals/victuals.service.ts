@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Body } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { VictualDto } from 'src/dto/victual.dto';
 import { ExceptionMessage } from 'src/exceptions/exception-message.enum';
@@ -9,12 +9,17 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
+import { RateDto } from 'src/dto/rate.dto';
+import { Rate, RateDocument } from 'src/schemas/rate.schema';
 
 @Injectable()
 export class VictualsService {
   constructor(
     @InjectModel(Victual.name)
     private victualModel: mongoose.Model<VictualDocument>,
+    @InjectModel(Rate.name)
+    private rateModel: mongoose.Model<RateDocument>,
+    @InjectConnection() private readonly connection: mongoose.Connection,
   ) {}
 
   async findOneVictualById(
@@ -99,5 +104,52 @@ export class VictualsService {
       },
     });
     return query.exec();
+  }
+
+  async rateVictual(@Body() rateDto: RateDto) {
+    const session = await this.connection.startSession();
+
+    await session.withTransaction(async () => {
+      // check if victual exists
+      const victual = await this.victualModel.findOne({
+        _id: rateDto.spotId,
+      });
+      if (!victual) {
+        throw new BadRequestException('Invalid Victual');
+      }
+      // get rate document if exists
+      const rate = await this.rateModel.findOne({
+        spotId: rateDto.spotId,
+        userId: rateDto.userId,
+      });
+      // if exists, update rate document, rateCount and rateValue
+      if (rate) {
+        const diff = rateDto.value - rate.value;
+        // update rate document
+        await this.rateModel.updateOne(
+          { _id: rate.id },
+          { $inc: { value: diff } },
+        );
+
+        // update victual
+        return await this.victualModel.updateOne(
+          { _id: rateDto.spotId },
+          { $inc: { rateValue: diff } },
+        );
+      } else {
+        // if not exists, create rate document, rateCount and rateValue
+        // create rate document
+        const createdRate = new this.rateModel(rateDto);
+        await createdRate.save();
+
+        // update victual
+        return await this.victualModel.updateOne(
+          { _id: rateDto.spotId },
+          { $inc: { rateCount: 1, rateValue: rateDto.value } },
+        );
+      }
+    });
+
+    session.endSession();
   }
 }
