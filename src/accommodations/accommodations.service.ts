@@ -11,6 +11,7 @@ import {
 import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 
 @Injectable()
 export class AccommodationsService {
@@ -91,5 +92,25 @@ export class AccommodationsService {
       SEARCH_FIELDS['accommodations'],
     );
     return this.accommodationModel.find(effectiveFilter).countDocuments();
+  }
+
+  async findNearbyAccommodations(
+    params: NearbyParamsDto,
+  ): Promise<Accommodation[]> {
+    const { long, lat, distance } = params;
+    // find nearby with nearSphere
+    const query = this.accommodationModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [long, lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: distance ? distance : 5000, // default 5000 meters
+        },
+      },
+    });
+    return query.exec();
   }
 }

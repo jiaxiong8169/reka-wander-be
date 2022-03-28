@@ -8,6 +8,7 @@ import { Victual, VictualDocument } from 'src/schemas/victual.schema';
 import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 
 @Injectable()
 export class VictualsService {
@@ -80,5 +81,23 @@ export class VictualsService {
       SEARCH_FIELDS['victuals'],
     );
     return this.victualModel.find(effectiveFilter).countDocuments();
+  }
+
+  async findNearbyVictuals(params: NearbyParamsDto): Promise<Victual[]> {
+    const { long, lat, distance } = params;
+    // find nearby with nearSphere
+    const query = this.victualModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [long, lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: distance ? distance : 5000, // default 5000 meters
+        },
+      },
+    });
+    return query.exec();
   }
 }
