@@ -17,8 +17,8 @@ export type TripDocument = Trip & mongoose.Document;
 export class Trip {
   _id: mongoose.Schema.Types.ObjectId;
 
-  @Prop({ required: true })
-  userId: string;
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }])
+  userId: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
   name: string;
@@ -35,8 +35,8 @@ export class Trip {
   @Prop({ required: true })
   budget: number;
 
-  @Prop()
-  interests: string[];
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' }])
+  interests: mongoose.Schema.Types.ObjectId[];
 
   @Prop()
   kids: boolean;
@@ -47,14 +47,14 @@ export class Trip {
   @Prop()
   rentHomestay: boolean;
 
-  @Prop()
-  attractions: string[];
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Attraction' }])
+  attractions: mongoose.Schema.Types.ObjectId[];
 
-  @Prop()
-  victuals: string[];
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Victual' }])
+  victuals: mongoose.Schema.Types.ObjectId[];
 
-  @Prop()
-  accommodations: string[];
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Accommodation' }])
+  accommodations: mongoose.Schema.Types.ObjectId[];
 
   @Prop({ required: true })
   timestamp: Date;

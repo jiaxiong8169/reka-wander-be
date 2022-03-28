@@ -17,8 +17,8 @@ export type CommentDocument = Comment & mongoose.Document;
 export class Comment {
   _id: mongoose.Schema.Types.ObjectId;
 
-  @Prop({ required: true })
-  userId: string;
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }])
+  userId: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
   userName: string;
