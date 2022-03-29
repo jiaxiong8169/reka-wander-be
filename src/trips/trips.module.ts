@@ -6,9 +6,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AttractionsModule } from 'src/attractions/attractions.module';
 import { AccommodationsModule } from 'src/accommodations/accommodations.module';
 import { VictualsModule } from 'src/victuals/victuals.module';
+import { User, UserSchema } from 'src/schemas/user.schema';
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Trip.name, schema: TripSchema }]),
+    MongooseModule.forFeature([
+      { name: Trip.name, schema: TripSchema },
+      { name: User.name, schema: UserSchema },
+    ]),
     AttractionsModule,
     AccommodationsModule,
     VictualsModule,

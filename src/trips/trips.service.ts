@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Body } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { TripDto } from 'src/dto/trip.dto';
 import { ExceptionMessage } from 'src/exceptions/exception-message.enum';
@@ -12,6 +12,7 @@ import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 import { AttractionsService } from 'src/attractions/attractions.service';
 import { AccommodationsService } from 'src/accommodations/accommodations.service';
 import { VictualsService } from 'src/victuals/victuals.service';
+import { User, UserDocument } from 'src/schemas/user.schema';
 
 @Injectable()
 export class TripsService {
@@ -21,6 +22,9 @@ export class TripsService {
     private readonly attractionsService: AttractionsService,
     private readonly accommodationsService: AccommodationsService,
     private readonly victualsService: VictualsService,
+    @InjectModel(User.name)
+    private userModel: mongoose.Model<UserDocument>,
+    @InjectConnection() private readonly connection: mongoose.Connection,
   ) {}
 
   async findOneTripById(
@@ -60,9 +64,30 @@ export class TripsService {
     trip.victualObjects = victuals;
     trip.victuals = victuals.map((a) => a['id']);
 
-    // create a new trip
-    const tripDb = await this.create(trip);
-    trip.id = tripDb['id'];
+    const session = await this.connection.startSession();
+
+    await session.withTransaction(async () => {
+      // get user
+      const user = await this.userModel.findOne({ _id: trip.userId });
+      if (!user) throw new BadRequestException('Invalid User');
+
+      // create a new trip
+      const tripDb = await this.create(trip);
+      trip.id = tripDb['id'];
+
+      // add into user trip list
+      user.trips.push(tripDb['id']);
+      await this.userModel.findOneAndUpdate(
+        { _id: user['id'] },
+        { trips: user.trips },
+        {
+          new: true,
+          runValidators: true,
+        },
+      );
+    });
+
+    session.endSession();
 
     return trip;
   }
