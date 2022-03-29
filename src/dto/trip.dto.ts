@@ -1,4 +1,10 @@
+import { Accommodation } from 'src/schemas/accommodation.schema';
+import { Attraction } from 'src/schemas/attraction.schema';
+import { Victual } from 'src/schemas/victual.schema';
+
 export class TripDto {
+  id: string;
+
   userId: string;
 
   name: string;
@@ -26,4 +32,10 @@ export class TripDto {
   accommodations: string[];
 
   timestamp: Date;
+
+  attractionObjects: Attraction[];
+
+  victualObjects: Victual[];
+
+  accommodationObjects: Accommodation[];
 }

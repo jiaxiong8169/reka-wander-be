@@ -11,6 +11,7 @@ import { SEARCH_FIELDS } from 'src/constants';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 import { Rate, RateDocument } from 'src/schemas/rate.schema';
 import { RateDto } from 'src/dto/rate.dto';
+import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 
 @Injectable()
 export class AttractionsService {
@@ -30,6 +31,23 @@ export class AttractionsService {
         _id: attractionId,
       })
       .orFail(new Error(ExceptionMessage.AttractionNotFound));
+  }
+
+  async findAttractionsByFeatures(
+    features: RecommenderFeatures,
+  ): Promise<Attraction[]> {
+    // and query
+    const andQuery: any = [
+      { 'recommenderFeatures.maxPax': { $gte: features.maxPax } },
+      { 'recommenderFeatures.minBudget': { $lte: features.minBudget } },
+    ];
+    if (features.kids) andQuery.push({ 'recommenderFeatures.kids': true });
+
+    const query = this.attractionModel.find({
+      $and: andQuery,
+    });
+
+    return query.exec();
   }
 
   async updateAttractionById(

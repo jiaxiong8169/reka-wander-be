@@ -11,6 +11,7 @@ import { SEARCH_FIELDS } from 'src/constants';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 import { RateDto } from 'src/dto/rate.dto';
 import { Rate, RateDocument } from 'src/schemas/rate.schema';
+import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 
 @Injectable()
 export class VictualsService {
@@ -30,6 +31,22 @@ export class VictualsService {
         _id: victualId,
       })
       .orFail(new Error(ExceptionMessage.VictualNotFound));
+  }
+
+  async findVictualsByFeatures(
+    features: RecommenderFeatures,
+  ): Promise<Victual[]> {
+    // and query
+    const andQuery: any = [
+      { 'recommenderFeatures.maxPax': { $gte: features.maxPax } },
+      { 'recommenderFeatures.minBudget': { $lte: features.minBudget } },
+    ];
+
+    const query = this.victualModel.find({
+      $and: andQuery,
+    });
+
+    return query.exec();
   }
 
   async updateVictualById(

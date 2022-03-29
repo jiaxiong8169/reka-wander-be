@@ -23,6 +23,19 @@ import { ApiTags } from '@nestjs/swagger';
 export class TripsController {
   constructor(private tripsService: TripsService) {}
 
+  @Post('recommend')
+  @RequirePermissions(Permission.CreateTrip)
+  async getTripRecommendations(@Body() body: TripDto) {
+    try {
+      // assign timestamp to current timestamp
+      body.timestamp = new Date();
+      const trip = await this.tripsService.getTripRecommendations(body);
+      return trip;
+    } catch (e: any) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
   @Get()
   @RequirePermissions(Permission.ReadAllTrips)
   async getAllTrips(@Query() query: SearchQueryDto) {
