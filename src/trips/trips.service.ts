@@ -8,12 +8,19 @@ import { Trip, TripDocument } from 'src/schemas/trip.schema';
 import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
+import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
+import { AttractionsService } from 'src/attractions/attractions.service';
+import { AccommodationsService } from 'src/accommodations/accommodations.service';
+import { VictualsService } from 'src/victuals/victuals.service';
 
 @Injectable()
 export class TripsService {
   constructor(
     @InjectModel(Trip.name)
     private tripModel: mongoose.Model<TripDocument>,
+    private readonly attractionsService: AttractionsService,
+    private readonly accommodationsService: AccommodationsService,
+    private readonly victualsService: VictualsService,
   ) {}
 
   async findOneTripById(
@@ -24,6 +31,40 @@ export class TripsService {
         _id: tripId,
       })
       .orFail(new Error(ExceptionMessage.TripNotFound));
+  }
+
+  async getTripRecommendations(trip: TripDto): Promise<TripDto> {
+    // instantiate features
+    const features = new RecommenderFeatures({
+      maxPax: trip.pax,
+      minBudget: trip.budget,
+      kids: trip.kids,
+      rentCar: trip.rentCar,
+      rentHomestay: trip.rentHomestay,
+      interests: trip.interests,
+    });
+
+    // get recommendations
+    const accommodations =
+      await this.accommodationsService.findAccommodationsByFeatures(features);
+    const attractions = await this.attractionsService.findAttractionsByFeatures(
+      features,
+    );
+    const victuals = await this.victualsService.findVictualsByFeatures(
+      features,
+    );
+    trip.accommodationObjects = accommodations;
+    trip.accommodations = accommodations.map((a) => a['id']);
+    trip.attractionObjects = attractions;
+    trip.attractions = attractions.map((a) => a['id']);
+    trip.victualObjects = victuals;
+    trip.victuals = victuals.map((a) => a['id']);
+
+    // create a new trip
+    const tripDb = await this.create(trip);
+    trip.id = tripDb['id'];
+
+    return trip;
   }
 
   async updateTripById(
