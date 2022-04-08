@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Loc } from './loc.dto';
-import { RecommenderFeatures } from './recommender-features.dto';
 
 export class AttractionDto {
   name: string;
@@ -16,28 +15,25 @@ export class AttractionDto {
 
   rateValue: number;
 
+  avgRating: number;
+
   description: string;
 
-  comments: string[];
+  reviews: string[];
 
-  @ApiProperty({
-    enum: RecommenderFeatures,
-  })
-  recommenderFeatures: RecommenderFeatures;
+  interest: string;
 
-  durationHrs: number;
+  hours: number;
 
   category: string;
 
-  normalMinPrice: number;
-
-  discountMinPrice: number;
+  price: number;
 
   perks: string;
 
   thumbnailSrc: string;
 
-  shares: number;
+  shares: string[];
 
-  likes: number;
+  likes: string[];
 }
