@@ -45,6 +45,24 @@ export const Roles = {
     Permission.ReadAllRestaurants,
     Permission.DeleteRestaurant,
     Permission.ReadRestaurant,
+    // homestay
+    Permission.CreateHomestay,
+    Permission.UpdateHomestay,
+    Permission.ReadAllHomestays,
+    Permission.DeleteHomestay,
+    Permission.ReadHomestay,
+    // vehicle
+    Permission.CreateVehicle,
+    Permission.UpdateVehicle,
+    Permission.ReadAllVehicles,
+    Permission.DeleteVehicle,
+    Permission.ReadVehicle,
+    // guide
+    Permission.CreateGuide,
+    Permission.UpdateGuide,
+    Permission.ReadAllGuides,
+    Permission.DeleteGuide,
+    Permission.ReadGuide,
   ],
   user: [
     Permission.ReadProfile,
@@ -69,5 +87,14 @@ export const Roles = {
     // restaurant
     Permission.ReadAllRestaurants,
     Permission.ReadRestaurant,
+    // homestay
+    Permission.ReadAllHomestays,
+    Permission.ReadHomestay,
+    // vehicle
+    Permission.ReadAllVehicles,
+    Permission.ReadVehicle,
+    // guide
+    Permission.ReadAllGuides,
+    Permission.ReadGuide,
   ],
 };
