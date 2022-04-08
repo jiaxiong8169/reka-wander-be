@@ -182,6 +182,7 @@ export class AttractionsService {
         ).toFixed(2);
         const createdReview = new this.reviewModel(reviewDto);
         await createdReview.save();
+        attraction.reviews.push(createdReview['_id']);
 
         // update attraction
         await this.attractionModel.updateOne(
@@ -189,6 +190,7 @@ export class AttractionsService {
           {
             $set: {
               avgRating: newAvgRating,
+              reviews: attraction.reviews,
             },
             $inc: { rateCount: 1, rateValue: reviewDto.rating },
           },
