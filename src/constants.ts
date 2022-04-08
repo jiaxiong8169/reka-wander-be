@@ -7,4 +7,7 @@ export const SEARCH_FIELDS = {
   attractions: ['name', 'city', 'category', 'perks'],
   restaurants: ['name', 'city', 'category', 'perks'],
   hotels: ['name', 'city', 'category', 'perks'],
+  homestays: ['name', 'city'],
+  vehicles: ['name', 'city'],
+  guides: ['name', 'city'],
 };

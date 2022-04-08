@@ -42,4 +42,22 @@ export enum Permission {
   UpdateRestaurant = 'updateRestaurant',
   DeleteRestaurant = 'deleteRestaurant',
   ReadRestaurant = 'readRestaurant',
+  // homestay
+  CreateHomestay = 'createHomestay',
+  ReadAllHomestays = 'readAllHomestays',
+  UpdateHomestay = 'updateHomestay',
+  DeleteHomestay = 'deleteHomestay',
+  ReadHomestay = 'readHomestay',
+  // vehicle
+  CreateVehicle = 'createVehicle',
+  ReadAllVehicles = 'readAllVehicles',
+  UpdateVehicle = 'updateVehicle',
+  DeleteVehicle = 'deleteVehicle',
+  ReadVehicle = 'readVehicle',
+  // guide
+  CreateGuide = 'createGuide',
+  ReadAllGuides = 'readAllGuides',
+  UpdateGuide = 'updateGuide',
+  DeleteGuide = 'deleteGuide',
+  ReadGuide = 'readGuide',
 }

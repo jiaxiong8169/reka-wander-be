@@ -24,4 +24,10 @@ export enum ExceptionMessage {
   TripExist = 'Trip already exists.',
   RestaurantNotFound = 'Restaurant not found. Please try again.',
   RestaurantExist = 'Restaurant already exists.',
+  HomestayNotFound = 'Homestay not found. Please try again.',
+  HomestayExist = 'Homestay already exists.',
+  VehicleNotFound = 'Vehicle not found. Please try again.',
+  VehicleExist = 'Vehicle already exists.',
+  GuideNotFound = 'Guide not found. Please try again.',
+  GuideExist = 'Guide already exists.',
 }
