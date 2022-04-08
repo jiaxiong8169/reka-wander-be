@@ -12,6 +12,7 @@ import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 import { Review, ReviewDocument } from 'src/schemas/review.schema';
 import { ReviewDto } from 'src/dto/review.dto';
 import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
+import { LikeShareDto } from 'src/dto/like-share.dto';
 
 @Injectable()
 export class RestaurantsService {
@@ -191,6 +192,40 @@ export class RestaurantsService {
           },
         );
       }
+    });
+
+    session.endSession();
+  }
+
+  async likeRestaurant(@Body() likeShareDto: LikeShareDto) {
+    const session = await this.connection.startSession();
+
+    await session.withTransaction(async () => {
+      // check if restaurant exists
+      const restaurant = await this.restaurantModel.findOne({
+        _id: likeShareDto.targetId,
+      });
+      if (!restaurant) {
+        throw new BadRequestException('Invalid Restaurant');
+      }
+      // if already liked, unlike it
+      if (restaurant.likes.includes(likeShareDto.userId)) {
+        restaurant.likes = restaurant.likes.filter(
+          (a) => a != likeShareDto.userId,
+        );
+      } else {
+        restaurant.likes.push(likeShareDto.userId);
+      }
+      // update restaurant
+      await this.restaurantModel.updateOne(
+        { _id: likeShareDto.targetId },
+        {
+          $set: {
+            likes: restaurant.likes,
+          },
+        },
+      );
+      return restaurant;
     });
 
     session.endSession();

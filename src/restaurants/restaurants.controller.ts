@@ -20,6 +20,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 import { ReviewDto } from 'src/dto/review.dto';
 import { User } from 'src/decorators/user.decorator';
+import { LikeShareDto } from 'src/dto/like-share.dto';
 
 @ApiTags('restaurants')
 @Controller('restaurants')
@@ -36,6 +37,19 @@ export class RestaurantsController {
     if (!req.contents) throw new BadRequestException('Comment cannot be empty');
     try {
       const restaurant = await this.restaurantsService.reviewRestaurant(req);
+      return restaurant;
+    } catch (e: any) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
+  @Post('like')
+  @RequirePermissions(Permission.CreateReview)
+  async likeRestaurant(@Body() req: LikeShareDto, @User() reqUser) {
+    req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
+    if (!req.userId) throw new BadRequestException('Invalid user information');
+    try {
+      const restaurant = await this.restaurantsService.likeRestaurant(req);
       return restaurant;
     } catch (e: any) {
       throw new BadRequestException(e.message);
