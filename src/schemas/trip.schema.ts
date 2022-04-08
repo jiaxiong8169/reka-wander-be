@@ -53,8 +53,8 @@ export class Trip {
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Victual' }])
   victuals: mongoose.Schema.Types.ObjectId[];
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Accommodation' }])
-  accommodations: mongoose.Schema.Types.ObjectId[];
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' }])
+  hotels: mongoose.Schema.Types.ObjectId[];
 
   @Prop({ required: true })
   timestamp: Date;

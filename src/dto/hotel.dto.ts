@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Loc } from './loc.dto';
-import { RecommenderFeatures } from './recommender-features.dto';
+import { RoomDto } from './room.dto';
 
-export class AccommodationDto {
+export class HotelDto {
   name: string;
 
   city: string;
@@ -12,32 +12,40 @@ export class AccommodationDto {
   })
   loc: Loc;
 
+  minPrice: number;
+
+  maxPrice: number;
+
   rateCount: number;
 
   rateValue: number;
 
+  avgRating: number;
+
   description: string;
 
-  comments: string[];
+  reviews: string[];
+
+  kids: boolean;
 
   @ApiProperty({
-    enum: RecommenderFeatures,
+    enum: [RoomDto],
   })
-  recommenderFeatures: RecommenderFeatures;
-
-  durationHrs: number;
+  rooms: RoomDto[];
 
   category: string;
-
-  normalMinPrice: number;
-
-  discountMinPrice: number;
 
   perks: string;
 
   thumbnailSrc: string;
 
-  shares: number;
+  shares: string[];
 
-  likes: number;
+  likes: string[];
+
+  vendorName: string;
+
+  vendorEmail: string;
+
+  vendorPhoneNumber: string;
 }

@@ -12,12 +12,12 @@ export enum Permission {
   UpdateComment = 'updateComment',
   DeleteComment = 'deleteComment',
   ReadComment = 'readComment',
-  // accommodation
-  CreateAccommodation = 'createAccommodation',
-  ReadAllAccommodations = 'readAllAccommodations',
-  UpdateAccommodation = 'updateAccommodation',
-  DeleteAccommodation = 'deleteAccommodation',
-  ReadAccommodation = 'readAccommodation',
+  // hotel
+  CreateHotel = 'createHotel',
+  ReadAllHotels = 'readAllHotels',
+  UpdateHotel = 'updateHotel',
+  DeleteHotel = 'deleteHotel',
+  ReadHotel = 'readHotel',
   // attraction
   CreateAttraction = 'createAttraction',
   ReadAllAttractions = 'readAllAttractions',

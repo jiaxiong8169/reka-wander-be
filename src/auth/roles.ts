@@ -15,12 +15,12 @@ export const Roles = {
     Permission.ReadAllComments,
     Permission.DeleteComment,
     Permission.ReadComment,
-    // accommodation
-    Permission.CreateAccommodation,
-    Permission.UpdateAccommodation,
-    Permission.ReadAllAccommodations,
-    Permission.DeleteAccommodation,
-    Permission.ReadAccommodation,
+    // hotel
+    Permission.CreateHotel,
+    Permission.UpdateHotel,
+    Permission.ReadAllHotels,
+    Permission.DeleteHotel,
+    Permission.ReadHotel,
     // attraction
     Permission.CreateAttraction,
     Permission.UpdateAttraction,
@@ -58,9 +58,9 @@ export const Roles = {
     Permission.CreateComment,
     Permission.ReadAllComments,
     Permission.ReadComment,
-    // accommodation
-    Permission.ReadAllAccommodations,
-    Permission.ReadAccommodation,
+    // hotel
+    Permission.ReadAllHotels,
+    Permission.ReadHotel,
     // attraction
     Permission.ReadAllAttractions,
     Permission.ReadAttraction,

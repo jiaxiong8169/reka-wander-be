@@ -1,4 +1,4 @@
-import { Accommodation } from 'src/schemas/accommodation.schema';
+import { Hotel } from 'src/schemas/hotel.schema';
 import { Attraction } from 'src/schemas/attraction.schema';
 import { Victual } from 'src/schemas/victual.schema';
 
@@ -29,7 +29,7 @@ export class TripDto {
 
   victuals: string[];
 
-  accommodations: string[];
+  hotels: string[];
 
   timestamp: Date;
 
@@ -37,5 +37,5 @@ export class TripDto {
 
   victualObjects: Victual[];
 
-  accommodationObjects: Accommodation[];
+  hotelObjects: Hotel[];
 }
