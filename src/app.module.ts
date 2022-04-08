@@ -7,9 +7,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
-import { CommentsModule } from './comments/comments.module';
+import { ReviewsModule } from './reviews/reviews.module';
 import { TripsModule } from './trips/trips.module';
-import { RatesModule } from './rates/rates.module';
 import { InterestsModule } from './interests/interests.module';
 import { AttractionsModule } from './attractions/attractions.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
@@ -19,9 +18,8 @@ import { HotelsModule } from './hotels/hotels.module';
   imports: [
     AuthModule,
     UsersModule,
-    CommentsModule,
+    ReviewsModule,
     TripsModule,
-    RatesModule,
     InterestsModule,
     AttractionsModule,
     RestaurantsModule,

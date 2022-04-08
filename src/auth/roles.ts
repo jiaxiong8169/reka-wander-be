@@ -9,12 +9,12 @@ export const Roles = {
     Permission.ReadAllUsers,
     Permission.DeleteUser,
     Permission.ReadUser,
-    // comments
-    Permission.CreateComment,
-    Permission.UpdateComment,
-    Permission.ReadAllComments,
-    Permission.DeleteComment,
-    Permission.ReadComment,
+    // reviews
+    Permission.CreateReview,
+    Permission.UpdateReview,
+    Permission.ReadAllReviews,
+    Permission.DeleteReview,
+    Permission.ReadReview,
     // hotel
     Permission.CreateHotel,
     Permission.UpdateHotel,
@@ -33,12 +33,6 @@ export const Roles = {
     Permission.ReadAllInterests,
     Permission.DeleteInterest,
     Permission.ReadInterest,
-    // rate
-    Permission.CreateRate,
-    Permission.UpdateRate,
-    Permission.ReadAllRates,
-    Permission.DeleteRate,
-    Permission.ReadRate,
     // trip
     Permission.CreateTrip,
     Permission.UpdateTrip,
@@ -54,10 +48,10 @@ export const Roles = {
   ],
   user: [
     Permission.ReadProfile,
-    // comments
-    Permission.CreateComment,
-    Permission.ReadAllComments,
-    Permission.ReadComment,
+    // reviews
+    Permission.CreateReview,
+    Permission.ReadAllReviews,
+    Permission.ReadReview,
     // hotel
     Permission.ReadAllHotels,
     Permission.ReadHotel,
@@ -67,11 +61,6 @@ export const Roles = {
     // interest
     Permission.ReadAllInterests,
     Permission.ReadInterest,
-    // rate
-    Permission.CreateRate,
-    Permission.UpdateRate,
-    Permission.ReadAllRates,
-    Permission.ReadRate,
     // trip
     Permission.CreateTrip,
     Permission.ReadAllTrips,
