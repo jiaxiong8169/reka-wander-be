@@ -1,7 +1,7 @@
 import { Hotel } from 'src/schemas/hotel.schema';
 import { Attraction } from 'src/schemas/attraction.schema';
 import { Restaurant } from 'src/schemas/restaurant.schema';
-import { Vehicle } from 'src/schemas/vehicles.schema';
+import { Vehicle } from 'src/schemas/vehicle.schema';
 import { Homestay } from 'src/schemas/homestay.schema';
 import { Room } from 'src/schemas/room.schema';
 
