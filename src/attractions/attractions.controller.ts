@@ -60,6 +60,19 @@ export class AttractionsController {
     }
   }
 
+  @Post('share')
+  @RequirePermissions(Permission.CreateReview)
+  async shareAttraction(@Body() req: LikeShareDto, @User() reqUser) {
+    req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
+    if (!req.userId) throw new BadRequestException('Invalid user information');
+    try {
+      const attraction = await this.attractionsService.shareAttraction(req);
+      return attraction;
+    } catch (e: any) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
   @Get('nearby')
   @RequirePermissions(Permission.ReadAllAttractions)
   async getNearbyAttractions(@Query() query: NearbyParamsDto) {

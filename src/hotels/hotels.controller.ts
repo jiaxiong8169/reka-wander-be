@@ -56,6 +56,19 @@ export class HotelsController {
     }
   }
 
+  @Post('share')
+  @RequirePermissions(Permission.CreateReview)
+  async shareHotel(@Body() req: LikeShareDto, @User() reqUser) {
+    req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
+    if (!req.userId) throw new BadRequestException('Invalid user information');
+    try {
+      const hotel = await this.hotelsService.shareHotel(req);
+      return hotel;
+    } catch (e: any) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
   @Get('nearby')
   @RequirePermissions(Permission.ReadAllHotels)
   async getNearbyHotels(@Query() query: NearbyParamsDto) {

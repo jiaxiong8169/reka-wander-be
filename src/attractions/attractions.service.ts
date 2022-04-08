@@ -235,4 +235,34 @@ export class AttractionsService {
 
     session.endSession();
   }
+
+  async shareAttraction(@Body() likeShareDto: LikeShareDto) {
+    const session = await this.connection.startSession();
+
+    await session.withTransaction(async () => {
+      // check if attraction exists
+      const attraction = await this.attractionModel.findOne({
+        _id: likeShareDto.targetId,
+      });
+      if (!attraction) {
+        throw new BadRequestException('Invalid Attraction');
+      }
+      // add into share list if does not exist
+      if (!attraction.shares.includes(likeShareDto.userId)) {
+        attraction.shares.push(likeShareDto.userId);
+        // update attraction
+        await this.attractionModel.updateOne(
+          { _id: likeShareDto.targetId },
+          {
+            $set: {
+              shares: attraction.shares,
+            },
+          },
+        );
+        return attraction;
+      }
+    });
+
+    session.endSession();
+  }
 }

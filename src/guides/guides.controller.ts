@@ -55,6 +55,19 @@ export class GuidesController {
     }
   }
 
+  @Post('share')
+  @RequirePermissions(Permission.CreateReview)
+  async shareGuide(@Body() req: LikeShareDto, @User() reqUser) {
+    req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
+    if (!req.userId) throw new BadRequestException('Invalid user information');
+    try {
+      const guide = await this.guidesService.shareGuide(req);
+      return guide;
+    } catch (e: any) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
   @Get()
   @RequirePermissions(Permission.ReadAllGuides)
   async getAllGuides(@Query() query: SearchQueryDto) {

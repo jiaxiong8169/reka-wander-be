@@ -228,4 +228,34 @@ export class HotelsService {
 
     session.endSession();
   }
+
+  async shareHotel(@Body() likeShareDto: LikeShareDto) {
+    const session = await this.connection.startSession();
+
+    await session.withTransaction(async () => {
+      // check if hotel exists
+      const hotel = await this.hotelModel.findOne({
+        _id: likeShareDto.targetId,
+      });
+      if (!hotel) {
+        throw new BadRequestException('Invalid Hotel');
+      }
+      // add into share list if does not exist
+      if (!hotel.shares.includes(likeShareDto.userId)) {
+        hotel.shares.push(likeShareDto.userId);
+        // update hotel
+        await this.hotelModel.updateOne(
+          { _id: likeShareDto.targetId },
+          {
+            $set: {
+              shares: hotel.shares,
+            },
+          },
+        );
+        return hotel;
+      }
+    });
+
+    session.endSession();
+  }
 }
