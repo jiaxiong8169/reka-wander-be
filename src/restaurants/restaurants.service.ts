@@ -180,6 +180,7 @@ export class RestaurantsService {
         ).toFixed(2);
         const createdReview = new this.reviewModel(reviewDto);
         await createdReview.save();
+        restaurant.reviews.push(createdReview['_id']);
 
         // update restaurant
         return await this.restaurantModel.updateOne(
@@ -187,6 +188,7 @@ export class RestaurantsService {
           {
             $set: {
               avgRating: newAvgRating,
+              reviews: restaurant.reviews,
             },
             $inc: { rateCount: 1, rateValue: reviewDto.rating },
           },

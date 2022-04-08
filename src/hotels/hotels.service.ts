@@ -178,6 +178,7 @@ export class HotelsService {
         ).toFixed(2);
         const createdReview = new this.reviewModel(reviewDto);
         await createdReview.save();
+        hotel.reviews.push(createdReview['_id']);
 
         // update hotel
         return await this.hotelModel.updateOne(
@@ -185,6 +186,7 @@ export class HotelsService {
           {
             $set: {
               avgRating: newAvgRating,
+              reviews: hotel.reviews,
             },
             $inc: { rateCount: 1, rateValue: reviewDto.rating },
           },
