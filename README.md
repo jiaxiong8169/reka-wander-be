@@ -36,7 +36,7 @@ $ db.hotels.createIndex({"loc": "2dsphere"})
 $ db.attractions.createIndex({"loc": "2dsphere"})
 
 # Restaurant
-$ db.restaurant.createIndex({"loc": "2dsphere"})
+$ db.restaurants.createIndex({"loc": "2dsphere"})
 ```
 
 ## Installation

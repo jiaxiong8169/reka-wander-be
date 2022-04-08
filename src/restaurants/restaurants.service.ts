@@ -2,9 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Body } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { VictualDto } from 'src/dto/victual.dto';
+import { RestaurantDto } from 'src/dto/restaurant.dto';
 import { ExceptionMessage } from 'src/exceptions/exception-message.enum';
-import { Victual, VictualDocument } from 'src/schemas/victual.schema';
+import { Restaurant, RestaurantDocument } from 'src/schemas/restaurant.schema';
 import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
@@ -14,75 +14,75 @@ import { Rate, RateDocument } from 'src/schemas/rate.schema';
 import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 
 @Injectable()
-export class VictualsService {
+export class RestaurantsService {
   constructor(
-    @InjectModel(Victual.name)
-    private victualModel: mongoose.Model<VictualDocument>,
+    @InjectModel(Restaurant.name)
+    private restaurantModel: mongoose.Model<RestaurantDocument>,
     @InjectModel(Rate.name)
     private rateModel: mongoose.Model<RateDocument>,
     @InjectConnection() private readonly connection: mongoose.Connection,
   ) {}
 
-  async findOneVictualById(
-    victualId: mongoose.Types.ObjectId | string,
-  ): Promise<Victual> {
-    return this.victualModel
+  async findOneRestaurantById(
+    restaurantId: mongoose.Types.ObjectId | string,
+  ): Promise<Restaurant> {
+    return this.restaurantModel
       .findOne({
-        _id: victualId,
+        _id: restaurantId,
       })
-      .orFail(new Error(ExceptionMessage.VictualNotFound));
+      .orFail(new Error(ExceptionMessage.RestaurantNotFound));
   }
 
-  async findVictualsByFeatures(
+  async findRestaurantsByFeatures(
     features: RecommenderFeatures,
-  ): Promise<Victual[]> {
+  ): Promise<Restaurant[]> {
     // and query
     const andQuery: any = [
       { 'recommenderFeatures.maxPax': { $gte: features.maxPax } },
       { 'recommenderFeatures.minBudget': { $lte: features.minBudget } },
     ];
 
-    const query = this.victualModel.find({
+    const query = this.restaurantModel.find({
       $and: andQuery,
     });
 
     return query.exec();
   }
 
-  async updateVictualById(
-    victualId: mongoose.Types.ObjectId,
-    req: VictualDto,
-  ): Promise<Victual> {
-    return this.victualModel.findOneAndUpdate({ _id: victualId }, req, {
+  async updateRestaurantById(
+    restaurantId: mongoose.Types.ObjectId,
+    req: RestaurantDto,
+  ): Promise<Restaurant> {
+    return this.restaurantModel.findOneAndUpdate({ _id: restaurantId }, req, {
       new: true,
       runValidators: true,
     });
   }
 
-  async create(@Body() victualDto: VictualDto): Promise<Victual> {
-    const createdVictual = new this.victualModel(victualDto);
-    return createdVictual.save().catch(() => {
-      throw Error(ExceptionMessage.VictualExist);
+  async create(@Body() restaurantDto: RestaurantDto): Promise<Restaurant> {
+    const createdRestaurant = new this.restaurantModel(restaurantDto);
+    return createdRestaurant.save().catch(() => {
+      throw Error(ExceptionMessage.RestaurantExist);
     });
   }
 
-  async deleteOneVictualByVictualId(
-    victualId: mongoose.Types.ObjectId,
-  ): Promise<Victual> {
-    return this.victualModel
-      .findOneAndDelete({ _id: victualId })
+  async deleteOneRestaurantByRestaurantId(
+    restaurantId: mongoose.Types.ObjectId,
+  ): Promise<Restaurant> {
+    return this.restaurantModel
+      .findOneAndDelete({ _id: restaurantId })
       .orFail(new Error(ExceptionMessage.CannotDelete));
   }
 
-  async findAllVictuals(params: SearchQueryDto): Promise<Victual[]> {
+  async findAllRestaurants(params: SearchQueryDto): Promise<Restaurant[]> {
     // fallback to empty filter if filter is not provided
     // find with empty filter will return all documents
     const { sort, offset, limit, filter = {} } = params;
     const effectiveFilter = processSearchAndFilter(
       filter,
-      SEARCH_FIELDS['victuals'],
+      SEARCH_FIELDS['restaurants'],
     );
-    let query = this.victualModel.find(effectiveFilter);
+    let query = this.restaurantModel.find(effectiveFilter);
     if (sort) {
       query = query.sort(sort);
     }
@@ -96,19 +96,19 @@ export class VictualsService {
     return query.exec();
   }
 
-  async getVictualsResultCount(params: SearchQueryDto): Promise<number> {
+  async getRestaurantsResultCount(params: SearchQueryDto): Promise<number> {
     const { filter = {} } = params;
     const effectiveFilter = processSearchAndFilter(
       filter,
-      SEARCH_FIELDS['victuals'],
+      SEARCH_FIELDS['restaurants'],
     );
-    return this.victualModel.find(effectiveFilter).countDocuments();
+    return this.restaurantModel.find(effectiveFilter).countDocuments();
   }
 
-  async findNearbyVictuals(params: NearbyParamsDto): Promise<Victual[]> {
+  async findNearbyRestaurants(params: NearbyParamsDto): Promise<Restaurant[]> {
     const { long, lat, distance } = params;
     // find nearby with nearSphere
-    const query = this.victualModel.find({
+    const query = this.restaurantModel.find({
       loc: {
         $nearSphere: {
           $geometry: {
@@ -123,16 +123,16 @@ export class VictualsService {
     return query.exec();
   }
 
-  async rateVictual(@Body() rateDto: RateDto) {
+  async rateRestaurant(@Body() rateDto: RateDto) {
     const session = await this.connection.startSession();
 
     await session.withTransaction(async () => {
-      // check if victual exists
-      const victual = await this.victualModel.findOne({
+      // check if restaurant exists
+      const restaurant = await this.restaurantModel.findOne({
         _id: rateDto.spotId,
       });
-      if (!victual) {
-        throw new BadRequestException('Invalid Victual');
+      if (!restaurant) {
+        throw new BadRequestException('Invalid Restaurant');
       }
       // get rate document if exists
       const rate = await this.rateModel.findOne({
@@ -148,8 +148,8 @@ export class VictualsService {
           { $inc: { value: diff } },
         );
 
-        // update victual
-        return await this.victualModel.updateOne(
+        // update restaurant
+        return await this.restaurantModel.updateOne(
           { _id: rateDto.spotId },
           { $inc: { rateValue: diff } },
         );
@@ -159,8 +159,8 @@ export class VictualsService {
         const createdRate = new this.rateModel(rateDto);
         await createdRate.save();
 
-        // update victual
-        return await this.victualModel.updateOne(
+        // update restaurant
+        return await this.restaurantModel.updateOne(
           { _id: rateDto.spotId },
           { $inc: { rateCount: 1, rateValue: rateDto.value } },
         );

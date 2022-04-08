@@ -5,7 +5,7 @@ import { TripsService } from './trips.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AttractionsModule } from 'src/attractions/attractions.module';
 import { HotelsModule } from 'src/hotels/hotels.module';
-import { VictualsModule } from 'src/victuals/victuals.module';
+import { RestaurantsModule } from 'src/restaurants/restaurants.module';
 import { User, UserSchema } from 'src/schemas/user.schema';
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { User, UserSchema } from 'src/schemas/user.schema';
     ]),
     AttractionsModule,
     HotelsModule,
-    VictualsModule,
+    RestaurantsModule,
   ],
   controllers: [TripsController],
   providers: [TripsService],

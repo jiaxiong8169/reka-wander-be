@@ -42,10 +42,10 @@ export enum Permission {
   UpdateTrip = 'updateTrip',
   DeleteTrip = 'deleteTrip',
   ReadTrip = 'readTrip',
-  // victual
-  CreateVictual = 'createVictual',
-  ReadAllVictuals = 'readAllVictuals',
-  UpdateVictual = 'updateVictual',
-  DeleteVictual = 'deleteVictual',
-  ReadVictual = 'readVictual',
+  // restaurant
+  CreateRestaurant = 'createRestaurant',
+  ReadAllRestaurants = 'readAllRestaurants',
+  UpdateRestaurant = 'updateRestaurant',
+  DeleteRestaurant = 'deleteRestaurant',
+  ReadRestaurant = 'readRestaurant',
 }

@@ -50,8 +50,8 @@ export class Trip {
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Attraction' }])
   attractions: mongoose.Schema.Types.ObjectId[];
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Victual' }])
-  victuals: mongoose.Schema.Types.ObjectId[];
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' }])
+  restaurants: mongoose.Schema.Types.ObjectId[];
 
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' }])
   hotels: mongoose.Schema.Types.ObjectId[];

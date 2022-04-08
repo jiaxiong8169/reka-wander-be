@@ -11,7 +11,7 @@ import { SEARCH_FIELDS } from 'src/constants';
 import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 import { AttractionsService } from 'src/attractions/attractions.service';
 import { HotelsService } from 'src/hotels/hotels.service';
-import { VictualsService } from 'src/victuals/victuals.service';
+import { RestaurantsService } from 'src/restaurants/restaurants.service';
 import { User, UserDocument } from 'src/schemas/user.schema';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class TripsService {
     private tripModel: mongoose.Model<TripDocument>,
     private readonly attractionsService: AttractionsService,
     private readonly hotelsService: HotelsService,
-    private readonly victualsService: VictualsService,
+    private readonly restaurantsService: RestaurantsService,
     @InjectModel(User.name)
     private userModel: mongoose.Model<UserDocument>,
     @InjectConnection() private readonly connection: mongoose.Connection,
@@ -53,15 +53,15 @@ export class TripsService {
     const attractions = await this.attractionsService.findAttractionsByFeatures(
       features,
     );
-    const victuals = await this.victualsService.findVictualsByFeatures(
+    const restaurants = await this.restaurantsService.findRestaurantsByFeatures(
       features,
     );
     trip.hotelObjects = hotels;
     trip.hotels = hotels.map((a) => a['id']);
     trip.attractionObjects = attractions;
     trip.attractions = attractions.map((a) => a['id']);
-    trip.victualObjects = victuals;
-    trip.victuals = victuals.map((a) => a['id']);
+    trip.restaurantObjects = restaurants;
+    trip.restaurants = restaurants.map((a) => a['id']);
 
     const session = await this.connection.startSession();
 
