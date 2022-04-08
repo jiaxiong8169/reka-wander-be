@@ -6,5 +6,5 @@ export const SEARCH_FIELDS = {
   interests: ['name'],
   attractions: ['name', 'city', 'category', 'perks'],
   victuals: ['name', 'city', 'category', 'perks'],
-  accommodations: ['name', 'city', 'category', 'perks'],
+  hotels: ['name', 'city', 'category', 'perks'],
 };

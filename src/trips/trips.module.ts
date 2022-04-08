@@ -4,7 +4,7 @@ import { TripsController } from './trips.controller';
 import { TripsService } from './trips.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AttractionsModule } from 'src/attractions/attractions.module';
-import { AccommodationsModule } from 'src/accommodations/accommodations.module';
+import { HotelsModule } from 'src/hotels/hotels.module';
 import { VictualsModule } from 'src/victuals/victuals.module';
 import { User, UserSchema } from 'src/schemas/user.schema';
 @Module({
@@ -14,7 +14,7 @@ import { User, UserSchema } from 'src/schemas/user.schema';
       { name: User.name, schema: UserSchema },
     ]),
     AttractionsModule,
-    AccommodationsModule,
+    HotelsModule,
     VictualsModule,
   ],
   controllers: [TripsController],

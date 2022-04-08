@@ -2,12 +2,9 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Body } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import { AccommodationDto } from 'src/dto/accommodation.dto';
+import { HotelDto } from 'src/dto/hotel.dto';
 import { ExceptionMessage } from 'src/exceptions/exception-message.enum';
-import {
-  Accommodation,
-  AccommodationDocument,
-} from 'src/schemas/accommodation.schema';
+import { Hotel, HotelDocument } from 'src/schemas/hotel.schema';
 import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
@@ -17,83 +14,73 @@ import { RateDto } from 'src/dto/rate.dto';
 import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 
 @Injectable()
-export class AccommodationsService {
+export class HotelsService {
   constructor(
-    @InjectModel(Accommodation.name)
-    private accommodationModel: mongoose.Model<AccommodationDocument>,
+    @InjectModel(Hotel.name)
+    private hotelModel: mongoose.Model<HotelDocument>,
     @InjectModel(Rate.name)
     private rateModel: mongoose.Model<RateDocument>,
     @InjectConnection() private readonly connection: mongoose.Connection,
   ) {}
 
-  async findOneAccommodationById(
-    accommodationId: mongoose.Types.ObjectId | string,
-  ): Promise<Accommodation> {
-    return this.accommodationModel
+  async findOneHotelById(
+    hotelId: mongoose.Types.ObjectId | string,
+  ): Promise<Hotel> {
+    return this.hotelModel
       .findOne({
-        _id: accommodationId,
+        _id: hotelId,
       })
-      .orFail(new Error(ExceptionMessage.AccommodationNotFound));
+      .orFail(new Error(ExceptionMessage.HotelNotFound));
   }
 
-  async findAccommodationsByFeatures(
-    features: RecommenderFeatures,
-  ): Promise<Accommodation[]> {
+  async findHotelsByFeatures(features: RecommenderFeatures): Promise<Hotel[]> {
     // and query
     const andQuery: any = [
       { 'recommenderFeatures.maxPax': { $gte: features.maxPax } },
       { 'recommenderFeatures.minBudget': { $lte: features.minBudget } },
     ];
 
-    const query = this.accommodationModel.find({
+    const query = this.hotelModel.find({
       $and: andQuery,
     });
 
     return query.exec();
   }
 
-  async updateAccommodationById(
-    accommodationId: mongoose.Types.ObjectId,
-    req: AccommodationDto,
-  ): Promise<Accommodation> {
-    return this.accommodationModel.findOneAndUpdate(
-      { _id: accommodationId },
-      req,
-      {
-        new: true,
-        runValidators: true,
-      },
-    );
-  }
-
-  async create(
-    @Body() accommodationDto: AccommodationDto,
-  ): Promise<Accommodation> {
-    const createdAccommodation = new this.accommodationModel(accommodationDto);
-    return createdAccommodation.save().catch(() => {
-      throw Error(ExceptionMessage.AccommodationExist);
+  async updateHotelById(
+    hotelId: mongoose.Types.ObjectId,
+    req: HotelDto,
+  ): Promise<Hotel> {
+    return this.hotelModel.findOneAndUpdate({ _id: hotelId }, req, {
+      new: true,
+      runValidators: true,
     });
   }
 
-  async deleteOneAccommodationByAccommodationId(
-    accommodationId: mongoose.Types.ObjectId,
-  ): Promise<Accommodation> {
-    return this.accommodationModel
-      .findOneAndDelete({ _id: accommodationId })
+  async create(@Body() hotelDto: HotelDto): Promise<Hotel> {
+    const createdHotel = new this.hotelModel(hotelDto);
+    return createdHotel.save().catch(() => {
+      throw Error(ExceptionMessage.HotelExist);
+    });
+  }
+
+  async deleteOneHotelByHotelId(
+    hotelId: mongoose.Types.ObjectId,
+  ): Promise<Hotel> {
+    return this.hotelModel
+      .findOneAndDelete({ _id: hotelId })
       .orFail(new Error(ExceptionMessage.CannotDelete));
   }
 
-  async findAllAccommodations(
-    params: SearchQueryDto,
-  ): Promise<Accommodation[]> {
+  async findAllHotels(params: SearchQueryDto): Promise<Hotel[]> {
     // fallback to empty filter if filter is not provided
     // find with empty filter will return all documents
     const { sort, offset, limit, filter = {} } = params;
     const effectiveFilter = processSearchAndFilter(
       filter,
-      SEARCH_FIELDS['accommodations'],
+      SEARCH_FIELDS['hotels'],
     );
-    let query = this.accommodationModel.find(effectiveFilter);
+    let query = this.hotelModel.find(effectiveFilter);
     if (sort) {
       query = query.sort(sort);
     }
@@ -107,21 +94,19 @@ export class AccommodationsService {
     return query.exec();
   }
 
-  async getAccommodationsResultCount(params: SearchQueryDto): Promise<number> {
+  async getHotelsResultCount(params: SearchQueryDto): Promise<number> {
     const { filter = {} } = params;
     const effectiveFilter = processSearchAndFilter(
       filter,
-      SEARCH_FIELDS['accommodations'],
+      SEARCH_FIELDS['hotels'],
     );
-    return this.accommodationModel.find(effectiveFilter).countDocuments();
+    return this.hotelModel.find(effectiveFilter).countDocuments();
   }
 
-  async findNearbyAccommodations(
-    params: NearbyParamsDto,
-  ): Promise<Accommodation[]> {
+  async findNearbyHotels(params: NearbyParamsDto): Promise<Hotel[]> {
     const { long, lat, distance } = params;
     // find nearby with nearSphere
-    const query = this.accommodationModel.find({
+    const query = this.hotelModel.find({
       loc: {
         $nearSphere: {
           $geometry: {
@@ -136,16 +121,16 @@ export class AccommodationsService {
     return query.exec();
   }
 
-  async rateAccommodation(@Body() rateDto: RateDto) {
+  async rateHotel(@Body() rateDto: RateDto) {
     const session = await this.connection.startSession();
 
     await session.withTransaction(async () => {
-      // check if accommodation exists
-      const accommodation = await this.accommodationModel.findOne({
+      // check if hotel exists
+      const hotel = await this.hotelModel.findOne({
         _id: rateDto.spotId,
       });
-      if (!accommodation) {
-        throw new BadRequestException('Invalid Accommodation');
+      if (!hotel) {
+        throw new BadRequestException('Invalid Hotel');
       }
       // get rate document if exists
       const rate = await this.rateModel.findOne({
@@ -161,8 +146,8 @@ export class AccommodationsService {
           { $inc: { value: diff } },
         );
 
-        // update accommodation
-        return await this.accommodationModel.updateOne(
+        // update hotel
+        return await this.hotelModel.updateOne(
           { _id: rateDto.spotId },
           { $inc: { rateValue: diff } },
         );
@@ -172,8 +157,8 @@ export class AccommodationsService {
         const createdRate = new this.rateModel(rateDto);
         await createdRate.save();
 
-        // update accommodation
-        return await this.accommodationModel.updateOne(
+        // update hotel
+        return await this.hotelModel.updateOne(
           { _id: rateDto.spotId },
           { $inc: { rateCount: 1, rateValue: rateDto.value } },
         );

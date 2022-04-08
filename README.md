@@ -28,22 +28,22 @@
 
 ## MongoDB Indexes
 
-````bash
-# Accommodation
-$ db.accommodations.createIndex({"loc": "2dsphere"})
+```bash
+# Hotel
+$ db.hotels.createIndex({"loc": "2dsphere"})
 
 # Attraction
 $ db.attractions.createIndex({"loc": "2dsphere"})
 
-# Victual
-$ db.victuals.createIndex({"loc": "2dsphere"})
+# Restaurant
+$ db.restaurant.createIndex({"loc": "2dsphere"})
 ```
 
 ## Installation
 
 ```bash
 $ npm install
-````
+```
 
 ## Running the app
 

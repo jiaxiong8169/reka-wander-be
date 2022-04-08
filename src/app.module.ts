@@ -13,7 +13,7 @@ import { RatesModule } from './rates/rates.module';
 import { InterestsModule } from './interests/interests.module';
 import { AttractionsModule } from './attractions/attractions.module';
 import { VictualsModule } from './victuals/victuals.module';
-import { AccommodationsModule } from './accommodations/accommodations.module';
+import { HotelsModule } from './hotels/hotels.module';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { AccommodationsModule } from './accommodations/accommodations.module';
     InterestsModule,
     AttractionsModule,
     VictualsModule,
-    AccommodationsModule,
+    HotelsModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

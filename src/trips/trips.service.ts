@@ -10,7 +10,7 @@ import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
 import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 import { AttractionsService } from 'src/attractions/attractions.service';
-import { AccommodationsService } from 'src/accommodations/accommodations.service';
+import { HotelsService } from 'src/hotels/hotels.service';
 import { VictualsService } from 'src/victuals/victuals.service';
 import { User, UserDocument } from 'src/schemas/user.schema';
 
@@ -20,7 +20,7 @@ export class TripsService {
     @InjectModel(Trip.name)
     private tripModel: mongoose.Model<TripDocument>,
     private readonly attractionsService: AttractionsService,
-    private readonly accommodationsService: AccommodationsService,
+    private readonly hotelsService: HotelsService,
     private readonly victualsService: VictualsService,
     @InjectModel(User.name)
     private userModel: mongoose.Model<UserDocument>,
@@ -49,16 +49,15 @@ export class TripsService {
     });
 
     // get recommendations
-    const accommodations =
-      await this.accommodationsService.findAccommodationsByFeatures(features);
+    const hotels = await this.hotelsService.findHotelsByFeatures(features);
     const attractions = await this.attractionsService.findAttractionsByFeatures(
       features,
     );
     const victuals = await this.victualsService.findVictualsByFeatures(
       features,
     );
-    trip.accommodationObjects = accommodations;
-    trip.accommodations = accommodations.map((a) => a['id']);
+    trip.hotelObjects = hotels;
+    trip.hotels = hotels.map((a) => a['id']);
     trip.attractionObjects = attractions;
     trip.attractions = attractions.map((a) => a['id']);
     trip.victualObjects = victuals;

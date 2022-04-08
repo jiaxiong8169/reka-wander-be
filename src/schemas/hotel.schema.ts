@@ -1,7 +1,8 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { RoomSchema, Room } from './room.schema';
 
-export type AccommodationDocument = Accommodation & mongoose.Document;
+export type HotelDocument = Hotel & mongoose.Document;
 
 @Schema({
   id: true,
@@ -14,7 +15,7 @@ export type AccommodationDocument = Accommodation & mongoose.Document;
     },
   },
 })
-export class Accommodation {
+export class Hotel {
   _id: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
@@ -32,40 +33,34 @@ export class Accommodation {
   loc: Record<string, any>;
 
   @Prop()
+  minPrice: number;
+
+  @Prop()
+  maxPrice: number;
+
+  @Prop()
   rateCount: number;
 
   @Prop()
   rateValue: number;
 
   @Prop()
-  description: string;
-
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }])
-  comments: mongoose.Schema.Types.ObjectId[];
-
-  @Prop(
-    raw({
-      maxPax: Number,
-      minBudget: Number,
-      interests: [String],
-      kids: Boolean,
-      rentCar: Boolean,
-      rentHomestay: Boolean,
-    }),
-  )
-  recommenderFeatures: Record<string, any>;
+  avgRating: number;
 
   @Prop()
-  durationHrs: number;
+  description: string;
+
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }])
+  reviews: mongoose.Schema.Types.ObjectId[];
+
+  @Prop()
+  kids: boolean;
+
+  @Prop([{ type: RoomSchema }])
+  rooms: Room;
 
   @Prop()
   category: string;
-
-  @Prop()
-  normalMinPrice: number;
-
-  @Prop()
-  discountMinPrice: number;
 
   @Prop()
   perks: string;
@@ -74,10 +69,19 @@ export class Accommodation {
   thumbnailSrc: string;
 
   @Prop()
-  shares: number;
+  shares: string[];
 
   @Prop()
-  likes: number;
+  likes: string[];
+
+  @Prop()
+  vendorName: string;
+
+  @Prop()
+  vendorEmail: string;
+
+  @Prop()
+  vendorPhoneNumber: string;
 }
 
-export const AccommodationSchema = SchemaFactory.createForClass(Accommodation);
+export const HotelSchema = SchemaFactory.createForClass(Hotel);
