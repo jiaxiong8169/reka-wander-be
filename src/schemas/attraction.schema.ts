@@ -38,34 +38,25 @@ export class Attraction {
   rateValue: number;
 
   @Prop()
-  description: string;
-
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }])
-  comments: mongoose.Schema.Types.ObjectId[];
-
-  @Prop(
-    raw({
-      maxPax: Number,
-      minBudget: Number,
-      interests: [String],
-      kids: Boolean,
-      rentCar: Boolean,
-      rentHomestay: Boolean,
-    }),
-  )
-  recommenderFeatures: Record<string, any>;
+  avgRating: number;
 
   @Prop()
-  durationHrs: number;
+  description: string;
+
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }])
+  reviews: mongoose.Schema.Types.ObjectId[];
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' })
+  interest: mongoose.Schema.Types.ObjectId;
+
+  @Prop()
+  hours: number;
 
   @Prop()
   category: string;
 
   @Prop()
-  normalMinPrice: number;
-
-  @Prop()
-  discountMinPrice: number;
+  price: number;
 
   @Prop()
   perks: string;
@@ -74,10 +65,10 @@ export class Attraction {
   thumbnailSrc: string;
 
   @Prop()
-  shares: number;
+  shares: string[];
 
   @Prop()
-  likes: number;
+  likes: string[];
 }
 
 export const AttractionSchema = SchemaFactory.createForClass(Attraction);
