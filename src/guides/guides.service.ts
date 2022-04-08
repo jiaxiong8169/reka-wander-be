@@ -197,4 +197,34 @@ export class GuidesService {
 
     session.endSession();
   }
+
+  async shareGuide(@Body() likeShareDto: LikeShareDto) {
+    const session = await this.connection.startSession();
+
+    await session.withTransaction(async () => {
+      // check if guide exists
+      const guide = await this.guideModel.findOne({
+        _id: likeShareDto.targetId,
+      });
+      if (!guide) {
+        throw new BadRequestException('Invalid Guide');
+      }
+      // add into share list if does not exist
+      if (!guide.shares.includes(likeShareDto.userId)) {
+        guide.shares.push(likeShareDto.userId);
+        // update guide
+        await this.guideModel.updateOne(
+          { _id: likeShareDto.targetId },
+          {
+            $set: {
+              shares: guide.shares,
+            },
+          },
+        );
+        return guide;
+      }
+    });
+
+    session.endSession();
+  }
 }

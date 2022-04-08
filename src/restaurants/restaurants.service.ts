@@ -232,4 +232,34 @@ export class RestaurantsService {
 
     session.endSession();
   }
+
+  async shareRestaurant(@Body() likeShareDto: LikeShareDto) {
+    const session = await this.connection.startSession();
+
+    await session.withTransaction(async () => {
+      // check if restaurant exists
+      const restaurant = await this.restaurantModel.findOne({
+        _id: likeShareDto.targetId,
+      });
+      if (!restaurant) {
+        throw new BadRequestException('Invalid Restaurant');
+      }
+      // add into share list if does not exist
+      if (!restaurant.shares.includes(likeShareDto.userId)) {
+        restaurant.shares.push(likeShareDto.userId);
+        // update restaurant
+        await this.restaurantModel.updateOne(
+          { _id: likeShareDto.targetId },
+          {
+            $set: {
+              shares: restaurant.shares,
+            },
+          },
+        );
+        return restaurant;
+      }
+    });
+
+    session.endSession();
+  }
 }

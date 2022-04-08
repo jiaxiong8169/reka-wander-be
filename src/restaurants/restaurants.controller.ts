@@ -56,6 +56,19 @@ export class RestaurantsController {
     }
   }
 
+  @Post('share')
+  @RequirePermissions(Permission.CreateReview)
+  async shareRestaurant(@Body() req: LikeShareDto, @User() reqUser) {
+    req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
+    if (!req.userId) throw new BadRequestException('Invalid user information');
+    try {
+      const restaurant = await this.restaurantsService.shareRestaurant(req);
+      return restaurant;
+    } catch (e: any) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
   @Get('nearby')
   @RequirePermissions(Permission.ReadAllRestaurants)
   async getNearbyRestaurants(@Query() query: NearbyParamsDto) {
