@@ -45,12 +45,12 @@ export const Roles = {
     Permission.ReadAllTrips,
     Permission.DeleteTrip,
     Permission.ReadTrip,
-    // victual
-    Permission.CreateVictual,
-    Permission.UpdateVictual,
-    Permission.ReadAllVictuals,
-    Permission.DeleteVictual,
-    Permission.ReadVictual,
+    // restaurant
+    Permission.CreateRestaurant,
+    Permission.UpdateRestaurant,
+    Permission.ReadAllRestaurants,
+    Permission.DeleteRestaurant,
+    Permission.ReadRestaurant,
   ],
   user: [
     Permission.ReadProfile,
@@ -77,8 +77,8 @@ export const Roles = {
     Permission.ReadAllTrips,
     Permission.DeleteTrip,
     Permission.ReadTrip,
-    // victual
-    Permission.ReadAllVictuals,
-    Permission.ReadVictual,
+    // restaurant
+    Permission.ReadAllRestaurants,
+    Permission.ReadRestaurant,
   ],
 };

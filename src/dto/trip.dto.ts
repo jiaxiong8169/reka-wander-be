@@ -1,6 +1,6 @@
 import { Hotel } from 'src/schemas/hotel.schema';
 import { Attraction } from 'src/schemas/attraction.schema';
-import { Victual } from 'src/schemas/victual.schema';
+import { Restaurant } from 'src/schemas/restaurant.schema';
 
 export class TripDto {
   id: string;
@@ -27,7 +27,7 @@ export class TripDto {
 
   attractions: string[];
 
-  victuals: string[];
+  restaurants: string[];
 
   hotels: string[];
 
@@ -35,7 +35,7 @@ export class TripDto {
 
   attractionObjects: Attraction[];
 
-  victualObjects: Victual[];
+  restaurantObjects: Restaurant[];
 
   hotelObjects: Hotel[];
 }
