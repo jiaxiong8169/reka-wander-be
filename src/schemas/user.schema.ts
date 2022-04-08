@@ -50,10 +50,16 @@ export class User {
   phoneNumber: string;
 
   @Prop()
+  profileSrc: string;
+
+  @Prop()
   currentHashedRefreshToken: string;
 
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Trip' }])
   trips: mongoose.Schema.Types.ObjectId[];
+
+  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Guide' }])
+  markedGuides: mongoose.Schema.Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

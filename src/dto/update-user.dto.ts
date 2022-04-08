@@ -9,5 +9,9 @@ export class UpdateUserDto {
 
   phoneNumber?: string;
 
-  trip?: string[];
+  profileSrc?: string;
+
+  trips?: string[];
+
+  markedGuides?: string[];
 }
