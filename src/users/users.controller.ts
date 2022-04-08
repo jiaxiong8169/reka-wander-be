@@ -42,7 +42,7 @@ export class UsersController {
     };
   }
 
-  @Get('/user')
+  @Get('/email')
   @RequirePermissions(Permission.ReadUser)
   async getOneUserByEmail(@Query('email') email: string) {
     return this.usersService.findOneUserByEmail(email).catch((e) => {
