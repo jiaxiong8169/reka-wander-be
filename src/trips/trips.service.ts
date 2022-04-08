@@ -56,8 +56,10 @@ export class TripsService {
     const restaurants = await this.restaurantsService.findRestaurantsByFeatures(
       features,
     );
-    trip.hotelObjects = hotels;
-    trip.hotels = hotels.map((a) => a['id']);
+    if (hotels.length > 0) {
+      trip.hotelObject = hotels[0];
+      trip.hotel = hotels[0]['id'];
+    }
     trip.attractionObjects = attractions;
     trip.attractions = attractions.map((a) => a['id']);
     trip.restaurantObjects = restaurants;
