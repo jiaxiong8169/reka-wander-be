@@ -53,8 +53,17 @@ export class Trip {
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' }])
   restaurants: mongoose.Schema.Types.ObjectId[];
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' }])
-  hotels: mongoose.Schema.Types.ObjectId[];
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' })
+  hotel: mongoose.Schema.Types.ObjectId;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle' })
+  vehicle: mongoose.Schema.Types.ObjectId;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Homestay' })
+  homestay: mongoose.Schema.Types.ObjectId;
+
+  @Prop()
+  rooms: string[];
 
   @Prop({ required: true })
   timestamp: Date;
