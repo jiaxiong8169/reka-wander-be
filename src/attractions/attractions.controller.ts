@@ -21,6 +21,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 import { ReviewDto } from 'src/dto/review.dto';
 import { User } from 'src/decorators/user.decorator';
+import { LikeShareDto } from 'src/dto/like-share.dto';
 // import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
 // import { PermissionsGuard } from 'src/auth/permissions.guard';
 
@@ -40,6 +41,19 @@ export class AttractionsController {
     if (!req.contents) throw new BadRequestException('Comment cannot be empty');
     try {
       const attraction = await this.attractionsService.reviewAttraction(req);
+      return attraction;
+    } catch (e: any) {
+      throw new BadRequestException(e.message);
+    }
+  }
+
+  @Post('like')
+  @RequirePermissions(Permission.CreateReview)
+  async likeAttraction(@Body() req: LikeShareDto, @User() reqUser) {
+    req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
+    if (!req.userId) throw new BadRequestException('Invalid user information');
+    try {
+      const attraction = await this.attractionsService.likeAttraction(req);
       return attraction;
     } catch (e: any) {
       throw new BadRequestException(e.message);

@@ -12,6 +12,7 @@ import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 import { Review, ReviewDocument } from 'src/schemas/review.schema';
 import { ReviewDto } from 'src/dto/review.dto';
 import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
+import { LikeShareDto } from 'src/dto/like-share.dto';
 
 @Injectable()
 export class AttractionsService {
@@ -162,7 +163,7 @@ export class AttractionsService {
         );
 
         // update attraction
-        return await this.attractionModel.updateOne(
+        await this.attractionModel.updateOne(
           { _id: reviewDto.targetId },
           {
             $set: {
@@ -171,6 +172,7 @@ export class AttractionsService {
             $inc: { rateValue: diff },
           },
         );
+        return attraction;
       } else {
         // if not exists, create review document, rateCount, rateValue, avgRating
         // create review document
@@ -182,7 +184,7 @@ export class AttractionsService {
         await createdReview.save();
 
         // update attraction
-        return await this.attractionModel.updateOne(
+        await this.attractionModel.updateOne(
           { _id: reviewDto.targetId },
           {
             $set: {
@@ -191,7 +193,42 @@ export class AttractionsService {
             $inc: { rateCount: 1, rateValue: reviewDto.rating },
           },
         );
+        return attraction;
       }
+    });
+
+    session.endSession();
+  }
+
+  async likeAttraction(@Body() likeShareDto: LikeShareDto) {
+    const session = await this.connection.startSession();
+
+    await session.withTransaction(async () => {
+      // check if attraction exists
+      const attraction = await this.attractionModel.findOne({
+        _id: likeShareDto.targetId,
+      });
+      if (!attraction) {
+        throw new BadRequestException('Invalid Attraction');
+      }
+      // if already liked, unlike it
+      if (attraction.likes.includes(likeShareDto.userId)) {
+        attraction.likes = attraction.likes.filter(
+          (a) => a != likeShareDto.userId,
+        );
+      } else {
+        attraction.likes.push(likeShareDto.userId);
+      }
+      // update attraction
+      await this.attractionModel.updateOne(
+        { _id: likeShareDto.targetId },
+        {
+          $set: {
+            likes: attraction.likes,
+          },
+        },
+      );
+      return attraction;
     });
 
     session.endSession();
