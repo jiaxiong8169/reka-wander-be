@@ -1,6 +1,9 @@
 import { Hotel } from 'src/schemas/hotel.schema';
 import { Attraction } from 'src/schemas/attraction.schema';
 import { Restaurant } from 'src/schemas/restaurant.schema';
+import { Vehicle } from 'src/schemas/vehicles.schema';
+import { Homestay } from 'src/schemas/homestay.schema';
+import { Room } from 'src/schemas/room.schema';
 
 export class TripDto {
   id: string;
@@ -29,7 +32,13 @@ export class TripDto {
 
   restaurants: string[];
 
-  hotels: string[];
+  hotel: string;
+
+  vehicle: string;
+
+  homestay: string;
+
+  rooms: string[];
 
   timestamp: Date;
 
@@ -37,5 +46,11 @@ export class TripDto {
 
   restaurantObjects: Restaurant[];
 
-  hotelObjects: Hotel[];
+  hotelObject: Hotel;
+
+  vehicleObject: Vehicle;
+
+  homestayObject: Homestay;
+
+  roomObjects: Room[];
 }
