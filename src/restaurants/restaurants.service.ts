@@ -9,8 +9,8 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
-import { RateDto } from 'src/dto/rate.dto';
-import { Rate, RateDocument } from 'src/schemas/rate.schema';
+import { Review, ReviewDocument } from 'src/schemas/review.schema';
+import { ReviewDto } from 'src/dto/review.dto';
 import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 
 @Injectable()
@@ -18,8 +18,8 @@ export class RestaurantsService {
   constructor(
     @InjectModel(Restaurant.name)
     private restaurantModel: mongoose.Model<RestaurantDocument>,
-    @InjectModel(Rate.name)
-    private rateModel: mongoose.Model<RateDocument>,
+    @InjectModel(Review.name)
+    private reviewModel: mongoose.Model<ReviewDocument>,
     @InjectConnection() private readonly connection: mongoose.Connection,
   ) {}
 
@@ -123,46 +123,72 @@ export class RestaurantsService {
     return query.exec();
   }
 
-  async rateRestaurant(@Body() rateDto: RateDto) {
+  async reviewRestaurant(@Body() reviewDto: ReviewDto) {
     const session = await this.connection.startSession();
 
     await session.withTransaction(async () => {
       // check if restaurant exists
       const restaurant = await this.restaurantModel.findOne({
-        _id: rateDto.spotId,
+        _id: reviewDto.targetId,
       });
       if (!restaurant) {
         throw new BadRequestException('Invalid Restaurant');
       }
-      // get rate document if exists
-      const rate = await this.rateModel.findOne({
-        spotId: rateDto.spotId,
-        userId: rateDto.userId,
+      // get review document if exists
+      const review = await this.reviewModel.findOne({
+        targetId: reviewDto.targetId,
+        userId: reviewDto.userId,
       });
-      // if exists, update rate document, rateCount and rateValue
-      if (rate) {
-        const diff = rateDto.value - rate.value;
-        // update rate document
-        await this.rateModel.updateOne(
-          { _id: rate.id },
-          { $inc: { value: diff } },
+      // if exists, update review document, rateCount, rateValue, avgRating
+      if (review) {
+        const diff = reviewDto.rating - review.rating;
+        const newAvgRating = (
+          (restaurant.rateValue + diff) /
+          restaurant.rateCount
+        ).toFixed(2);
+        // update review document
+        await this.reviewModel.updateOne(
+          { _id: review.id },
+          {
+            $set: {
+              userName: reviewDto.userName,
+              userProfileSrc: reviewDto.userProfileSrc,
+              timestamp: reviewDto.timestamp,
+              contents: reviewDto.contents,
+            },
+            $inc: { rating: diff },
+          },
         );
 
         // update restaurant
         return await this.restaurantModel.updateOne(
-          { _id: rateDto.spotId },
-          { $inc: { rateValue: diff } },
+          { _id: reviewDto.targetId },
+          {
+            $set: {
+              avgRating: newAvgRating,
+            },
+            $inc: { rateValue: diff },
+          },
         );
       } else {
-        // if not exists, create rate document, rateCount and rateValue
-        // create rate document
-        const createdRate = new this.rateModel(rateDto);
-        await createdRate.save();
+        // if not exists, create review document, rateCount, rateValue, avgRating
+        // create review document
+        const newAvgRating = (
+          (restaurant.rateValue + reviewDto.rating) /
+          (restaurant.rateCount + 1)
+        ).toFixed(2);
+        const createdReview = new this.reviewModel(reviewDto);
+        await createdReview.save();
 
         // update restaurant
         return await this.restaurantModel.updateOne(
-          { _id: rateDto.spotId },
-          { $inc: { rateCount: 1, rateValue: rateDto.value } },
+          { _id: reviewDto.targetId },
+          {
+            $set: {
+              avgRating: newAvgRating,
+            },
+            $inc: { rateCount: 1, rateValue: reviewDto.rating },
+          },
         );
       }
     });

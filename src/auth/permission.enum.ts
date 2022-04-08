@@ -6,12 +6,12 @@ export enum Permission {
   UpdateUser = 'updateUser',
   DeleteUser = 'deleteUser',
   ReadUser = 'readUser',
-  // comments
-  CreateComment = 'createComment',
-  ReadAllComments = 'readAllComments',
-  UpdateComment = 'updateComment',
-  DeleteComment = 'deleteComment',
-  ReadComment = 'readComment',
+  // reviews
+  CreateReview = 'createReview',
+  ReadAllReviews = 'readAllReviews',
+  UpdateReview = 'updateReview',
+  DeleteReview = 'deleteReview',
+  ReadReview = 'readReview',
   // hotel
   CreateHotel = 'createHotel',
   ReadAllHotels = 'readAllHotels',
@@ -30,12 +30,6 @@ export enum Permission {
   UpdateInterest = 'updateInterest',
   DeleteInterest = 'deleteInterest',
   ReadInterest = 'readInterest',
-  // rate
-  CreateRate = 'createRate',
-  ReadAllRates = 'readAllRates',
-  UpdateRate = 'updateRate',
-  DeleteRate = 'deleteRate',
-  ReadRate = 'readRate',
   // trip
   CreateTrip = 'createTrip',
   ReadAllTrips = 'readAllTrips',

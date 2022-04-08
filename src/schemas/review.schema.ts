@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 
-export type RateDocument = Rate & mongoose.Document;
+export type ReviewDocument = Review & mongoose.Document;
 
 @Schema({
   id: true,
@@ -14,20 +14,29 @@ export type RateDocument = Rate & mongoose.Document;
     },
   },
 })
-export class Rate {
+export class Review {
   _id: mongoose.Schema.Types.ObjectId;
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }])
+  @Prop({ required: true })
+  targetId: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   userId: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
-  spotId: string;
+  userName: string;
+
+  @Prop()
+  userProfileSrc: string;
 
   @Prop({ required: true })
   timestamp: Date;
 
   @Prop({ required: true })
-  value: number;
+  contents: string;
+
+  @Prop({ required: true })
+  rating: number;
 }
 
-export const RateSchema = SchemaFactory.createForClass(Rate);
+export const ReviewSchema = SchemaFactory.createForClass(Review);

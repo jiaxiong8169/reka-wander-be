@@ -18,7 +18,7 @@ import * as mongoose from 'mongoose';
 import { HotelDto } from 'src/dto/hotel.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
-import { RateDto } from 'src/dto/rate.dto';
+import { ReviewDto } from 'src/dto/review.dto';
 import { User } from 'src/decorators/user.decorator';
 
 @ApiTags('hotels')
@@ -26,15 +26,16 @@ import { User } from 'src/decorators/user.decorator';
 export class HotelsController {
   constructor(private hotelsService: HotelsService) {}
 
-  @Post('rate')
-  @RequirePermissions(Permission.CreateRate)
-  async rateHotel(@Body() req: RateDto, @User() reqUser) {
+  @Post('review')
+  @RequirePermissions(Permission.CreateReview)
+  async reviewHotel(@Body() req: ReviewDto, @User() reqUser) {
     req.timestamp = new Date();
     req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
-    // request must be associated with user ID
-    if (!req.userId) throw new BadRequestException('Invalid User ID');
+    if (!req.userId || !req.userName)
+      throw new BadRequestException('Invalid user information');
+    if (!req.contents) throw new BadRequestException('Comment cannot be empty');
     try {
-      const hotel = await this.hotelsService.rateHotel(req);
+      const hotel = await this.hotelsService.reviewHotel(req);
       return hotel;
     } catch (e: any) {
       throw new BadRequestException(e.message);
