@@ -15,6 +15,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
 import { HotelsModule } from './hotels/hotels.module';
 import { HomestaysModule } from './homestays/homestays.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
+import { GuidesModule } from './guides/guides.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { VehiclesModule } from './vehicles/vehicles.module';
     HotelsModule,
     HomestaysModule,
     VehiclesModule,
+    GuidesModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

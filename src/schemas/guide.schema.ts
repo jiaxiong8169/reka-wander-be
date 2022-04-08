@@ -2,7 +2,7 @@ import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Package, PackageSchema } from './package.schema';
 
-export type HotelDocument = Hotel & mongoose.Document;
+export type GuideDocument = Guide & mongoose.Document;
 
 @Schema({
   id: true,
@@ -15,7 +15,7 @@ export type HotelDocument = Hotel & mongoose.Document;
     },
   },
 })
-export class Hotel {
+export class Guide {
   _id: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })
@@ -78,4 +78,4 @@ export class Hotel {
   timestamp: Date;
 }
 
-export const HotelSchema = SchemaFactory.createForClass(Hotel);
+export const GuideSchema = SchemaFactory.createForClass(Guide);
