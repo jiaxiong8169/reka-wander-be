@@ -107,9 +107,9 @@ export class RestaurantsService {
   }
 
   async findNearbyRestaurants(params: NearbyParamsDto): Promise<Restaurant[]> {
-    const { long, lat, distance } = params;
+    const { long, lat, distance, sort, offset, limit } = params;
     // find nearby with nearSphere
-    const query = this.restaurantModel.find({
+    let query = this.restaurantModel.find({
       loc: {
         $nearSphere: {
           $geometry: {
@@ -121,6 +121,15 @@ export class RestaurantsService {
         },
       },
     });
+    if (sort) {
+      query = query.sort(sort);
+    }
+    if (offset) {
+      query = query.skip(offset);
+    }
+    if (limit) {
+      query.limit(limit);
+    }
     return query.exec();
   }
 

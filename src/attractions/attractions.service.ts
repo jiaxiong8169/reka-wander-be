@@ -108,9 +108,9 @@ export class AttractionsService {
   }
 
   async findNearbyAttractions(params: NearbyParamsDto): Promise<Attraction[]> {
-    const { long, lat, distance } = params;
+    const { long, lat, distance, sort, offset, limit } = params;
     // find nearby with nearSphere
-    const query = this.attractionModel.find({
+    let query = this.attractionModel.find({
       loc: {
         $nearSphere: {
           $geometry: {
@@ -122,6 +122,15 @@ export class AttractionsService {
         },
       },
     });
+    if (sort) {
+      query = query.sort(sort);
+    }
+    if (offset) {
+      query = query.skip(offset);
+    }
+    if (limit) {
+      query.limit(limit);
+    }
     return query.exec();
   }
 

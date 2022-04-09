@@ -17,11 +17,22 @@ import { VehiclesService } from './vehicles.service';
 import * as mongoose from 'mongoose';
 import { VehicleDto } from 'src/dto/vehicle.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 
 @ApiTags('vehicles')
 @Controller('vehicles')
 export class VehiclesController {
   constructor(private vehiclesService: VehiclesService) {}
+
+  @Get('nearby')
+  @RequirePermissions(Permission.ReadAllVehicles)
+  async getNearbyVehicles(@Query() query: NearbyParamsDto) {
+    const nearbyVehicles = await this.vehiclesService.findNearbyVehicles(query);
+    return {
+      data: nearbyVehicles,
+      total: nearbyVehicles.length,
+    };
+  }
 
   @Get()
   @RequirePermissions(Permission.ReadAllVehicles)

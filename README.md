@@ -37,6 +37,15 @@ $ db.attractions.createIndex({"loc": "2dsphere"})
 
 # Restaurant
 $ db.restaurants.createIndex({"loc": "2dsphere"})
+
+# Guide
+$ db.guides.createIndex({"loc": "2dsphere"})
+
+# Vehicle
+$ db.vehicles.createIndex({"loc": "2dsphere"})
+
+# Homestay
+$ db.homestays.createIndex({"loc": "2dsphere"})
 ```
 
 ## Installation
