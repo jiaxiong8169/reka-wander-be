@@ -53,4 +53,14 @@ export class TripDto {
   homestayObject: Homestay;
 
   roomObjects: Room[];
+
+  days: number;
+
+  hours: number;
+
+  long: number;
+
+  lat: number;
+
+  previousBudget: number;
 }
