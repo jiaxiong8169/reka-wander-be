@@ -1,7 +1,6 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Strategy, ExtractJwt } from 'passport-firebase-jwt';
-import { auth } from 'firebase-admin';
 import { AuthService } from '../auth.service';
 import * as admin from 'firebase-admin';
 import { ServiceAccount } from 'firebase-admin';
@@ -11,6 +10,7 @@ export class FirebaseAuthStrategy extends PassportStrategy(
   Strategy,
   'firebase-strategy',
 ) {
+  private defaultApp: any;
   constructor(private authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -30,14 +30,15 @@ export class FirebaseAuthStrategy extends PassportStrategy(
       client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL,
     } as ServiceAccount;
 
-    admin.initializeApp({
+    this.defaultApp = admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
     });
   }
 
   async validate(request, token) {
     const { email } = request.body;
-    return auth()
+    return await this.defaultApp
+      .auth()
       .verifyIdToken(token, true)
       .then(async (value) => {
         return await this.authService.validateUserWithoutPassword(

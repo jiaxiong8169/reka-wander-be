@@ -16,6 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload): Promise<DecodedJwtPayload> {
+    console.log({ payload });
     const { sub, email, roles, permissions } = payload;
     return { id: sub, email, role: roles[0], permissions };
   }
