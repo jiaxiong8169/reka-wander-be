@@ -29,6 +29,11 @@ export class TripsController {
     try {
       // assign timestamp to current timestamp
       body.timestamp = new Date();
+      body.days =
+        (new Date(body.endDate).getTime() -
+          new Date(body.startDate).getTime()) /
+        (1000 * 3600 * 24);
+      body.hours = body.days * 8;
       const trip = await this.tripsService.getTripRecommendations(body);
       return trip;
     } catch (e: any) {

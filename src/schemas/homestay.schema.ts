@@ -45,7 +45,7 @@ export class Homestay {
   kids: boolean;
 
   @Prop([{ type: RoomSchema }])
-  rooms: Room;
+  rooms: Room[];
 
   @Prop()
   thumbnailSrc: string;

@@ -9,6 +9,7 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
+import { TripDto } from 'src/dto/trip.dto';
 
 @Injectable()
 export class VehiclesService {
@@ -108,5 +109,42 @@ export class VehiclesService {
       query.limit(limit);
     }
     return query.exec();
+  }
+
+  async findVehicleByFeatures(trip: TripDto) {
+    if (!trip.rentCar) return;
+    const targetPrice = trip.kids ? 'priceWithBaby' : 'price';
+    let query = this.vehicleModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [trip.long, trip.lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: 50000, // default 300 kilometers
+        },
+      },
+      pax: {
+        $gte: trip.pax,
+      },
+      availability: {
+        $gt: 0,
+      },
+      [targetPrice]: {
+        $lte: trip.budget,
+      },
+    });
+    query = query.sort('price');
+
+    const vehicles = await query.exec();
+
+    if (vehicles.length > 0) {
+      trip.vehicle = vehicles[0]['_id'];
+      trip.vehicleObject = vehicles[0];
+      trip.kids
+        ? (trip.budget -= vehicles[0].priceWithBaby)
+        : (trip.budget -= vehicles[0].price);
+    }
   }
 }

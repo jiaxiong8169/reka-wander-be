@@ -57,7 +57,7 @@ export class Hotel {
   kids: boolean;
 
   @Prop([{ type: RoomSchema }])
-  rooms: Room;
+  rooms: Room[];
 
   @Prop()
   category: string;

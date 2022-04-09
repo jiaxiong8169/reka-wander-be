@@ -13,6 +13,8 @@ import { AttractionsService } from 'src/attractions/attractions.service';
 import { HotelsService } from 'src/hotels/hotels.service';
 import { RestaurantsService } from 'src/restaurants/restaurants.service';
 import { User, UserDocument } from 'src/schemas/user.schema';
+import { HomestaysService } from 'src/homestays/homestays.service';
+import { VehiclesService } from 'src/vehicles/vehicles.service';
 
 @Injectable()
 export class TripsService {
@@ -22,6 +24,8 @@ export class TripsService {
     private readonly attractionsService: AttractionsService,
     private readonly hotelsService: HotelsService,
     private readonly restaurantsService: RestaurantsService,
+    private readonly homestaysService: HomestaysService,
+    private readonly vehiclesService: VehiclesService,
     @InjectModel(User.name)
     private userModel: mongoose.Model<UserDocument>,
     @InjectConnection() private readonly connection: mongoose.Connection,
@@ -49,46 +53,102 @@ export class TripsService {
     });
 
     // get recommendations
-    const hotels = await this.hotelsService.findHotelsByFeatures(features);
+    trip.previousBudget = trip.budget;
+    await this.hotelsService.findHotelByFeatures(trip);
+    await this.homestaysService.findHomestayByFeatures(trip);
+    await this.vehiclesService.findVehicleByFeatures(trip);
     const attractions = await this.attractionsService.findAttractionsByFeatures(
-      features,
+      trip,
     );
     const restaurants = await this.restaurantsService.findRestaurantsByFeatures(
-      features,
+      trip,
     );
-    if (hotels.length > 0) {
-      trip.hotelObject = hotels[0];
-      trip.hotel = hotels[0]['id'];
+
+    // use 2 pointers method to give equal priority to restaurants and attractions
+    trip.attractionObjects = [];
+    trip.attractions = [];
+    trip.restaurantObjects = [];
+    trip.restaurants = [];
+    let left1 = 0;
+    let left2 = 0;
+    let tmpBudget = trip.budget;
+    while (
+      tmpBudget > 0 &&
+      left1 < restaurants.length &&
+      left2 < attractions.length
+    ) {
+      if (left1 <= left2 && left1 !== -1) {
+        if (restaurants[left1].price * trip.pax <= tmpBudget) {
+          trip.restaurants.push(restaurants[left1]['_id'].toString());
+          trip.restaurantObjects.push(restaurants[left1]);
+          tmpBudget -= restaurants[left1].price * trip.pax;
+          left1++;
+        } else {
+          left1 = -1;
+        }
+      } else if (left2 !== -1) {
+        if (attractions[left2].price * trip.pax <= tmpBudget) {
+          trip.attractions.push(attractions[left2]['_id'].toString());
+          trip.attractionObjects.push(attractions[left2]);
+          tmpBudget -= attractions[left2].price * trip.pax;
+          left2++;
+        } else {
+          left2 = -1;
+        }
+      } else {
+        break;
+      }
     }
-    trip.attractionObjects = attractions;
-    trip.attractions = attractions.map((a) => a['id']);
-    trip.restaurantObjects = restaurants;
-    trip.restaurants = restaurants.map((a) => a['id']);
 
-    const session = await this.connection.startSession();
+    while (left1 !== -1 && left1 < restaurants.length) {
+      if (restaurants[left1].price * trip.pax <= tmpBudget) {
+        trip.restaurants.push(restaurants[left1]['_id'].toString());
+        trip.restaurantObjects.push(restaurants[left1]);
+        tmpBudget -= restaurants[left1].price * trip.pax;
+        left1++;
+      } else {
+        break;
+      }
+    }
 
-    await session.withTransaction(async () => {
-      // get user
-      const user = await this.userModel.findOne({ _id: trip.userId });
-      if (!user) throw new BadRequestException('Invalid User');
+    while (left2 !== -1 && left2 < attractions.length) {
+      if (attractions[left2].price * trip.pax <= tmpBudget) {
+        trip.attractions.push(attractions[left2]['_id'].toString());
+        trip.attractionObjects.push(attractions[left2]);
+        tmpBudget -= attractions[left2].price * trip.pax;
+        left2++;
+      } else {
+        break;
+      }
+    }
 
-      // create a new trip
-      const tripDb = await this.create(trip);
-      trip.id = tripDb['id'];
+    // create a trip only if trip userId exists
+    if (trip.userId) {
+      const session = await this.connection.startSession();
 
-      // add into user trip list
-      user.trips.push(tripDb['id']);
-      await this.userModel.findOneAndUpdate(
-        { _id: user['id'] },
-        { trips: user.trips },
-        {
-          new: true,
-          runValidators: true,
-        },
-      );
-    });
+      await session.withTransaction(async () => {
+        // get user
+        const user = await this.userModel.findOne({ _id: trip.userId });
+        if (!user) throw new BadRequestException('Invalid User');
 
-    session.endSession();
+        // create a new trip
+        const tripDb = await this.create(trip);
+        trip.id = tripDb['id'];
+
+        // add into user trip list
+        user.trips.push(tripDb['id']);
+        await this.userModel.findOneAndUpdate(
+          { _id: user['id'] },
+          { trips: user.trips },
+          {
+            new: true,
+            runValidators: true,
+          },
+        );
+      });
+
+      session.endSession();
+    }
 
     return trip;
   }

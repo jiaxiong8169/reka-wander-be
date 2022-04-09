@@ -35,6 +35,9 @@ export class Trip {
   @Prop({ required: true })
   budget: number;
 
+  @Prop({ required: true })
+  previousBudget: number;
+
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' }])
   interests: mongoose.Schema.Types.ObjectId[];
 
