@@ -20,11 +20,22 @@ import { ApiTags } from '@nestjs/swagger';
 import { ReviewDto } from 'src/dto/review.dto';
 import { User } from 'src/decorators/user.decorator';
 import { LikeShareDto } from 'src/dto/like-share.dto';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 
 @ApiTags('guides')
 @Controller('guides')
 export class GuidesController {
   constructor(private guidesService: GuidesService) {}
+
+  @Get('nearby')
+  @RequirePermissions(Permission.ReadAllGuides)
+  async getNearbyGuides(@Query() query: NearbyParamsDto) {
+    const nearbyGuides = await this.guidesService.findNearbyGuides(query);
+    return {
+      data: nearbyGuides,
+      total: nearbyGuides.length,
+    };
+  }
 
   @Post('review')
   @RequirePermissions(Permission.CreateReview)

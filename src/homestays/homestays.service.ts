@@ -8,6 +8,7 @@ import { Homestay, HomestayDocument } from 'src/schemas/homestay.schema';
 import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 
 @Injectable()
 export class HomestaysService {
@@ -80,5 +81,32 @@ export class HomestaysService {
       SEARCH_FIELDS['homestays'],
     );
     return this.homestayModel.find(effectiveFilter).countDocuments();
+  }
+
+  async findNearbyHomestays(params: NearbyParamsDto): Promise<Homestay[]> {
+    const { long, lat, distance, sort, offset, limit } = params;
+    // find nearby with nearSphere
+    let query = this.homestayModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [long, lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: distance ? distance : 5000, // default 5000 meters
+        },
+      },
+    });
+    if (sort) {
+      query = query.sort(sort);
+    }
+    if (offset) {
+      query = query.skip(offset);
+    }
+    if (limit) {
+      query.limit(limit);
+    }
+    return query.exec();
   }
 }
