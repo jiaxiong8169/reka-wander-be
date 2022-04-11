@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { Permission } from 'src/auth/permission.enum';
 import { RequirePermissions } from 'src/auth/permissions.decorator';
@@ -21,6 +22,8 @@ import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 import { ReviewDto } from 'src/dto/review.dto';
 import { User } from 'src/decorators/user.decorator';
 import { LikeShareDto } from 'src/dto/like-share.dto';
+import { PermissionsGuard } from 'src/auth/permissions.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
 
 @ApiTags('hotels')
 @Controller('hotels')
@@ -45,7 +48,9 @@ export class HotelsController {
 
   @Post('like')
   @RequirePermissions(Permission.CreateReview)
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
   async likeHotel(@Body() req: LikeShareDto, @User() reqUser) {
+    console.log('hello');
     req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
     if (!req.userId) throw new BadRequestException('Invalid user information');
     try {

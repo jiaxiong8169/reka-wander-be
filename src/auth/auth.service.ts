@@ -37,6 +37,17 @@ export class AuthService {
     return user;
   }
 
+  async validateUserWithoutPassword(email: string): Promise<User> {
+    let user;
+    try {
+      user = await this.usersService.findOneUserByEmail(email);
+    } catch (e: any) {
+      throw Error(ExceptionMessage.Authentication);
+    }
+    user.password = undefined;
+    return user;
+  }
+
   async login(
     user: User,
   ): Promise<[{ access_token: string; refresh_token: string }, User]> {

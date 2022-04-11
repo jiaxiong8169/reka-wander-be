@@ -9,7 +9,6 @@ import {
   Req,
   Res,
   UnauthorizedException,
-  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto } from 'src/dto/create-user.dto';
@@ -17,9 +16,6 @@ import { AuthService } from './auth.service';
 import JwtRefreshGuard from './jwt-refresh/jwt-refresh.guard';
 import { LocalAuthGuard } from './local-auth/local-auth.guard';
 import { Response } from 'express';
-import { Roles } from './roles';
-import { RequirePermissions } from './permissions.decorator';
-import { PermissionsGuard } from './permissions.guard';
 import { JwtAuthGuard } from './jwt-auth/jwt-auth.guard';
 import { JwtResetPasswordGuard } from './jwt-reset-password/jwt-reset-password.guard';
 import { User as UserSchema } from 'src/schemas/user.schema';
@@ -27,6 +23,7 @@ import { DecodedJwtPayload } from 'src/dto/payloads.dto';
 import * as mongoose from 'mongoose';
 import { User } from 'src/decorators/user.decorator';
 import { ApiTags } from '@nestjs/swagger';
+import { FirebaseAuthGuard } from './firebase-auth/firebase-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -36,6 +33,17 @@ export class AuthController {
   @Post('login')
   @UseGuards(LocalAuthGuard)
   async login(@Req() req, @Res({ passthrough: true }) response: Response) {
+    const reqUser: UserSchema = req.user;
+    const [tokens, user] = await this.authService.login(reqUser);
+    return { tokens, user };
+  }
+
+  @Post('login/google')
+  @UseGuards(FirebaseAuthGuard)
+  async loginWithGoogle(
+    @Req() req,
+    @Res({ passthrough: true }) response: Response,
+  ) {
     const reqUser: UserSchema = req.user;
     const [tokens, user] = await this.authService.login(reqUser);
     return { tokens, user };
@@ -60,8 +68,6 @@ export class AuthController {
   }
 
   @Post('register')
-  @RequirePermissions(...Roles.admin)
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
   async register(@Body() req: CreateUserDto) {
     try {
       return this.authService.register(req);
