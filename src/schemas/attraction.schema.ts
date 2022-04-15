@@ -69,6 +69,9 @@ export class Attraction {
 
   @Prop()
   likes: string[];
+
+  @Prop()
+  link: string;
 }
 
 export const AttractionSchema = SchemaFactory.createForClass(Attraction);

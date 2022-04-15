@@ -60,6 +60,9 @@ export class Vehicle {
 
   @Prop()
   vendorPhoneNumber: string;
+
+  @Prop()
+  link: string;
 }
 
 export const VehicleSchema = SchemaFactory.createForClass(Vehicle);
