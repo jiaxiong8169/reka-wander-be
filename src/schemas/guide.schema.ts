@@ -76,6 +76,9 @@ export class Guide {
 
   @Prop()
   timestamp: Date;
+
+  @Prop()
+  link: string;
 }
 
 export const GuideSchema = SchemaFactory.createForClass(Guide);

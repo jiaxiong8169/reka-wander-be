@@ -44,4 +44,6 @@ export class GuideDto {
   vendorPhoneNumber: string;
 
   timestamp: Date;
+
+  link: string;
 }

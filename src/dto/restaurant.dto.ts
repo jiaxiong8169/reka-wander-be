@@ -34,4 +34,6 @@ export class RestaurantDto {
   shares: string[];
 
   likes: string[];
+
+  link: string;
 }

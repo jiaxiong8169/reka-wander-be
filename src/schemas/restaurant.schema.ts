@@ -66,6 +66,9 @@ export class Restaurant {
 
   @Prop()
   likes: string[];
+
+  @Prop()
+  link: string;
 }
 
 export const RestaurantSchema = SchemaFactory.createForClass(Restaurant);

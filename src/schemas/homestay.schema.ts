@@ -58,6 +58,9 @@ export class Homestay {
 
   @Prop()
   vendorPhoneNumber: string;
+
+  @Prop()
+  link: string;
 }
 
 export const HomestaySchema = SchemaFactory.createForClass(Homestay);

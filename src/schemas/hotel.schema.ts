@@ -82,6 +82,9 @@ export class Hotel {
 
   @Prop()
   vendorPhoneNumber: string;
+
+  @Prop()
+  link: string;
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);

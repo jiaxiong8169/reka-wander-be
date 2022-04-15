@@ -48,4 +48,6 @@ export class HotelDto {
   vendorEmail: string;
 
   vendorPhoneNumber: string;
+
+  link: string;
 }
