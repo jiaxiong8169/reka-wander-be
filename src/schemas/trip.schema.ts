@@ -38,8 +38,8 @@ export class Trip {
   @Prop({ required: true })
   previousBudget: number;
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' }])
-  interests: mongoose.Schema.Types.ObjectId[];
+  @Prop()
+  interests: string[];
 
   @Prop()
   kids: boolean;

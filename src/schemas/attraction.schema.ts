@@ -46,8 +46,8 @@ export class Attraction {
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }])
   reviews: mongoose.Schema.Types.ObjectId[];
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' })
-  interest: mongoose.Schema.Types.ObjectId;
+  @Prop()
+  interest: string;
 
   @Prop()
   hours: number;

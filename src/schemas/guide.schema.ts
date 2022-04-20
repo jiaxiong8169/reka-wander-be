@@ -35,8 +35,8 @@ export class Guide {
   @Prop()
   description: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' })
-  interest: mongoose.Schema.Types.ObjectId;
+  @Prop()
+  interest: string;
 
   @Prop()
   price: number;
