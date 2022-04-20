@@ -8,7 +8,6 @@ import { Trip, TripDocument } from 'src/schemas/trip.schema';
 import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
-import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 import { AttractionsService } from 'src/attractions/attractions.service';
 import { HotelsService } from 'src/hotels/hotels.service';
 import { RestaurantsService } from 'src/restaurants/restaurants.service';
@@ -42,16 +41,6 @@ export class TripsService {
   }
 
   async getTripRecommendations(trip: TripDto): Promise<TripDto> {
-    // instantiate features
-    const features = new RecommenderFeatures({
-      maxPax: trip.pax,
-      minBudget: trip.budget,
-      kids: trip.kids,
-      rentCar: trip.rentCar,
-      rentHomestay: trip.rentHomestay,
-      interests: trip.interests,
-    });
-
     // get recommendations
     trip.previousBudget = trip.budget;
     await this.hotelsService.findHotelByFeatures(trip);
@@ -165,8 +154,8 @@ export class TripsService {
 
   async create(@Body() tripDto: TripDto): Promise<Trip> {
     const createdTrip = new this.tripModel(tripDto);
-    return createdTrip.save().catch(() => {
-      throw Error(ExceptionMessage.TripExist);
+    return createdTrip.save().catch((e) => {
+      throw Error(e.message);
     });
   }
 
