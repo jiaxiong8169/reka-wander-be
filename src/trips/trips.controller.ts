@@ -27,6 +27,8 @@ export class TripsController {
   @RequirePermissions(Permission.CreateTrip)
   async getTripRecommendations(@Body() body: TripDto) {
     try {
+      // set endDate if not exists yet
+      if (!body.endDate) body.endDate = body.startDate;
       // assign timestamp to current timestamp
       body.timestamp = new Date();
       body.days =
