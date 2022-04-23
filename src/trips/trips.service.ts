@@ -118,22 +118,24 @@ export class TripsService {
       await session.withTransaction(async () => {
         // get user
         const user = await this.userModel.findOne({ _id: trip.userId });
-        if (!user) throw new BadRequestException('Invalid User');
 
-        // create a new trip
-        const tripDb = await this.create(trip);
-        trip.id = tripDb['id'];
+        // if user is found, create a new trip
+        if (user) {
+          // create a new trip
+          const tripDb = await this.create(trip);
+          trip.id = tripDb['id'];
 
-        // add into user trip list
-        user.trips.push(tripDb['id']);
-        await this.userModel.findOneAndUpdate(
-          { _id: user['id'] },
-          { trips: user.trips },
-          {
-            new: true,
-            runValidators: true,
-          },
-        );
+          // add into user trip list
+          user.trips.push(tripDb['id']);
+          await this.userModel.findOneAndUpdate(
+            { _id: user['id'] },
+            { trips: user.trips },
+            {
+              new: true,
+              runValidators: true,
+            },
+          );
+        }
       });
 
       session.endSession();
