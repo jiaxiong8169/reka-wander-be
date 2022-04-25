@@ -122,7 +122,7 @@ export class VehiclesService {
             coordinates: [trip.long, trip.lat],
           },
           $minDistance: 0, // minimum 0 meters
-          $maxDistance: 50000, // default 300 kilometers
+          $maxDistance: 300000, // default 300 kilometers
         },
       },
       pax: {

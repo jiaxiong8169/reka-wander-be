@@ -61,25 +61,34 @@ export class TripsService {
     let left1 = 0;
     let left2 = 0;
     let tmpBudget = trip.budget;
+    let tmpHours = trip.hours;
     while (
       tmpBudget > 0 &&
+      tmpHours > 0 &&
       left1 < restaurants.length &&
       left2 < attractions.length
     ) {
       if (left1 <= left2 && left1 !== -1) {
-        if (restaurants[left1].price * trip.pax <= tmpBudget) {
+        // for restaurant, make sure that the price is within budget and hours within 2
+        if (restaurants[left1].price * trip.pax <= tmpBudget && tmpHours >= 2) {
           trip.restaurants.push(restaurants[left1]['_id'].toString());
           trip.restaurantObjects.push(restaurants[left1]);
           tmpBudget -= restaurants[left1].price * trip.pax;
+          tmpHours -= 2;
           left1++;
         } else {
           left1 = -1;
         }
       } else if (left2 !== -1) {
-        if (attractions[left2].price * trip.pax <= tmpBudget) {
+        // for attractions, make sure that the price is within budget and hours within trip.hours
+        if (
+          attractions[left2].price * trip.pax <= tmpBudget &&
+          tmpHours >= attractions[left2].hours
+        ) {
           trip.attractions.push(attractions[left2]['_id'].toString());
           trip.attractionObjects.push(attractions[left2]);
           tmpBudget -= attractions[left2].price * trip.pax;
+          tmpHours -= attractions[left2].hours;
           left2++;
         } else {
           left2 = -1;
@@ -90,10 +99,11 @@ export class TripsService {
     }
 
     while (left1 !== -1 && left1 < restaurants.length) {
-      if (restaurants[left1].price * trip.pax <= tmpBudget) {
+      if (restaurants[left1].price * trip.pax <= tmpBudget && tmpHours >= 2) {
         trip.restaurants.push(restaurants[left1]['_id'].toString());
         trip.restaurantObjects.push(restaurants[left1]);
         tmpBudget -= restaurants[left1].price * trip.pax;
+        tmpHours -= 2;
         left1++;
       } else {
         break;
@@ -101,15 +111,22 @@ export class TripsService {
     }
 
     while (left2 !== -1 && left2 < attractions.length) {
-      if (attractions[left2].price * trip.pax <= tmpBudget) {
+      if (
+        attractions[left2].price * trip.pax <= tmpBudget &&
+        tmpHours >= attractions[left2].hours
+      ) {
         trip.attractions.push(attractions[left2]['_id'].toString());
         trip.attractionObjects.push(attractions[left2]);
         tmpBudget -= attractions[left2].price * trip.pax;
+        tmpHours -= attractions[left2].hours;
         left2++;
       } else {
         break;
       }
     }
+
+    // set remaining budget
+    trip.budget = tmpBudget;
 
     // create a trip only if trip userId exists
     if (trip.userId) {
