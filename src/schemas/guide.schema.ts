@@ -47,6 +47,9 @@ export class Guide {
   @Prop()
   thumbnailSrc: string;
 
+  @Prop()
+  thumbnailTransparentSrc: string;
+
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }])
   reviews: mongoose.Schema.Types.ObjectId[];
 

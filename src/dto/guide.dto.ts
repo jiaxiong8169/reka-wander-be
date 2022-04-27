@@ -25,6 +25,8 @@ export class GuideDto {
 
   thumbnailSrc: string;
 
+  thumbnailTransparentSrc: string;
+
   reviews: string[];
 
   rateCount: number;
