@@ -32,11 +32,11 @@ export class TripDto {
 
   restaurants: string[];
 
-  hotel: string;
+  hotels: string[];
 
-  vehicle: string;
+  vehicles: string[];
 
-  homestay: string;
+  homestays: string[];
 
   rooms: string[];
 
@@ -46,11 +46,11 @@ export class TripDto {
 
   restaurantObjects: Restaurant[];
 
-  hotelObject: Hotel;
+  hotelObjects: Hotel[];
 
-  vehicleObject: Vehicle;
+  vehicleObjects: Vehicle[];
 
-  homestayObject: Homestay;
+  homestayObjects: Homestay[];
 
   roomObjects: Room[];
 

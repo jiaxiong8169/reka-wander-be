@@ -61,8 +61,8 @@ export class HotelsService {
           room.availability > 0 &&
           room[targetPrice] <= trip.budget
         ) {
-          trip.hotel = hotel['_id'];
-          trip.hotelObject = hotel;
+          trip.hotels = [hotel['_id']];
+          trip.hotelObjects = [hotel];
           trip.rooms = [room['_id']];
           trip.roomObjects = [room];
           trip.kids

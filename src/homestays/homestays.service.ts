@@ -137,8 +137,8 @@ export class HomestaysService {
           room.availability > 0 &&
           room[targetPrice] <= trip.budget
         ) {
-          trip.homestay = homestay['_id'];
-          trip.homestayObject = homestay;
+          trip.homestays = [homestay['_id']];
+          trip.homestayObjects = [homestay];
           trip.rooms = [room['_id']];
           trip.roomObjects = [room];
           trip.kids

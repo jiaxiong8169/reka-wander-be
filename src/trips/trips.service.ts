@@ -128,6 +128,14 @@ export class TripsService {
     // set remaining budget
     trip.budget = tmpBudget;
 
+    // set default values
+    if (!trip.hotelObjects) trip.hotelObjects = [];
+    if (!trip.hotels) trip.hotels = [];
+    if (!trip.vehicleObjects) trip.vehicleObjects = [];
+    if (!trip.vehicles) trip.vehicles = [];
+    if (!trip.homestayObjects) trip.homestayObjects = [];
+    if (!trip.homestays) trip.homestays = [];
+
     // create a trip only if trip userId exists
     if (trip.userId) {
       const session = await this.connection.startSession();

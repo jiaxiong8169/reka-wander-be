@@ -140,8 +140,8 @@ export class VehiclesService {
     const vehicles = await query.exec();
 
     if (vehicles.length > 0) {
-      trip.vehicle = vehicles[0]['_id'];
-      trip.vehicleObject = vehicles[0];
+      trip.vehicles = [vehicles[0]['_id']];
+      trip.vehicleObjects = [vehicles[0]];
       trip.kids
         ? (trip.budget -= vehicles[0].priceWithBaby)
         : (trip.budget -= vehicles[0].price);
