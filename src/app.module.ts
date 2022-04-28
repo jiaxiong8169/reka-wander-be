@@ -16,6 +16,8 @@ import { HotelsModule } from './hotels/hotels.module';
 import { HomestaysModule } from './homestays/homestays.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
 import { GuidesModule } from './guides/guides.module';
+import { MailService } from './mail/mail.service';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -34,6 +36,7 @@ import { GuidesModule } from './guides/guides.module';
       isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.MONGO_DB_CONNECTION_URI),
+    MailModule,
   ],
   controllers: [AppController],
   providers: [
