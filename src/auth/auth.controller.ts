@@ -24,11 +24,15 @@ import * as mongoose from 'mongoose';
 import { User } from 'src/decorators/user.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from './firebase-auth/firebase-auth.guard';
+import { MailService } from 'src/mail/mail.service';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private mailService: MailService,
+  ) {}
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
@@ -110,5 +114,10 @@ export class AuthController {
       }?token=${token}`,
       expiration: `${inMinute} minute${inMinute > 1 ? 's' : ''}`,
     };
+  }
+
+  @Get('/mail')
+  async sendMail(@Query('name') name, @Query('email') email) {
+    return this.mailService.sendForgotPasswordMail(name, email);
   }
 }

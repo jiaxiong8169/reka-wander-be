@@ -8,9 +8,15 @@
         "options": {
           "classValidatorShim": false,
           "introspectComments": true,
-          "dtoFileNameSuffix": [".dto.ts"]
+          "dtoFileNameSuffix": [
+            ".dto.ts"
+          ]
         }
       }
-    ]
+    ],
+    "assets": [
+      "mail/templates/**/*"
+    ],
+    "watchAssets": true
   }
 }
