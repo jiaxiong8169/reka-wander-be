@@ -1,12 +1,9 @@
-function requireUncached(module) {
-  delete require.cache[require.resolve(module)];
-  return require(module);
-}
+load('./utils.js');
 
 const data = requireUncached('./data/attractions.json');
+fixLocationStructure(data);
 
-db.attractions.remove({});
-db.trips.remove({});
+// add attractions
+db.attractions.insertMany(data);
 
-const result = db.attractions.insertMany(data);
-print(result);
+createReviews('attractions');

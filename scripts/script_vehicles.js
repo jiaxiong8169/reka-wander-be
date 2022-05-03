@@ -1,12 +1,7 @@
-function requireUncached(module) {
-  delete require.cache[require.resolve(module)];
-  return require(module);
-}
+load('./utils.js');
 
 const data = requireUncached('./data/vehicles.json');
-
-db.trips.remove({});
-db.vehicles.remove({});
+fixLocationStructure(data);
 
 const result = db.vehicles.insertMany(data);
 print(result);

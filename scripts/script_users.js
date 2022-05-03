@@ -1,7 +1,4 @@
-function requireUncached(module) {
-  delete require.cache[require.resolve(module)];
-  return require(module);
-}
+load('./utils.js');
 
 const data = requireUncached('./data/users.json');
 
@@ -18,7 +15,7 @@ const rslt = db.users.find({
 });
 
 rslt.forEach((r) => {
-  db.users.update(
+  db.users.updateOne(
     { email: r.email },
     {
       $set: {

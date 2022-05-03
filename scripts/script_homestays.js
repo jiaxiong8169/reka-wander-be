@@ -1,13 +1,8 @@
-function requireUncached(module) {
-  delete require.cache[require.resolve(module)];
-  return require(module);
-}
+load('./utils.js');
 
 const data = requireUncached('./data/homestays.json');
 const rooms = requireUncached('./data/rooms.json');
-
-db.trips.remove({});
-db.homestays.remove({});
+fixLocationStructure(data);
 
 data.forEach((d) => {
   // get rooms

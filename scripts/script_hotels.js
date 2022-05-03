@@ -1,13 +1,8 @@
-function requireUncached(module) {
-  delete require.cache[require.resolve(module)];
-  return require(module);
-}
+load('./utils.js');
 
 const data = requireUncached('./data/hotels.json');
 const rooms = requireUncached('./data/rooms.json');
-
-db.trips.remove({});
-db.hotels.remove({});
+fixLocationStructure(data);
 
 data.forEach((d) => {
   // get rooms
@@ -16,3 +11,5 @@ data.forEach((d) => {
 
 const result = db.hotels.insertMany(data);
 print(result);
+
+createReviews('hotels');

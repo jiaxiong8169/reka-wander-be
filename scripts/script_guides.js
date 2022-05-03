@@ -1,12 +1,8 @@
-function requireUncached(module) {
-  delete require.cache[require.resolve(module)];
-  return require(module);
-}
+load('./utils.js');
 
 const data = requireUncached('./data/guides.json');
 const packages = requireUncached('./data/packages.json');
-
-db.guides.remove({});
+fixLocationStructure(data);
 
 data.forEach((d) => {
   // get packages
@@ -14,4 +10,7 @@ data.forEach((d) => {
 });
 
 const result = db.guides.insertMany(data);
+
 print(result);
+
+createReviews('guides');
