@@ -6,7 +6,11 @@ fixLocationStructure(data);
 
 data.forEach((d) => {
   // get packages
-  d.packages = packages.filter((r) => r.name === d.name);
+  d.packages = packages.filter((r) => r.guideName === d.name);
+  // append object ID
+  d.packages.forEach((p) => {
+    p._id = new ObjectId();
+  });
 });
 
 const result = db.guides.insertMany(data);
