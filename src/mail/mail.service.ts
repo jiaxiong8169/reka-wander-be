@@ -1,5 +1,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
+import { CarRentalMailDataDto } from 'src/dto/car-rental-mail-data.dto';
+import { User } from 'src/schemas/user.schema';
 
 @Injectable()
 export class MailService {
@@ -16,6 +18,34 @@ export class MailService {
           name,
           message: 'You can reset your password now.',
           messageDetails: 'The link is only valid for certain period of time.',
+        },
+      })
+      .then((success) => {
+        console.log(success);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  public sendCarRentalRequestMail(
+    data: CarRentalMailDataDto,
+    vendorEmail: string,
+    user: User,
+  ) {
+    console.log('send mail');
+    const { email, phoneNumber } = user;
+    this.mailerService
+      .sendMail({
+        to: vendorEmail,
+        subject: 'New car rental request from Reka Wander',
+        template: 'car_rental.hbs',
+        context: {
+          data,
+          user: {
+            email,
+            phoneNumber,
+          },
         },
       })
       .then((success) => {
