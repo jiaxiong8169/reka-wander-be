@@ -18,6 +18,7 @@ import { VehiclesModule } from './vehicles/vehicles.module';
 import { GuidesModule } from './guides/guides.module';
 import { MailService } from './mail/mail.service';
 import { MailModule } from './mail/mail.module';
+import { CarRentalModule } from './car-rental/car-rental.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { MailModule } from './mail/mail.module';
     }),
     MongooseModule.forRoot(process.env.MONGO_DB_CONNECTION_URI),
     MailModule,
+    CarRentalModule,
   ],
   controllers: [AppController],
   providers: [
