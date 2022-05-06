@@ -13,12 +13,12 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
           ignoreTLS: false,
           secure: false,
           auth: {
-            user: process.env.MAILDEV_INCOMING_USER,
-            pass: process.env.MAILDEV_INCOMING_PASS,
+            user: process.env.ADMIN_EMAIL,
+            pass: process.env.ADMIN_EMAIL_API_KEY,
           },
         },
         defaults: {
-          from: '"Reka Wander" <rekawander@gmail.com>',
+          from: `"Reka Wander" <${process.env.ADMIN_EMAIL}>`,
         },
         template: {
           dir: __dirname + '/templates',

@@ -18,6 +18,7 @@ export class MailService {
         subject: 'You requested to reset your password.', // Subject line
         template: 'general_email_template_with_button',
         context: {
+          supportEmail: process.env.ADMIN_EMAIL,
           title: 'Reset your password',
           name: email,
           message: 'You can reset your password now.',
@@ -42,12 +43,13 @@ export class MailService {
       subject: 'You changed your password.',
       template: 'general_email_template_with_button',
       context: {
+        supportEmail: process.env.ADMIN_EMAIL,
         title: 'Someone changed your password.',
         name: email,
         message:
           'We hope you are the one that changed the password. If not, click the button below to report this security issue.',
         messageDetails: `Send an email to our support team to further assist you, manually or by clicking the button below.`,
-        link: 'mailto:rekawander@gmail.com?subject=Unexpected password change&body=I did not change the password for my account. Please look into the issue.',
+        link: `mailto:${process.env.ADMIN_EMAIL}?subject=Unexpected password change&body=I did not change the password for my account. Please look into the issue.`,
         linkText: 'Reset Password',
       },
     });
@@ -66,6 +68,7 @@ export class MailService {
         subject: 'New car rental request from Reka Wander',
         template: 'car_rental.hbs',
         context: {
+          supportEmail: process.env.ADMIN_EMAIL,
           data,
           user: {
             name: name || 'Not Provided',
