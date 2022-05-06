@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from './auth/jwt-auth/jwt-auth.guard';
 import { Permission } from './auth/permission.enum';
@@ -20,5 +20,10 @@ export class AppController {
   getProfile(@User() user: DecodedJwtPayload): Promise<UserSchema> {
     const { id } = user;
     return this.usersService.findOneUserById(id);
+  }
+
+  @Get('')
+  async tempEndpoint(@Req() req) {
+    console.log(req);
   }
 }

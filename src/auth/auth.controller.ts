@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Post,
   Put,
   Query,
@@ -87,7 +88,7 @@ export class AuthController {
     return user;
   }
 
-  @Put('resetpassword')
+  @Post('resetpassword')
   @UseGuards(JwtResetPasswordGuard)
   async resetPassword(@Req() req, @Body('password') password) {
     const reqUser: DecodedJwtPayload = req.user;
@@ -96,28 +97,14 @@ export class AuthController {
   }
 
   @Get('requestresetpassword')
-  @UseGuards(JwtAuthGuard)
   async requestResetPasswordToken(@Query('email') email: string) {
-    const validPeriodInString = process.env.JWT_RESET_PASSWORD_TOKEN_EXPIRATION;
-    // the pattern for the token expiration is `^\d+s?`
-    // need to strip the last character to get the number in seconds
-    const validPeriod = validPeriodInString.substring(
-      0,
-      validPeriodInString.length - 1,
-    );
-    const inMinute = Number(validPeriod) / 60;
-    const token = await this.authService.getResetPasswordToken(email);
-    return {
-      url: `${
-        process.env.REACT_APP_FRONTEND_URL +
-        process.env.RESET_PASSWORD_ROUTE_PATH
-      }?token=${token}`,
-      expiration: `${inMinute} minute${inMinute > 1 ? 's' : ''}`,
-    };
-  }
-
-  @Get('/mail')
-  async sendMail(@Query('name') name, @Query('email') email) {
-    return this.mailService.sendForgotPasswordMail(name, email);
+    try {
+      return await this.authService.sendResetPasswordEmail(
+        email,
+        'http://localhost:9000',
+      );
+    } catch (e) {
+      throw new NotFoundException(e.message);
+    }
   }
 }

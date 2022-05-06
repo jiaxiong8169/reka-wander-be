@@ -3,7 +3,11 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
-import { DecodedJwtPayload, JwtPayloadEmailOnly } from 'src/dto/payloads.dto';
+import {
+  DecodedJwtPayload,
+  JwtPayloadEmailOnly,
+  JwtPayloadResetPasswordToken,
+} from 'src/dto/payloads.dto';
 import { ExceptionMessage } from 'src/exceptions/exception-message.enum';
 
 @Injectable()
@@ -25,11 +29,16 @@ export class JwtResetPasswordStrategy extends PassportStrategy(
     });
   }
 
-  async validate(payload: JwtPayloadEmailOnly): Promise<DecodedJwtPayload> {
+  async validate(
+    payload: JwtPayloadResetPasswordToken,
+  ): Promise<DecodedJwtPayload> {
     try {
-      const { email } = payload;
+      const { email, password } = payload;
       const user = await this.usersService.findOneUserByEmail(email);
       if (!user) throw Error(ExceptionMessage.AccountNotExist);
+      if (user.password !== password) {
+        throw Error(ExceptionMessage.ResetTokenUsed);
+      }
       return {
         id: user._id.toString(),
         email: user.email,

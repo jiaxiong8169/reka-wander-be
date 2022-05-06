@@ -6,17 +6,19 @@ import { JwtService } from '@nestjs/jwt';
 import {
   DecodedJwtPayload,
   JwtPayload,
-  JwtPayloadEmailOnly,
+  JwtPayloadResetPasswordToken,
 } from 'src/dto/payloads.dto';
 import { User } from 'src/schemas/user.schema';
 import { CreateUserDto } from 'src/dto/create-user.dto';
 import * as mongoose from 'mongoose';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private mailService: MailService,
   ) {}
 
   async validateUser(email: string, pass: string): Promise<User> {
@@ -118,17 +120,51 @@ export class AuthService {
   }
 
   async getResetPasswordToken(email: string): Promise<string> {
-    const payload: JwtPayloadEmailOnly = { email };
+    const user = await this.usersService.findOneUserByEmail(email);
+    if (!user) {
+      throw Error(ExceptionMessage.AccountNotExist);
+    }
+    const { name, password } = user;
+    const payload: JwtPayloadResetPasswordToken = {
+      preferred_name: name,
+      email,
+      password,
+    };
+    console.log(payload);
     return this.jwtService.sign(payload, {
       secret: process.env.JWT_RESET_PASSWORD_TOKEN_SECRET,
       expiresIn: process.env.JWT_RESET_PASSWORD_TOKEN_EXPIRATION,
     });
   }
 
+  async sendResetPasswordEmail(email: string, origin: string): Promise<void> {
+    const validPeriodInString = process.env.JWT_RESET_PASSWORD_TOKEN_EXPIRATION;
+    // the pattern for the token expiration is `^\d+s?`
+    // need to strip the last character to get the number in seconds
+    const validPeriod = validPeriodInString.substring(
+      0,
+      validPeriodInString.length - 1,
+    );
+    const inMinute = Number(validPeriod) / 60;
+    const token = await this.getResetPasswordToken(email);
+    this.mailService.sendForgotPasswordMail(
+      email,
+      `${origin}/auth/resetpassword?token=${token}`,
+      inMinute,
+    );
+  }
+
   async resetPassword(
     id: mongoose.Types.ObjectId,
     passwordPlainText: string,
   ): Promise<User> {
-    return this.usersService.changeUserPassword(id, passwordPlainText);
+    const user = await this.usersService.changeUserPassword(
+      id,
+      passwordPlainText,
+    );
+    if (user) {
+      this.mailService.sendResetPasswordConfirmationEmail(user.email);
+    }
+    return user;
   }
 }
