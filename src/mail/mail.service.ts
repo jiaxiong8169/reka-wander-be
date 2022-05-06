@@ -34,7 +34,7 @@ export class MailService {
     user: User,
   ) {
     console.log('send mail');
-    const { email, phoneNumber } = user;
+    const { name, email, phoneNumber } = user;
     this.mailerService
       .sendMail({
         to: vendorEmail,
@@ -43,6 +43,7 @@ export class MailService {
         context: {
           data,
           user: {
+            name: name || 'Not Provided',
             email,
             phoneNumber,
           },
