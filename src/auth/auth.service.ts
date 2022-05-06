@@ -124,8 +124,13 @@ export class AuthService {
     if (!user) {
       throw Error(ExceptionMessage.AccountNotExist);
     }
-    const { password } = user;
-    const payload: JwtPayloadResetPasswordToken = { email, password };
+    const { name, password } = user;
+    const payload: JwtPayloadResetPasswordToken = {
+      preferred_name: name,
+      email,
+      password,
+    };
+    console.log(payload);
     return this.jwtService.sign(payload, {
       secret: process.env.JWT_RESET_PASSWORD_TOKEN_SECRET,
       expiresIn: process.env.JWT_RESET_PASSWORD_TOKEN_EXPIRATION,

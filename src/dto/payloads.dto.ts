@@ -13,6 +13,7 @@ export class JwtPayloadEmailOnly {
 }
 
 export class JwtPayloadResetPasswordToken {
+  preferred_name: string;
   email: string;
   password: string;
 }
