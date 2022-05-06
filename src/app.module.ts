@@ -19,6 +19,8 @@ import { GuidesModule } from './guides/guides.module';
 import { MailService } from './mail/mail.service';
 import { MailModule } from './mail/mail.module';
 import { CarRentalModule } from './car-rental/car-rental.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -39,6 +41,10 @@ import { CarRentalModule } from './car-rental/car-rental.module';
     MongooseModule.forRoot(process.env.MONGO_DB_CONNECTION_URI),
     MailModule,
     CarRentalModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+      serveRoot: '/auth/resetpassword',
+    }),
   ],
   controllers: [AppController],
   providers: [

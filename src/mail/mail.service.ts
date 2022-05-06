@@ -7,17 +7,25 @@ import { User } from 'src/schemas/user.schema';
 export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  public sendForgotPasswordMail(name, email): void {
+  public sendForgotPasswordMail(
+    email: string,
+    resetPasswordLink: string,
+    validityInMinutes: number,
+  ): void {
     this.mailerService
       .sendMail({
         to: email, // list of receivers
         subject: 'You requested to reset your password.', // Subject line
-        template: 'general_email_template_without_button',
+        template: 'general_email_template_with_button',
         context: {
           title: 'Reset your password',
-          name,
+          name: email,
           message: 'You can reset your password now.',
-          messageDetails: 'The link is only valid for certain period of time.',
+          messageDetails: `The link is only valid for ${validityInMinutes} minute${
+            validityInMinutes > 1 ? 's' : ''
+          }.`,
+          link: resetPasswordLink,
+          linkText: 'Reset Password',
         },
       })
       .then((success) => {
