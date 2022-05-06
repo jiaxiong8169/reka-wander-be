@@ -36,6 +36,23 @@ export class MailService {
       });
   }
 
+  public sendResetPasswordConfirmationEmail(email: string) {
+    this.mailerService.sendMail({
+      to: email,
+      subject: 'You changed your password.',
+      template: 'general_email_template_with_button',
+      context: {
+        title: 'Someone changed your password.',
+        name: email,
+        message:
+          'We hope you are the one that changed the password. If not, click the button below to report this security issue.',
+        messageDetails: `Send an email to our support team to further assist you, manually or by clicking the button below.`,
+        link: 'mailto:rekawander@gmail.com?subject=Unexpected password change&body=I did not change the password for my account. Please look into the issue.',
+        linkText: 'Reset Password',
+      },
+    });
+  }
+
   public sendCarRentalRequestMail(
     data: CarRentalMailDataDto,
     vendorEmail: string,

@@ -158,6 +158,13 @@ export class AuthService {
     id: mongoose.Types.ObjectId,
     passwordPlainText: string,
   ): Promise<User> {
-    return this.usersService.changeUserPassword(id, passwordPlainText);
+    const user = await this.usersService.changeUserPassword(
+      id,
+      passwordPlainText,
+    );
+    if (user) {
+      this.mailService.sendResetPasswordConfirmationEmail(user.email);
+    }
+    return user;
   }
 }
