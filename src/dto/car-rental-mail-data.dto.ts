@@ -11,4 +11,12 @@ export class CarRentalMailDataDto {
     email: string;
     phoneNumber: string;
   };
+
+  name: string;
+
+  price: number;
+
+  priceWithBaby: number;
+
+  availabilityBeforeRent: number;
 }
