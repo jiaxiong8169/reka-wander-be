@@ -97,11 +97,11 @@ export class AuthController {
   }
 
   @Get('requestresetpassword')
-  async requestResetPasswordToken(@Query('email') email: string) {
+  async requestResetPasswordToken(@Req() req, @Query('email') email: string) {
     try {
       return await this.authService.sendResetPasswordEmail(
         email,
-        'http://localhost:9000',
+        `${process.env.HOSTNAME || req.hostname}:${process.env.PORT || 9000}`,
       );
     } catch (e) {
       throw new NotFoundException(e.message);
