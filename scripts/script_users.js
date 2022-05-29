@@ -10,6 +10,8 @@ const rslt = db.users.find({
       'nicole@rekawander.com',
       'chinxiongwei@hotmail.com',
       'fhueiching@gmail.com',
+      'autumnlewjb@gmail.com',
+      'haziqyazet@gmail.com',
     ],
   },
 });
