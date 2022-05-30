@@ -1,3 +1,6 @@
+import { CreateUserDto } from './create-user.dto';
+import { VehicleDto } from './vehicle.dto';
+
 export class CarRentalMailDataDto {
   pickUpDate: Date;
 
@@ -5,18 +8,9 @@ export class CarRentalMailDataDto {
 
   carLocation: string;
 
-  carPrice: number;
+  totalPrice: number;
 
-  user: {
-    email: string;
-    phoneNumber: string;
-  };
+  user: CreateUserDto;
 
-  name: string;
-
-  price: number;
-
-  priceWithBaby: number;
-
-  availabilityBeforeRent: number;
+  vehicle: VehicleDto;
 }

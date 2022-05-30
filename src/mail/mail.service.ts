@@ -1,7 +1,6 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { CarRentalMailDataDto } from 'src/dto/car-rental-mail-data.dto';
-import { User } from 'src/schemas/user.schema';
 
 @Injectable()
 export class MailService {
@@ -55,26 +54,15 @@ export class MailService {
     });
   }
 
-  public sendCarRentalRequestMail(
-    data: CarRentalMailDataDto,
-    vendorEmail: string,
-    user: User,
-  ) {
-    console.log('send mail');
-    const { name, email, phoneNumber } = user;
+  public sendCarRentalRequestMail(data: CarRentalMailDataDto) {
     this.mailerService
       .sendMail({
-        to: vendorEmail,
-        subject: 'New car rental request from Reka Wander',
+        to: data?.user?.email,
+        subject: 'New Car Rental Request from Reka Wander',
         template: 'car_rental.hbs',
         context: {
           supportEmail: process.env.ADMIN_EMAIL,
           data,
-          user: {
-            name: name || 'Not Provided',
-            email,
-            phoneNumber,
-          },
         },
       })
       .then((success) => {

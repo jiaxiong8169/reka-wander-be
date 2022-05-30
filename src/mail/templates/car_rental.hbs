@@ -1,345 +1,3 @@
-{{!-- <html>
-
-<head>
-    <meta charset='utf-8' />
-    <meta http-equiv='x-ua-compatible' content='ie=edge' />
-    <title>New Car Rental Request</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1' />
-    <style type='text/css'>
-        @media screen {
-            @font-face {
-                font-family: 'Source Sans Pro';
-                font-style:
-                    normal;
-                font-weight: 400;
-                src: local('Source Sans Pro Regular'),
-                    local('SourceSansPro-Regular'),
-                    url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format('woff');
-            }
-
-            @font-face {
-                font-family: 'Source Sans Pro';
-                font-style:
-                    normal;
-                font-weight: 700;
-                src: local('Source Sans Pro Bold'),
-                    local('SourceSansPro-Bold'),
-                    url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format('woff');
-            }
-        }
-
-        body,
-        table,
-        td,
-        a {
-            -ms-text-size-adjust: 100%;
-            /* 1
-      */
-            -webkit-text-size-adjust: 100%;
-            /* 2 */
-        }
-
-        table,
-        td {
-            mso-table-rspace:
-                0pt;
-            mso-table-lspace: 0pt;
-        }
-
-        img {
-            -ms-interpolation-mode: bicubic;
-        }
-
-        a[x-apple-data-detectors] {
-            font-family: inherit !important;
-            font-size:
-                inherit !important;
-            font-weight: inherit !important;
-            line-height: inherit !important;
-            color: inherit !important;
-            text-decoration: none !important;
-        }
-
-        div[style*='margin: 16px 0;'] {
-            margin: 0 !important;
-        }
-
-        body {
-            width: 100% !important;
-            height: 100% !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-
-        table {
-            border-collapse: collapse !important;
-        }
-
-        a {
-            color:
-                #1a82e2;
-        }
-
-        img {
-            height: auto;
-            line-height: 100%;
-            text-decoration: none;
-            border: 0;
-            outline: none;
-        }
-    </style>
-</head>
-
-<body style='background-color: ' #AFEEEE'>
-    <!-- start body -->
-    <table border='0' cellpadding='0' cellspacing='0' width='100%'>
-
-        <!-- start hero -->
-        <tr>
-            <td align='center' bgcolor='#AFEEEE'>
-                <!--[if (gte mso 9)|(IE)]>
-            <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-                <tr>
-                    <td align="center" valign="top" width="600">
-            <![endif]-->
-                <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px'>
-                    <tr>
-                        <td align='left' bgcolor='#ffffff' style="
-                  padding: 36px 24px 0;
-                  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                  border-top: 3px solid #E0FFFF;
-                ">
-                            <h1 style='
-                    margin: 0;
-                    font-size: 32px;
-                    font-weight: 700;
-                    letter-spacing: -1px;
-                    line-height: 48px;
-                  '>
-                                You received a new car rental request!
-                            </h1>
-                        </td>
-                    </tr>
-                </table>
-                <!--[if (gte mso 9)|(IE)]>
-            </td>
-            </tr>
-            </table>
-            <![endif]-->
-            </td>
-        </tr>
-        <!-- end hero -->
-
-        <!-- start copy block -->
-        <tr>
-            <td align='center' bgcolor='#AFEEEE'>
-                <!--[if (gte mso 9)|(IE)]>
-            <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-                <tr>
-                    <td align="center" valign="top" width="600">
-            <![endif]-->
-                <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px'>
-                    <!-- start copy -->
-                    <tr>
-                        <td align='left' bgcolor='#ffffff' style="
-                  padding: 24px;
-                  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                  font-size: 16px;
-                  line-height: 24px;
-                ">
-                            <table>
-                                <tr>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td colspan='2'>
-                                        <h3>Pickup Details</h3>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Pickup Date And Time:</td>
-                                    <td>{{data.pickUpDate}}</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td colspan='2'>
-                                        <h3>Return Details</h3>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Return Date And Time:</td>
-                                    <td>{{data.returnDate}}</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td colspan='2'>
-                                        <h3>Car Details</h3>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Car Name:</td>
-                                    <td>{{data.name}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Normal Price Per Day:</td>
-                                    <td>{{data.price}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Baby Price Per Day:</td>
-                                    <td>{{data.priceWithBaby}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Car Availability Before Request:</td>
-                                    <td>{{data.availabilityBeforeRent}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Car Location:</td>
-                                    <td>{{data.carLocation}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Total Rental Price:</td>
-                                    <td>{{data.carPrice}}</td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td colspan='2'>
-                                        <h3>Customer Details</h3>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Customer Name:</td>
-                                    <td>{{user.name}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Customer Email:</td>
-                                    <td>{{user.email}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Customer Phone Number:</td>
-                                    <td>{{user.phoneNumber}}</td>
-                                </tr>
-
-                                <tr>
-                                    <td></td>
-                                </tr>
-
-                            </table>
-                            <table>
-                                <tr style='text-align: center;'>
-                                    <td colspan='2' ; align:'center'>
-                                        <h2 style='color: #e03e2d'>IMPORTANT</h2>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <ul>
-                                            <li style='text-align: left;justify-content: space-between;'>
-                                                <span class='text'>Your rental application is sent to the vendor
-                                                    email.</span>
-                                            </li>
-                                            <li style='; text-align: left; justify-content: space-between;'>
-                                                <span class='text'>Your rental is
-                                                    <span
-                                                        style='color: #e03e2d; font-size: 14px'><strong>NOT</strong></span>
-                                                    proceed to the final step yet. Please wait patiently for the
-                                                    vendor to send an confrimation email. Your rental will be
-                                                    confirm and proceed to the final step after you receive the
-                                                    email from vendor.</span>
-                                            </li>
-                                        </ul>
-                                    <td>
-
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <!-- end copy -->
-
-                    <!-- start copy -->
-                    <tr>
-                        <td align='left' bgcolor='#ffffff' style="
-                  padding: 24px;
-                  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                  font-size: 16px;
-                  line-height: 24px;
-                  border-bottom: 3px solid #E0FFFF;
-                ">
-                            <p style='margin: 0'>
-                                Cheers,
-                                <br />
-                                The Reka Wander Support Team
-                            </p>
-                        </td>
-                    </tr>
-                    <!-- end copy -->
-                </table>
-                <!--[if (gte mso 9)|(IE)]>
-            </td>
-            </tr>
-            </table>
-            <![endif]-->
-            </td>
-        </tr>
-        <!-- end copy block -->
-
-        <!-- start footer -->
-        <tr>
-            <td align='center' bgcolor='#AFEEEE' style='padding: 24px'>
-                <!--[if (gte mso 9)|(IE)]>
-            <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-                <tr>
-                    <td align="center" valign="top" width="600">
-            <![endif]-->
-                <table border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width: 600px'>
-                    <!-- start permission -->
-                    <tr>
-                        <td align='center' bgcolor='#AFEEEE' style="
-                  padding: 12px 24px;
-                  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                  font-size: 14px;
-                  line-height: 20px;
-                  color: #666;
-                ">
-                            <p style='margin: 0'>
-                                This is a system generated email, please do not reply to the
-                                email. For any enquiries or technical supports, please contact
-                                <a href='mailto:{{supportEmail}}'>{{supportEmail}}</a>.
-                            </p>
-                        </td>
-                    </tr>
-                    <!-- end permission -->
-                </table>
-                <!--[if (gte mso 9)|(IE)]>
-</td>
-</tr>
-</table>
-<![endif]-->
-            </td>
-        </tr>
-        <!-- end footer -->
-    </table>
-    <!-- end body -->
-</body>
-
-</html> --}}
 <!DOCTYPE html>
 <html style="font-family: arial, 'helvetica neue', helvetica, sans-serif">
 
@@ -780,7 +438,7 @@
         }
 
         .footer-img {
-            background-image: url("https://images.pexels.com/photos/3355788/pexels-photo-3355788.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+            background-image: url("http://drive.google.com/uc?export=view&id=1HNzhZCD6SIoHhGBPL5a8wPni_HE0dbDX");
             background-repeat: round;
             background-size: auto;
             padding-top: 15%;
@@ -798,7 +456,7 @@
         }
 
         .header-img {
-            background-image: url("https://images.pexels.com/photos/673018/pexels-photo-673018.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+            background-image: url("http://drive.google.com/uc?export=view&id=1_qLauylgCmYxgW9K_QoL1PhmgTkyKu78");
             background-repeat: round;
             background-size: auto;
         }
@@ -922,7 +580,7 @@
                     src="https://img.freepik.com/free-vector/man-tracking-taxi-driver-cab-tablet-map-guy-using-device-car-location-with-gps-system-app-male-checking-navigation-smartphone-booking-taxi-cartography-display-flat-illustration_74855-20647.jpg?t=st=1653682437~exp=1653683037~hmac=ad4ed8f31225a94c33e796daf3d516e4dbc6af5cc3a0d6ea0e64033ea882e745&w=1060" />
             </a>
             <h1>
-                <strong>You received a new car rental
+                <strong>You sent a new car rental
                     request!</strong>
             </h1>
 
@@ -1068,7 +726,7 @@
                                               color: #666666;
                                               font-size: 14px;
                                             ">
-                                                                {{user.name}}
+                                                                {{data.user.name}}
                                                             </p>
                                                         </td>
                                                     </tr>
@@ -1215,7 +873,7 @@
                                               color: #666666;
                                               font-size: 14px;
                                             ">
-                                                                {{user.email}}
+                                                                {{data.user.email}}
                                                             </p>
                                                         </td>
                                                     </tr>
@@ -1363,7 +1021,7 @@
                                               color: #666666;
                                               font-size: 14px;
                                             ">
-                                                                {{user.phoneNumber}}
+                                                                {{data.user.phoneNumber}}
                                                             </p>
                                                         </td>
                                                     </tr>
@@ -1780,7 +1438,7 @@
                                               color: #666666;
                                               font-size: 14px;
                                             ">
-                                                                            {{data.name}}
+                                                                            {{data.vehicle.name}}
                                                                         </p>
                                                                     </td>
                                                                 </tr>
@@ -1883,110 +1541,7 @@
                                               color: #666666;
                                               font-size: 14px;
                                             ">
-                                                                            {{data.price}}
-                                                                        </p>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="esdev-adapt-off" align="left" style="
-                          margin: 0;
-                          padding-bottom: 10px;
-                          padding-top: 20px;
-                          padding-right: 20px;
-                          padding-left: 40px;
-                        ">
-                                    <table class="esdev-mso-table" cellspacing="0" cellpadding="0" style="
-                            mso-table-lspace: 0pt;
-                            mso-table-rspace: 0pt;
-                            
-                            border-spacing: 0px;
-                            width: 540px;
-                          ">
-                                        <tr>
-                                            <td class="esdev-mso-td" valign="top" style="padding: 0; margin: 0">
-                                                <table class="es-left" cellspacing="0" cellpadding="0" align="left"
-                                                    style="
-                                  mso-table-lspace: 0pt;
-                                  mso-table-rspace: 0pt;
-                                  
-                                  border-spacing: 0px;
-                                  float: left;
-                                ">
-                                                    <tr>
-                                                        <td align="left" style="padding: 0; margin: 0; width: 260px">
-                                                            <table width="100%" cellspacing="0" cellpadding="0"
-                                                                role="presentation" style="
-                                        mso-table-lspace: 0pt;
-                                        mso-table-rspace: 0pt;
-                                        
-                                        border-spacing: 0px;
-                                      ">
-                                                                <tr>
-                                                                    <td align="left" style="padding: 0; margin: 0">
-                                                                        <p style="
-                                              margin: 0;
-                                              -webkit-text-size-adjust: none;
-                                              -ms-text-size-adjust: none;
-                                              mso-line-height-rule: exactly;
-                                              font-family: arial,
-                                                'helvetica neue', helvetica,
-                                                sans-serif;
-                                              line-height: 21px;
-                                              color: #333333;
-                                              font-size: 14px;
-                                            ">
-                                                                            <strong>Baby Price Per Day:</strong>
-                                                                        </p>
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td style="padding: 0; margin: 0; width: 20px"></td>
-                                            <td class="esdev-mso-td" valign="top" style="padding: 0; margin: 0">
-                                                <table class="es-right" cellspacing="0" cellpadding="0" align="right"
-                                                    style="
-                                  mso-table-lspace: 0pt;
-                                  mso-table-rspace: 0pt;
-                                  
-                                  border-spacing: 0px;
-                                  float: right;
-                                ">
-                                                    <tr>
-                                                        <td align="left" style="padding: 0; margin: 0; width: 260px">
-                                                            <table width="100%" cellspacing="0" cellpadding="0"
-                                                                role="presentation" style="
-                                        mso-table-lspace: 0pt;
-                                        mso-table-rspace: 0pt;
-                                        
-                                        border-spacing: 0px;
-                                      ">
-                                                                <tr>
-                                                                    <td align="left" style="padding: 0; margin: 0">
-                                                                        <p style="
-                                              margin: 0;
-                                              -webkit-text-size-adjust: none;
-                                              -ms-text-size-adjust: none;
-                                              mso-line-height-rule: exactly;
-                                              font-family: arial,
-                                                'helvetica neue', helvetica,
-                                                sans-serif;
-                                              line-height: 21px;
-                                              color: #666666;
-                                              font-size: 14px;
-                                            ">
-                                                                            {{data.priceWithBaby}}
+                                                                            {{data.vehicle.price}}
                                                                         </p>
                                                                     </td>
                                                                 </tr>
@@ -2090,7 +1645,7 @@
                                               color: #666666;
                                               font-size: 14px;
                                             ">
-                                                                            {{data.availabilityBeforeRent}}
+                                                                            {{data.vehicle.availability}}
                                                                         </p>
                                                                     </td>
                                                                 </tr>
@@ -2308,7 +1863,7 @@
                                               color: #413c79;
                                               text-align: right;
                                             ">
-                                                                            Total Rental Prize
+                                                                            Total Rental Price
                                                                         </h3>
                                                                     </td>
                                                                 </tr>
@@ -2350,7 +1905,7 @@
                                               font-weight: bold;
                                               color: #413c79;
                                             ">
-                                                                            RM {{data.carPrice}}
+                                                                            RM {{data.totalPrice}}
                                                                         </h3>
                                                                     </td>
                                                                 </tr>
@@ -2363,169 +1918,6 @@
                                     </table>
                                 </td>
                             </tr>
-
-
-
-                            {{!-- <tr>
-                                <td class="esdev-adapt-off" align="left" style="
-                          margin: 0;
-                          padding-top: 10px;
-                          padding-bottom: 20px;
-                          padding-left: 20px;
-                          padding-right: 20px;
-                        ">
-                                    <table cellspacing="0" cellpadding="0" width="100%" style="
-                            mso-table-lspace: 0pt;
-                            mso-table-rspace: 0pt;
-                            
-                            border-spacing: 0px;
-                          ">
-                                        <tr>
-                                            <td align="left" style="padding: 0; margin: 0; width: 560px">
-                                                <table width="100%" cellspacing="0" cellpadding="0" role="presentation"
-                                                    style="
-                                  mso-table-lspace: 0pt;
-                                  mso-table-rspace: 0pt;
-                                  
-                                  border-spacing: 0px;
-                                ">
-                                                    <tr>
-                                                        <td align="right" style="padding: 0; margin: 0">
-                                                            <h2 style="
-                                        margin: 0;
-                                        line-height: 52px;
-                                        mso-line-height-rule: exactly;
-                                        font-family: arial, 'helvetica neue',
-                                          helvetica, sans-serif;
-                                        font-size: 26px;
-                                        font-style: normal;
-                                        font-weight: bold;
-                                        color: #ff0033;
-                                        text-align: center;
-                                      ">
-                                                                IMPORTANT
-                                                            </h2>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td align="left" style="padding: 0; margin: 0">
-                                                            <ul>
-                                                                <li style="
-                                          -webkit-text-size-adjust: none;
-                                          -ms-text-size-adjust: none;
-                                          mso-line-height-rule: exactly;
-                                          font-family: arial, 'helvetica neue',
-                                            helvetica, sans-serif;
-                                          line-height: 21px;
-                                          margin-bottom: 15px;
-                                          margin-left: 0;
-                                          color: #666666;
-                                          font-size: 14px;
-                                        ">
-                                                                    <p style="
-                                            margin: 0;
-                                            -webkit-text-size-adjust: none;
-                                            -ms-text-size-adjust: none;
-                                            mso-line-height-rule: exactly;
-                                            font-family: arial, 'helvetica neue',
-                                              helvetica, sans-serif;
-                                            line-height: 21px;
-                                            color: #666666;
-                                            font-size: 14px;
-                                          ">
-                                                                        Your rental application is sent to the
-                                                                        vendor email.
-                                                                    </p>
-                                                                </li>
-                                                                <li style="
-                                          -webkit-text-size-adjust: none;
-                                          -ms-text-size-adjust: none;
-                                          mso-line-height-rule: exactly;
-                                          font-family: arial, 'helvetica neue',
-                                            helvetica, sans-serif;
-                                          line-height: 21px;
-                                          margin-bottom: 15px;
-                                          margin-left: 0;
-                                          color: #666666;
-                                          font-size: 14px;
-                                        ">
-                                                                    <p style="
-                                            margin: 0;
-                                            -webkit-text-size-adjust: none;
-                                            -ms-text-size-adjust: none;
-                                            mso-line-height-rule: exactly;
-                                            font-family: arial, 'helvetica neue',
-                                              helvetica, sans-serif;
-                                            line-height: 21px;
-                                            color: #666666;
-                                            font-size: 14px;
-                                          ">
-                                                                        Your rental is<span
-                                                                            style="color: #ff0033">&nbsp;<strong>NOT</strong></span>&nbsp;proceed
-                                                                        to the final step yet.
-                                                                        Please wait patiently for the vendor
-                                                                        to send an confrimation email. Your
-                                                                        rental will be confirm and proceed to
-                                                                        the final step after you receive the
-                                                                        email from vendor.
-                                                                    </p>
-                                                                </li>
-                                                            </ul>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr> --}}
-                            {{!-- <tr>
-                                <td align="left" style="
-                          padding: 0;
-                          margin: 0;
-                          padding-bottom: 20px;
-                          padding-left: 20px;
-                          padding-right: 20px;
-                        ">
-                                    <table width="100%" cellspacing="0" cellpadding="0" style="
-                            mso-table-lspace: 0pt;
-                            mso-table-rspace: 0pt;
-                            
-                            border-spacing: 0px;
-                          ">
-                                        <tr>
-                                            <td align="left" style="padding: 0; margin: 0; width: 560px">
-                                                <table width="100%" cellspacing="0" cellpadding="0" role="presentation"
-                                                    style="
-                                  mso-table-lspace: 0pt;
-                                  mso-table-rspace: 0pt;
-                                  
-                                  border-spacing: 0px;
-                                ">
-                                                    <tr>
-                                                        <td align="left" style="padding: 0; margin: 0">
-                                                            <p style="
-                                        margin: 0;
-                                        -webkit-text-size-adjust: none;
-                                        -ms-text-size-adjust: none;
-                                        mso-line-height-rule: exactly;
-                                        font-family: arial, 'helvetica neue',
-                                          helvetica, sans-serif;
-                                        line-height: 21px;
-                                        color: #666666;
-                                        font-size: 14px;
-                                      ">
-                                                                Cheers,<br />The&nbsp;Reka&nbsp;Wander
-                                                                Support Team
-                                                            </p>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr> --}}
                         </table>
                     </td>
                 </tr>
@@ -2542,21 +1934,6 @@
                 <tr>
                     <th>
                         <div style="margin: 0 auto; text-align: center;">
-
-                            {{!-- <a href="#" class="no-pointer"><img align="center"
-                                    src="http://drive.google.com/uc?export=view&id=15M20godcxACiYXe69a-Yau-lrV2dbI-i"
-                                    alt="Logo" style="
-                                        display: block;
-                                        border: 0;
-                                        outline: none;
-                                        text-decoration: none;
-                                        -ms-interpolation-mode: bicubic;
-                                        font-size: 12px;
-                                        margin-left: auto;
-                                        margin-right: auto;
-                                        width: 200px;
-                                        filter: brightness(0) invert(1);
-                                      " title="Logo" width="200" /></a> --}}
                             <table class="bg-blue-opacity" style="
                       mso-table-lspace: 0pt;
                       mso-table-rspace: 0pt;
@@ -2667,98 +2044,6 @@
                 </tr>
             </table>
         </section>
-
-
-
-        {{!-- <table class="es-footer" cellspacing="0" cellpadding="0" align="center" style="
-                mso-table-lspace: 0pt;
-                mso-table-rspace: 0pt;
-                
-                border-spacing: 0px;
-                table-layout: fixed !important;
-                width: 100%;
-                background-color: transparent;
-                background-repeat: repeat;
-                background-position: center top;
-              ">
-            <tr>
-                <td align="center" style="padding: 0; margin: 0">
-                    <table class="es-footer-body" style="
-                      mso-table-lspace: 0pt;
-                      mso-table-rspace: 0pt;
-                      
-                      border-spacing: 0px;
-                      background-color: transparent;
-                      width: 600px;
-                    " cellspacing="0" cellpadding="0" align="center">
-                        <tr>
-                            <td align="left" style="
-                          margin: 0;
-                          padding-bottom: 20px;
-                          padding-left: 20px;
-                          padding-right: 20px;
-                          padding-top: 30px;
-                        ">
-                                <table width="100%" cellspacing="0" cellpadding="0" style="
-                            mso-table-lspace: 0pt;
-                            mso-table-rspace: 0pt;
-                            
-                            border-spacing: 0px;
-                          ">
-                                    <tr>
-                                        <td align="left" style="padding: 0; margin: 0; width: 560px">
-                                            <table width="100%" cellspacing="0" cellpadding="0" role="presentation"
-                                                style="
-                                  mso-table-lspace: 0pt;
-                                  mso-table-rspace: 0pt;
-                                  
-                                  border-spacing: 0px;
-                                ">
-                                                <tr>
-                                                    <td align="center" style="
-                                      padding: 0;
-                                      margin: 0;
-                                      padding-bottom: 35px;
-                                    ">
-                                                        <p style="
-                                        margin: 0;
-                                        -webkit-text-size-adjust: none;
-                                        -ms-text-size-adjust: none;
-                                        mso-line-height-rule: exactly;
-                                        font-family: arial, 'helvetica neue',
-                                          helvetica, sans-serif;
-                                        line-height: 18px;
-                                        color: #333333;
-                                        font-size: 12px;
-                                      ">
-                                                            This is a system generated email, please
-                                                            do not reply to the email. For any
-                                                            enquiries or technical supports, please
-                                                            contact&nbsp;<a href="mailto:rekawander@gmail.com"
-                                                                target="_blank" style="
-                                          -webkit-text-size-adjust: none;
-                                          -ms-text-size-adjust: none;
-                                          mso-line-height-rule: exactly;
-                                          text-decoration: underline;
-                                          color: #333333;
-                                          font-size: 12px;
-                                        ">rekawander@gmail.com</a>.
-                                                        </p>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        </td>
-        </tr>
-        </table> --}}
     </div>
 </body>
 
