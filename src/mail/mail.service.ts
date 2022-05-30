@@ -1,6 +1,11 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { CarRentalMailDataDto } from 'src/dto/car-rental-mail-data.dto';
+import {
+  CarRentalMailDataDto,
+  GuideMailDataDto,
+  HomestayMailDataDto,
+  HotelMailDataDto,
+} from 'src/dto/mail-data.dto';
 
 @Injectable()
 export class MailService {
@@ -60,6 +65,139 @@ export class MailService {
         to: data?.user?.email,
         subject: 'New Car Rental Request from Reka Wander',
         template: 'car_rental.hbs',
+        context: {
+          supportEmail: process.env.ADMIN_EMAIL,
+          data,
+        },
+      })
+      .then((success) => {
+        console.log(success);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  public sendCarRentalVendorMail(data: CarRentalMailDataDto) {
+    this.mailerService
+      .sendMail({
+        to: data?.vehicle?.vendorEmail,
+        subject: 'New Car Rental Request from Reka Wander',
+        template: 'car_rental_vendor.hbs',
+        context: {
+          supportEmail: process.env.ADMIN_EMAIL,
+          data,
+        },
+      })
+      .then((success) => {
+        console.log(success);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  public sendHomestayMail(data: HomestayMailDataDto) {
+    this.mailerService
+      .sendMail({
+        to: data?.user?.email,
+        subject: 'New Homestay Booking Request from Reka Wander',
+        template: 'homestay.hbs',
+        context: {
+          supportEmail: process.env.ADMIN_EMAIL,
+          data,
+        },
+      })
+      .then((success) => {
+        console.log(success);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  public sendHomestayVendorMail(data: HomestayMailDataDto) {
+    this.mailerService
+      .sendMail({
+        to: data?.homestay?.vendorEmail,
+        subject: 'New Homestay Booking Request from Reka Wander',
+        template: 'homestay_vendor.hbs',
+        context: {
+          supportEmail: process.env.ADMIN_EMAIL,
+          data,
+        },
+      })
+      .then((success) => {
+        console.log(success);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  public sendHotelMail(data: HotelMailDataDto) {
+    this.mailerService
+      .sendMail({
+        to: data?.user?.email,
+        subject: 'New Hotel Booking Request from Reka Wander',
+        template: 'hotel.hbs',
+        context: {
+          supportEmail: process.env.ADMIN_EMAIL,
+          data,
+        },
+      })
+      .then((success) => {
+        console.log(success);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  public sendHotelVendorMail(data: HotelMailDataDto) {
+    this.mailerService
+      .sendMail({
+        to: data?.hotel?.vendorEmail,
+        subject: 'New Hotel Booking Request from Reka Wander',
+        template: 'hotel_vendor.hbs',
+        context: {
+          supportEmail: process.env.ADMIN_EMAIL,
+          data,
+        },
+      })
+      .then((success) => {
+        console.log(success);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  public sendGuideMail(data: GuideMailDataDto) {
+    this.mailerService
+      .sendMail({
+        to: data?.user?.email,
+        subject: 'New Guide Booking Request from Reka Wander',
+        template: 'guide.hbs',
+        context: {
+          supportEmail: process.env.ADMIN_EMAIL,
+          data,
+        },
+      })
+      .then((success) => {
+        console.log(success);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  public sendGuideVendorMail(data: GuideMailDataDto) {
+    this.mailerService
+      .sendMail({
+        to: data?.guide?.vendorEmail,
+        subject: 'New Guide Booking Request from Reka Wander',
+        template: 'guide_vendor.hbs',
         context: {
           supportEmail: process.env.ADMIN_EMAIL,
           data,
