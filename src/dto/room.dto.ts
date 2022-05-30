@@ -8,4 +8,6 @@ export class RoomDto {
   thumbnailSrc: string;
 
   availability: number;
+
+  quantity: number;
 }
