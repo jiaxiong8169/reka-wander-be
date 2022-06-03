@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ExceptionMessage } from 'src/exceptions/exception-message.enum';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
@@ -12,6 +12,7 @@ import { User } from 'src/schemas/user.schema';
 import { CreateUserDto } from 'src/dto/create-user.dto';
 import * as mongoose from 'mongoose';
 import { MailService } from 'src/mail/mail.service';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Injectable()
 export class AuthService {
@@ -48,6 +49,36 @@ export class AuthService {
     }
     user.password = undefined;
     return user;
+  }
+
+  async checkPasswordMatch(
+    email: string,
+    oldPassword: string,
+  ): Promise<boolean> {
+    try {
+      const currentUser = await this.usersService.findOneUserByEmail(email);
+      return await bcrypt.compare(oldPassword, currentUser.password);
+    } catch (e: any) {
+      throw Error(ExceptionMessage.AccountNotExist);
+    }
+  }
+
+  async changePassword(
+    email: string,
+    oldPassword: string,
+    newPassword: string,
+  ) {
+    try {
+      if (!(await this.checkPasswordMatch(email, oldPassword))) {
+        throw Error(ExceptionMessage.PasswordMismatch);
+      }
+      const currentUser = await this.usersService.findOneUserByEmail(email);
+      const { _id } = currentUser;
+      const userId = new mongoose.Types.ObjectId(_id.toString());
+      return this.usersService.changeUserPassword(userId, newPassword);
+    } catch (e) {
+      throw e;
+    }
   }
 
   async login(

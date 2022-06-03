@@ -26,6 +26,9 @@ import { User } from 'src/decorators/user.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from './firebase-auth/firebase-auth.guard';
 import { MailService } from 'src/mail/mail.service';
+import { ExceptionMessage } from 'src/exceptions/exception-message.enum';
+import { ChangePasswordDto } from 'src/dto/change-password.dto';
+import { userInfo } from 'os';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -41,6 +44,22 @@ export class AuthController {
     const reqUser: UserSchema = req.user;
     const [tokens, user] = await this.authService.login(reqUser);
     return { tokens, user };
+  }
+
+  @Put('changepassword')
+  @UseGuards(JwtAuthGuard)
+  async changePassword(
+    @User() user: DecodedJwtPayload,
+    @Body() changePasswordBody: ChangePasswordDto,
+  ) {
+    const { email } = user;
+    const { oldPassword, newPassword } = changePasswordBody;
+    console.log(changePasswordBody);
+    try {
+      await this.authService.changePassword(email, oldPassword, newPassword);
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
   }
 
   @Post('login/google')
