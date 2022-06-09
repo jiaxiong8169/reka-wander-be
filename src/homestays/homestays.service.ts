@@ -8,6 +8,8 @@ import { Homestay, HomestayDocument } from 'src/schemas/homestay.schema';
 import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
+import { TripDto } from 'src/dto/trip.dto';
 
 @Injectable()
 export class HomestaysService {
@@ -80,5 +82,71 @@ export class HomestaysService {
       SEARCH_FIELDS['homestays'],
     );
     return this.homestayModel.find(effectiveFilter).countDocuments();
+  }
+
+  async findNearbyHomestays(params: NearbyParamsDto): Promise<Homestay[]> {
+    const { long, lat, distance, sort, offset, limit } = params;
+    // find nearby with nearSphere
+    let query = this.homestayModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [long, lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: distance ? distance : 5000, // default 5000 meters
+        },
+      },
+    });
+    if (sort) {
+      query = query.sort(sort);
+    }
+    if (offset) {
+      query = query.skip(offset);
+    }
+    if (limit) {
+      query.limit(limit);
+    }
+    return query.exec();
+  }
+
+  async findHomestayByFeatures(trip: TripDto) {
+    if (!trip.rentHomestay || trip.days <= 0) return null;
+    const targetPrice = trip.kids ? 'priceWithBaby' : 'price';
+    let query = this.homestayModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [trip.long, trip.lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: 300000, // default 300 kilometers
+        },
+      },
+    });
+    query = query.sort('minPrice');
+
+    const homestays = await query.exec();
+
+    homestays.forEach((homestay) => {
+      homestay.rooms.forEach((room) => {
+        if (
+          room.pax >= trip.pax &&
+          room.availability > 0 &&
+          room[targetPrice] <= trip.budget
+        ) {
+          trip.homestays = [homestay['_id']];
+          trip.homestayObjects = [homestay];
+          trip.rooms = [room['_id']];
+          trip.roomObjects = [room];
+          trip.kids
+            ? (trip.budget -= room.priceWithBaby)
+            : (trip.budget -= room.price);
+          return;
+        }
+      });
+    });
   }
 }

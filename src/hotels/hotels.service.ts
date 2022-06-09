@@ -13,6 +13,7 @@ import { Review, ReviewDocument } from 'src/schemas/review.schema';
 import { ReviewDto } from 'src/dto/review.dto';
 import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 import { LikeShareDto } from 'src/dto/like-share.dto';
+import { TripDto } from 'src/dto/trip.dto';
 
 @Injectable()
 export class HotelsService {
@@ -34,18 +35,43 @@ export class HotelsService {
       .orFail(new Error(ExceptionMessage.HotelNotFound));
   }
 
-  async findHotelsByFeatures(features: RecommenderFeatures): Promise<Hotel[]> {
-    // and query
-    const andQuery: any = [
-      { 'recommenderFeatures.maxPax': { $gte: features.maxPax } },
-      { 'recommenderFeatures.minBudget': { $lte: features.minBudget } },
-    ];
-
-    const query = this.hotelModel.find({
-      $and: andQuery,
+  async findHotelByFeatures(trip: TripDto) {
+    if (trip.rentHomestay || trip.days <= 0) return null;
+    const targetPrice = trip.kids ? 'priceWithBaby' : 'price';
+    let query = this.hotelModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [trip.long, trip.lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: 300000, // default 300 kilometers
+        },
+      },
     });
+    query = query.sort('minPrice -avgRating');
 
-    return query.exec();
+    const hotels = await query.exec();
+
+    hotels.forEach((hotel) => {
+      hotel.rooms.forEach((room) => {
+        if (
+          room.pax >= trip.pax &&
+          room.availability > 0 &&
+          room[targetPrice] <= trip.budget
+        ) {
+          trip.hotels = [hotel['_id']];
+          trip.hotelObjects = [hotel];
+          trip.rooms = [room['_id']];
+          trip.roomObjects = [room];
+          trip.kids
+            ? (trip.budget -= room.priceWithBaby)
+            : (trip.budget -= room.price);
+          return;
+        }
+      });
+    });
   }
 
   async updateHotelById(
@@ -105,9 +131,9 @@ export class HotelsService {
   }
 
   async findNearbyHotels(params: NearbyParamsDto): Promise<Hotel[]> {
-    const { long, lat, distance } = params;
+    const { long, lat, distance, sort, offset, limit } = params;
     // find nearby with nearSphere
-    const query = this.hotelModel.find({
+    let query = this.hotelModel.find({
       loc: {
         $nearSphere: {
           $geometry: {
@@ -119,6 +145,15 @@ export class HotelsService {
         },
       },
     });
+    if (sort) {
+      query = query.sort(sort);
+    }
+    if (offset) {
+      query = query.skip(offset);
+    }
+    if (limit) {
+      query.limit(limit);
+    }
     return query.exec();
   }
 

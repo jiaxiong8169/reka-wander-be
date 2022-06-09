@@ -35,8 +35,8 @@ export class Guide {
   @Prop()
   description: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' })
-  interest: mongoose.Schema.Types.ObjectId;
+  @Prop()
+  interest: string;
 
   @Prop()
   price: number;
@@ -46,6 +46,9 @@ export class Guide {
 
   @Prop()
   thumbnailSrc: string;
+
+  @Prop()
+  thumbnailTransparentSrc: string;
 
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }])
   reviews: mongoose.Schema.Types.ObjectId[];
@@ -76,6 +79,9 @@ export class Guide {
 
   @Prop()
   timestamp: Date;
+
+  @Prop()
+  link: string;
 }
 
 export const GuideSchema = SchemaFactory.createForClass(Guide);

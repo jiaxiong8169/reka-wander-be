@@ -30,4 +30,6 @@ export class VehicleDto {
   vendorEmail: string;
 
   vendorPhoneNumber: string;
+
+  link: string;
 }

@@ -8,6 +8,8 @@ import { Vehicle, VehicleDocument } from 'src/schemas/vehicle.schema';
 import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { processSearchAndFilter } from 'src/utils';
 import { SEARCH_FIELDS } from 'src/constants';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
+import { TripDto } from 'src/dto/trip.dto';
 
 @Injectable()
 export class VehiclesService {
@@ -80,5 +82,69 @@ export class VehiclesService {
       SEARCH_FIELDS['vehicles'],
     );
     return this.vehicleModel.find(effectiveFilter).countDocuments();
+  }
+
+  async findNearbyVehicles(params: NearbyParamsDto): Promise<Vehicle[]> {
+    const { long, lat, distance, sort, offset, limit } = params;
+    // find nearby with nearSphere
+    let query = this.vehicleModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [long, lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: distance ? distance : 5000, // default 5000 meters
+        },
+      },
+    });
+    if (sort) {
+      query = query.sort(sort);
+    }
+    if (offset) {
+      query = query.skip(offset);
+    }
+    if (limit) {
+      query.limit(limit);
+    }
+    return query.exec();
+  }
+
+  async findVehicleByFeatures(trip: TripDto) {
+    if (!trip.rentCar) return;
+    const targetPrice = trip.kids ? 'priceWithBaby' : 'price';
+    let query = this.vehicleModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [trip.long, trip.lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: 300000, // default 300 kilometers
+        },
+      },
+      pax: {
+        $gte: trip.pax,
+      },
+      availability: {
+        $gt: 0,
+      },
+      [targetPrice]: {
+        $lte: trip.budget,
+      },
+    });
+    query = query.sort('price');
+
+    const vehicles = await query.exec();
+
+    if (vehicles.length > 0) {
+      trip.vehicles = [vehicles[0]['_id']];
+      trip.vehicleObjects = [vehicles[0]];
+      trip.kids
+        ? (trip.budget -= vehicles[0].priceWithBaby)
+        : (trip.budget -= vehicles[0].price);
+    }
   }
 }

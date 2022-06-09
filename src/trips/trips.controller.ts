@@ -27,11 +27,20 @@ export class TripsController {
   @RequirePermissions(Permission.CreateTrip)
   async getTripRecommendations(@Body() body: TripDto) {
     try {
+      // set endDate if not exists yet
+      if (!body.endDate) body.endDate = body.startDate;
       // assign timestamp to current timestamp
       body.timestamp = new Date();
+      body.days =
+        (new Date(body.endDate).getTime() -
+          new Date(body.startDate).getTime()) /
+          (1000 * 3600 * 24) +
+        1;
+      body.hours = body.days * 8;
       const trip = await this.tripsService.getTripRecommendations(body);
       return trip;
     } catch (e: any) {
+      console.log(e);
       throw new BadRequestException(e.message);
     }
   }

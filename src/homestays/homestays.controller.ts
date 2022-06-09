@@ -17,11 +17,24 @@ import { HomestaysService } from './homestays.service';
 import * as mongoose from 'mongoose';
 import { HomestayDto } from 'src/dto/homestay.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 
 @ApiTags('homestays')
 @Controller('homestays')
 export class HomestaysController {
   constructor(private homestaysService: HomestaysService) {}
+
+  @Get('nearby')
+  @RequirePermissions(Permission.ReadAllHomestays)
+  async getNearbyHomestays(@Query() query: NearbyParamsDto) {
+    const nearbyHomestays = await this.homestaysService.findNearbyHomestays(
+      query,
+    );
+    return {
+      data: nearbyHomestays,
+      total: nearbyHomestays.length,
+    };
+  }
 
   @Get()
   @RequirePermissions(Permission.ReadAllHomestays)

@@ -45,7 +45,7 @@ export class Homestay {
   kids: boolean;
 
   @Prop([{ type: RoomSchema }])
-  rooms: Room;
+  rooms: Room[];
 
   @Prop()
   thumbnailSrc: string;
@@ -58,6 +58,9 @@ export class Homestay {
 
   @Prop()
   vendorPhoneNumber: string;
+
+  @Prop()
+  link: string;
 }
 
 export const HomestaySchema = SchemaFactory.createForClass(Homestay);

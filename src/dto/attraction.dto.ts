@@ -36,4 +36,6 @@ export class AttractionDto {
   shares: string[];
 
   likes: string[];
+
+  link: string;
 }

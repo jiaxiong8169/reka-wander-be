@@ -13,6 +13,7 @@ import { Review, ReviewDocument } from 'src/schemas/review.schema';
 import { ReviewDto } from 'src/dto/review.dto';
 import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 import { LikeShareDto } from 'src/dto/like-share.dto';
+import { TripDto } from 'src/dto/trip.dto';
 
 @Injectable()
 export class RestaurantsService {
@@ -34,20 +35,29 @@ export class RestaurantsService {
       .orFail(new Error(ExceptionMessage.RestaurantNotFound));
   }
 
-  async findRestaurantsByFeatures(
-    features: RecommenderFeatures,
-  ): Promise<Restaurant[]> {
-    // and query
-    const andQuery: any = [
-      { 'recommenderFeatures.maxPax': { $gte: features.maxPax } },
-      { 'recommenderFeatures.minBudget': { $lte: features.minBudget } },
-    ];
+  async findRestaurantsByFeatures(trip: TripDto): Promise<Restaurant[]> {
+    let query = this.restaurantModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [trip.long, trip.lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: 300000, // default 300 kilometers
+        },
+      },
+    });
+    query = query.sort('price -avgRating');
 
-    const query = this.restaurantModel.find({
-      $and: andQuery,
+    const restaurants = await query.exec();
+
+    restaurants.sort((restaurant1, restaurant2) => {
+      if (trip.interests.includes(restaurant1.interest.toString())) return -1;
+      return 1;
     });
 
-    return query.exec();
+    return restaurants;
   }
 
   async updateRestaurantById(
@@ -107,9 +117,9 @@ export class RestaurantsService {
   }
 
   async findNearbyRestaurants(params: NearbyParamsDto): Promise<Restaurant[]> {
-    const { long, lat, distance } = params;
+    const { long, lat, distance, sort, offset, limit } = params;
     // find nearby with nearSphere
-    const query = this.restaurantModel.find({
+    let query = this.restaurantModel.find({
       loc: {
         $nearSphere: {
           $geometry: {
@@ -121,6 +131,15 @@ export class RestaurantsService {
         },
       },
     });
+    if (sort) {
+      query = query.sort(sort);
+    }
+    if (offset) {
+      query = query.skip(offset);
+    }
+    if (limit) {
+      query.limit(limit);
+    }
     return query.exec();
   }
 

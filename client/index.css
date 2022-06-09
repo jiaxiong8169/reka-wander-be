@@ -1,0 +1,13 @@
+button {
+  background-color: #0891b2 !important;
+}
+
+body {
+  height: 100vh;
+  background-image: linear-gradient(to bottom, #cfddfc, white);
+}
+
+#show-hide-password {
+  text-decoration: none;
+  color: #0891b2;
+}

@@ -57,7 +57,7 @@ export class Hotel {
   kids: boolean;
 
   @Prop([{ type: RoomSchema }])
-  rooms: Room;
+  rooms: Room[];
 
   @Prop()
   category: string;
@@ -82,6 +82,9 @@ export class Hotel {
 
   @Prop()
   vendorPhoneNumber: string;
+
+  @Prop()
+  link: string;
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);

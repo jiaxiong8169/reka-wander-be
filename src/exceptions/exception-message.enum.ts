@@ -30,4 +30,6 @@ export enum ExceptionMessage {
   VehicleExist = 'Vehicle already exists.',
   GuideNotFound = 'Guide not found. Please try again.',
   GuideExist = 'Guide already exists.',
+  ResetTokenUsed = 'The link is being used before. Please request a new one again.',
+  PasswordMismatch = 'The password entered do not match your original password.',
 }

@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Post,
   Put,
   Query,
@@ -24,11 +25,18 @@ import * as mongoose from 'mongoose';
 import { User } from 'src/decorators/user.decorator';
 import { ApiTags } from '@nestjs/swagger';
 import { FirebaseAuthGuard } from './firebase-auth/firebase-auth.guard';
+import { MailService } from 'src/mail/mail.service';
+import { ExceptionMessage } from 'src/exceptions/exception-message.enum';
+import { ChangePasswordDto } from 'src/dto/change-password.dto';
+import { userInfo } from 'os';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private mailService: MailService,
+  ) {}
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
@@ -36,6 +44,22 @@ export class AuthController {
     const reqUser: UserSchema = req.user;
     const [tokens, user] = await this.authService.login(reqUser);
     return { tokens, user };
+  }
+
+  @Put('changepassword')
+  @UseGuards(JwtAuthGuard)
+  async changePassword(
+    @User() user: DecodedJwtPayload,
+    @Body() changePasswordBody: ChangePasswordDto,
+  ) {
+    const { email } = user;
+    const { oldPassword, newPassword } = changePasswordBody;
+    console.log(changePasswordBody);
+    try {
+      await this.authService.changePassword(email, oldPassword, newPassword);
+    } catch (e) {
+      throw new BadRequestException(e.message);
+    }
   }
 
   @Post('login/google')
@@ -83,7 +107,7 @@ export class AuthController {
     return user;
   }
 
-  @Put('resetpassword')
+  @Post('resetpassword')
   @UseGuards(JwtResetPasswordGuard)
   async resetPassword(@Req() req, @Body('password') password) {
     const reqUser: DecodedJwtPayload = req.user;
@@ -92,23 +116,14 @@ export class AuthController {
   }
 
   @Get('requestresetpassword')
-  @UseGuards(JwtAuthGuard)
-  async requestResetPasswordToken(@Query('email') email: string) {
-    const validPeriodInString = process.env.JWT_RESET_PASSWORD_TOKEN_EXPIRATION;
-    // the pattern for the token expiration is `^\d+s?`
-    // need to strip the last character to get the number in seconds
-    const validPeriod = validPeriodInString.substring(
-      0,
-      validPeriodInString.length - 1,
-    );
-    const inMinute = Number(validPeriod) / 60;
-    const token = await this.authService.getResetPasswordToken(email);
-    return {
-      url: `${
-        process.env.REACT_APP_FRONTEND_URL +
-        process.env.RESET_PASSWORD_ROUTE_PATH
-      }?token=${token}`,
-      expiration: `${inMinute} minute${inMinute > 1 ? 's' : ''}`,
-    };
+  async requestResetPasswordToken(@Req() req, @Query('email') email: string) {
+    try {
+      return await this.authService.sendResetPasswordEmail(
+        email,
+        `${process.env.HOSTNAME || req.hostname}:${process.env.PORT || 9000}`,
+      );
+    } catch (e) {
+      throw new NotFoundException(e.message);
+    }
   }
 }

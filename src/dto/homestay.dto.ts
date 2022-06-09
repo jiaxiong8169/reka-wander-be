@@ -32,4 +32,6 @@ export class HomestayDto {
   vendorEmail: string;
 
   vendorPhoneNumber: string;
+
+  link: string;
 }

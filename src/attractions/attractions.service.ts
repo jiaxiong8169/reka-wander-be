@@ -11,8 +11,8 @@ import { SEARCH_FIELDS } from 'src/constants';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 import { Review, ReviewDocument } from 'src/schemas/review.schema';
 import { ReviewDto } from 'src/dto/review.dto';
-import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 import { LikeShareDto } from 'src/dto/like-share.dto';
+import { TripDto } from 'src/dto/trip.dto';
 
 @Injectable()
 export class AttractionsService {
@@ -34,21 +34,29 @@ export class AttractionsService {
       .orFail(new Error(ExceptionMessage.AttractionNotFound));
   }
 
-  async findAttractionsByFeatures(
-    features: RecommenderFeatures,
-  ): Promise<Attraction[]> {
-    // and query
-    const andQuery: any = [
-      { 'recommenderFeatures.maxPax': { $gte: features.maxPax } },
-      { 'recommenderFeatures.minBudget': { $lte: features.minBudget } },
-    ];
-    if (features.kids) andQuery.push({ 'recommenderFeatures.kids': true });
+  async findAttractionsByFeatures(trip: TripDto): Promise<Attraction[]> {
+    let query = this.attractionModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [trip.long, trip.lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: 300000, // default 300 kilometers
+        },
+      },
+    });
+    query = query.sort('price -avgRating');
 
-    const query = this.attractionModel.find({
-      $and: andQuery,
+    const attractions = await query.exec();
+
+    attractions.sort((attraction1, attraction2) => {
+      if (trip.interests.includes(attraction1.interest.toString())) return -1;
+      return 1;
     });
 
-    return query.exec();
+    return attractions;
   }
 
   async updateAttractionById(
@@ -108,9 +116,9 @@ export class AttractionsService {
   }
 
   async findNearbyAttractions(params: NearbyParamsDto): Promise<Attraction[]> {
-    const { long, lat, distance } = params;
+    const { long, lat, distance, sort, offset, limit } = params;
     // find nearby with nearSphere
-    const query = this.attractionModel.find({
+    let query = this.attractionModel.find({
       loc: {
         $nearSphere: {
           $geometry: {
@@ -122,6 +130,15 @@ export class AttractionsService {
         },
       },
     });
+    if (sort) {
+      query = query.sort(sort);
+    }
+    if (offset) {
+      query = query.skip(offset);
+    }
+    if (limit) {
+      query.limit(limit);
+    }
     return query.exec();
   }
 

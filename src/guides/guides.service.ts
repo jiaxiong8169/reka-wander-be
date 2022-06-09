@@ -11,6 +11,7 @@ import { SEARCH_FIELDS } from 'src/constants';
 import { Review, ReviewDocument } from 'src/schemas/review.schema';
 import { ReviewDto } from 'src/dto/review.dto';
 import { LikeShareDto } from 'src/dto/like-share.dto';
+import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 
 @Injectable()
 export class GuidesService {
@@ -226,5 +227,32 @@ export class GuidesService {
     });
 
     session.endSession();
+  }
+
+  async findNearbyGuides(params: NearbyParamsDto): Promise<Guide[]> {
+    const { long, lat, distance, sort, offset, limit } = params;
+    // find nearby with nearSphere
+    let query = this.guideModel.find({
+      loc: {
+        $nearSphere: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [long, lat],
+          },
+          $minDistance: 0, // minimum 0 meters
+          $maxDistance: distance ? distance : 5000, // default 5000 meters
+        },
+      },
+    });
+    if (sort) {
+      query = query.sort(sort);
+    }
+    if (offset) {
+      query = query.skip(offset);
+    }
+    if (limit) {
+      query.limit(limit);
+    }
+    return query.exec();
   }
 }

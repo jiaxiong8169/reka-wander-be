@@ -25,6 +25,8 @@ export class GuideDto {
 
   thumbnailSrc: string;
 
+  thumbnailTransparentSrc: string;
+
   reviews: string[];
 
   rateCount: number;
@@ -44,4 +46,6 @@ export class GuideDto {
   vendorPhoneNumber: string;
 
   timestamp: Date;
+
+  link: string;
 }

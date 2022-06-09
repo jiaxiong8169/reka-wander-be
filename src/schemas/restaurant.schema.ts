@@ -46,8 +46,8 @@ export class Restaurant {
   @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }])
   reviews: mongoose.Schema.Types.ObjectId[];
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Interest' })
-  interest: mongoose.Schema.Types.ObjectId;
+  @Prop()
+  interest: string;
 
   @Prop()
   category: string;
@@ -66,6 +66,9 @@ export class Restaurant {
 
   @Prop()
   likes: string[];
+
+  @Prop()
+  link: string;
 }
 
 export const RestaurantSchema = SchemaFactory.createForClass(Restaurant);
