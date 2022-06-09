@@ -7,7 +7,7 @@ export class CreateUserDto {
 
   password: string;
 
-  phoneNumber?: string;
+  phoneNumber: string;
 
   profileSrc?: string;
 

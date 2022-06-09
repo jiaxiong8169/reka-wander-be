@@ -18,6 +18,7 @@ import { SearchQueryDto } from 'src/dto/search-params.dto';
 import { UsersService } from './users.service';
 import * as mongoose from 'mongoose';
 import { CreateUserDto } from 'src/dto/create-user.dto';
+import { UpdateUserDto } from 'src/dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 // import { PermissionsGuard } from 'src/auth/permissions.guard';
 // import { JwtAuthGuard } from 'src/auth/jwt-auth/jwt-auth.guard';
@@ -85,7 +86,7 @@ export class UsersController {
   @Put(':userId')
   @RequirePermissions(Permission.UpdateUser)
   async updateUser(
-    @Body() req: CreateUserDto,
+    @Body() req: UpdateUserDto,
     @Param('userId') userId: mongoose.Types.ObjectId,
   ) {
     try {
