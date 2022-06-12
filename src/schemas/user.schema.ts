@@ -22,7 +22,7 @@ export type UserDocument = User & mongoose.Document;
 export class User {
   _id: mongoose.Schema.Types.ObjectId;
 
-  @Prop({ required: true, default: '' })
+  @Prop({ default: '' })
   name: string;
 
   @Prop({ default: 'user', lowercase: true, required: true, minLength: 1 })
