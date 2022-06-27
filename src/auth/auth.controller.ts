@@ -120,7 +120,9 @@ export class AuthController {
     try {
       return await this.authService.sendResetPasswordEmail(
         email,
-        `${process.env.HOSTNAME || req.hostname}:${process.env.PORT || 9000}`,
+        `${req.secure ? 'https' : 'http'}://${
+          process.env.HOSTNAME || req.headers.host
+        }`,
       );
     } catch (e) {
       throw new NotFoundException(e.message);
