@@ -12,6 +12,7 @@ const rslt = db.users.find({
       'fhueiching@gmail.com',
       'autumnlewjb@gmail.com',
       'haziqyazet@gmail.com',
+      'haziq@lcpbuildsofttechnology.com',
     ],
   },
 });
@@ -36,6 +37,8 @@ db.users.remove({
       'nicole@rekawander.com',
       'chinxiongwei@hotmail.com',
       'fhueiching@gmail.com',
+      'haziqyazet@gmail.com',
+      'haziq@lcpbuildsofttechnology.com',
     ],
   },
 });
