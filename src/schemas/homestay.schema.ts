@@ -61,6 +61,27 @@ export class Homestay {
 
   @Prop()
   link: string;
+
+  @Prop()
+  propertyType: string;
+
+  @Prop()
+  parkingFee: number;
+
+  @Prop()
+  parkingNumber: number;
+
+  @Prop()
+  checkInTime: string;
+
+  @Prop()
+  checkOutTime: string;
+
+  @Prop()
+  additionalRules: string[];
+
+  @Prop()
+  amenities: string[];
 }
 
 export const HomestaySchema = SchemaFactory.createForClass(Homestay);

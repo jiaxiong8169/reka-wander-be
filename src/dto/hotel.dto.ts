@@ -50,4 +50,16 @@ export class HotelDto {
   vendorPhoneNumber: string;
 
   link: string;
+  
+  propertyType: string;
+
+  parkingFee: number;
+
+  checkInTime: string;
+
+  checkOutTime: string;
+
+  additionalRules: string[];
+
+  amenities: string[];
 }
