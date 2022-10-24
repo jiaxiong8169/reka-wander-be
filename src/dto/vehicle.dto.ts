@@ -32,4 +32,12 @@ export class VehicleDto {
   vendorPhoneNumber: string;
 
   link: string;
+
+  transmission: string;
+  
+  seatNumber: number;
+
+  type: string;
+
+  additionalRules: string[];
 }

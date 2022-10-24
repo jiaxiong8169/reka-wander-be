@@ -85,6 +85,24 @@ export class Hotel {
 
   @Prop()
   link: string;
+
+  @Prop()
+  parkingFee: number;
+
+  @Prop()
+  parkingNumber: number;
+
+  @Prop()
+  checkInTime: string;
+
+  @Prop()
+  checkOutTime: string;
+
+  @Prop()
+  additionalRules: string[];
+
+  @Prop()
+  amenities: string[];
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);
