@@ -63,6 +63,18 @@ export class Vehicle {
 
   @Prop()
   link: string;
+
+  @Prop()
+  transmission: string;
+
+  @Prop()
+  seatNumber: number;
+
+  @Prop()
+  type: string;
+
+  @Prop()
+  additionalRules: string[];
 }
 
 export const VehicleSchema = SchemaFactory.createForClass(Vehicle);
