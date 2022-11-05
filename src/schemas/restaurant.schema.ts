@@ -69,6 +69,9 @@ export class Restaurant {
 
   @Prop()
   link: string;
+
+  @Prop({ required: true })
+  timestamp: Date;
 }
 
 export const RestaurantSchema = SchemaFactory.createForClass(Restaurant);

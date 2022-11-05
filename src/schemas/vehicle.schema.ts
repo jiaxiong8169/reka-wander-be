@@ -75,6 +75,9 @@ export class Vehicle {
 
   @Prop()
   additionalRules: string[];
+
+  @Prop({ required: true })
+  timestamp: Date;
 }
 
 export const VehicleSchema = SchemaFactory.createForClass(Vehicle);
