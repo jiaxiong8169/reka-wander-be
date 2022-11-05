@@ -103,7 +103,6 @@ export class Hotel {
 
   @Prop()
   amenities: string[];
-<<<<<<< HEAD
 
   @Prop({ required: true })
   timestamp: Date;
@@ -114,8 +113,6 @@ export class Hotel {
 
 interface FacilitiesType{
   [key: string]: string | number;
-=======
->>>>>>> Modify dto and schemas for homestay,hotel,room,vehicle
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);

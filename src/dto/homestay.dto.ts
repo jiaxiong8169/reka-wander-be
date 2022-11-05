@@ -46,7 +46,6 @@ export class HomestayDto {
   additionalRules: string[];
 
   amenities: string[];
-<<<<<<< HEAD
 
   facilities: FacilitiesType;
 
@@ -56,6 +55,4 @@ export class HomestayDto {
 interface FacilitiesType{
   [key: string]: string | number;
 
-=======
->>>>>>> Modify dto and schemas for homestay,hotel,room,vehicle
 }
