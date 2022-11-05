@@ -14,6 +14,8 @@ export enum ExceptionMessage {
   CannotDelete = 'Unable to delete this entry. Please try again.',
   ReviewNotFound = 'Review not found. Please try again.',
   ReviewExist = 'Review already exists.',
+  ReservationNotFound = 'Reservation not found. Please try again.',
+  ReservationExist = 'Reservation already exists.',
   HotelNotFound = 'Hotel not found. Please try again.',
   HotelExist = 'Hotel already exists.',
   AttractionNotFound = 'Attraction not found. Please try again.',

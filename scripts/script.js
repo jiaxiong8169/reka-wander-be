@@ -1,5 +1,6 @@
 // main script for cleaning all data
 db.reviews.deleteMany({});
+db.reservations.deleteMany({});
 db.trips.deleteMany({});
 db.attractions.deleteMany({});
 db.guides.deleteMany({});
@@ -17,3 +18,4 @@ load('script_hotels.js');
 load('script_interests.js');
 load('script_restaurants.js');
 load('script_vehicles.js');
+load('script_reservations.js');

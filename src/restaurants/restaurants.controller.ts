@@ -106,6 +106,7 @@ export class RestaurantsController {
   async createRestaurant(@Body() body: RestaurantDto) {
     try {
       const restaurant = await this.restaurantsService.create(body);
+      body.timestamp = new Date();
       return restaurant;
     } catch (e: any) {
       throw new BadRequestException(e.message);

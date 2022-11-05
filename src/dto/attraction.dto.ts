@@ -38,4 +38,6 @@ export class AttractionDto {
   likes: string[];
 
   link: string;
+
+  timestamp: Date;
 }

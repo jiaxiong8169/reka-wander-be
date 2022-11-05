@@ -58,6 +58,7 @@ export class VehiclesController {
   async createVehicle(@Body() body: VehicleDto) {
     try {
       const vehicle = await this.vehiclesService.create(body);
+      body.timestamp = new Date();
       return vehicle;
     } catch (e: any) {
       throw new BadRequestException(e.message);

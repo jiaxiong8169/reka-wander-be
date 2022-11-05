@@ -72,6 +72,9 @@ export class Attraction {
 
   @Prop()
   link: string;
+
+  @Prop({ required: true })
+  timestamp: Date;
 }
 
 export const AttractionSchema = SchemaFactory.createForClass(Attraction);
