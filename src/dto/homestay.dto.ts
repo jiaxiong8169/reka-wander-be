@@ -46,4 +46,13 @@ export class HomestayDto {
   additionalRules: string[];
 
   amenities: string[];
+
+  facilities: FacilitiesType;
+
+  timestamp: Date;
+}
+
+interface FacilitiesType{
+  [key: string]: string | number;
+
 }

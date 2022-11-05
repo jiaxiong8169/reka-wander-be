@@ -36,4 +36,6 @@ export class RestaurantDto {
   likes: string[];
 
   link: string;
+
+  timestamp: Date;
 }

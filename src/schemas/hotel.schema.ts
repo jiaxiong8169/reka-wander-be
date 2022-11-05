@@ -103,6 +103,16 @@ export class Hotel {
 
   @Prop()
   amenities: string[];
+
+  @Prop({ required: true })
+  timestamp: Date;
+
+  @Prop()
+  facilities: FacilitiesType;
+}
+
+interface FacilitiesType{
+  [key: string]: string | number;
 }
 
 export const HotelSchema = SchemaFactory.createForClass(Hotel);

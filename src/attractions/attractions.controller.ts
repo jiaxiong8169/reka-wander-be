@@ -110,6 +110,7 @@ export class AttractionsController {
   async createAttraction(@Body() body: AttractionDto) {
     try {
       const attraction = await this.attractionsService.create(body);
+      body.timestamp = new Date();
       return attraction;
     } catch (e: any) {
       throw new BadRequestException(e.message);

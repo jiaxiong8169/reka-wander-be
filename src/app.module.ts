@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
 import { ReviewsModule } from './reviews/reviews.module';
+import { ReservationsModule } from './reservation/reservation.module';
 import { TripsModule } from './trips/trips.module';
 import { InterestsModule } from './interests/interests.module';
 import { AttractionsModule } from './attractions/attractions.module';
@@ -25,6 +26,7 @@ import { join } from 'path';
     AuthModule,
     UsersModule,
     ReviewsModule,
+    ReservationsModule,
     TripsModule,
     InterestsModule,
     AttractionsModule,

@@ -2,6 +2,7 @@
 export const SEARCH_FIELDS = {
   users: ['name.eng', 'name.cht', 'name.chs'],
   reviews: ['userName', 'contents'],
+  reservation: ['type'],
   trips: ['name'],
   interests: ['name'],
   attractions: ['name', 'city', 'category', 'perks'],

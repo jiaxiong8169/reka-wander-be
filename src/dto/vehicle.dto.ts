@@ -40,4 +40,6 @@ export class VehicleDto {
   type: string;
 
   additionalRules: string[];
+
+  timestamp: Date;
 }

@@ -106,6 +106,7 @@ export class HotelsController {
   async createHotel(@Body() body: HotelDto) {
     try {
       const hotel = await this.hotelsService.create(body);
+      body.timestamp = new Date();
       return hotel;
     } catch (e: any) {
       throw new BadRequestException(e.message);

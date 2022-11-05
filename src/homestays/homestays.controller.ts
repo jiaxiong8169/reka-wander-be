@@ -60,6 +60,7 @@ export class HomestaysController {
   async createHomestay(@Body() body: HomestayDto) {
     try {
       const homestay = await this.homestaysService.create(body);
+      body.timestamp = new Date();
       return homestay;
     } catch (e: any) {
       throw new BadRequestException(e.message);
