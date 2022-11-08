@@ -105,8 +105,9 @@ export class HotelsController {
   @RequirePermissions(Permission.CreateHotel)
   async createHotel(@Body() body: HotelDto) {
     try {
-      const hotel = await this.hotelsService.create(body);
       body.timestamp = new Date();
+      const hotel = await this.hotelsService.create(body);
+
       return hotel;
     } catch (e: any) {
       throw new BadRequestException(e.message);

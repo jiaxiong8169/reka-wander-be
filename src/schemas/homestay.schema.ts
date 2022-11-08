@@ -86,12 +86,12 @@ export class Homestay {
   @Prop({ required: true })
   timestamp: Date;
 
-  @Prop()
-  facilities: FacilitiesType;
+  // @Prop()
+  // facilities: FacilitiesType;
 }
 
-interface FacilitiesType{
-  [key: string]: string | number;
-}
+// interface FacilitiesType{
+//   [key: string]: string | number;
+// }
 
 export const HomestaySchema = SchemaFactory.createForClass(Homestay);

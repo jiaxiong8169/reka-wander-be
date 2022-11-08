@@ -1,5 +1,5 @@
 export class ReservationDto {
-  id: string;
+  targetId: string;
   
   userId: string;
 
@@ -7,11 +7,13 @@ export class ReservationDto {
 
   type: string;
 
-  typeName: string;
+  reservedName: string;
 
-  selected: string[];
+  totalPrice: number;
 
-  processed: boolean;
+  selectedItems: string[];
+
+  isDone: boolean;
 
   startDate: Date;
 

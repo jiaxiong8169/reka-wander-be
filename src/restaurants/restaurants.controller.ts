@@ -105,8 +105,8 @@ export class RestaurantsController {
   @RequirePermissions(Permission.CreateRestaurant)
   async createRestaurant(@Body() body: RestaurantDto) {
     try {
-      const restaurant = await this.restaurantsService.create(body);
       body.timestamp = new Date();
+      const restaurant = await this.restaurantsService.create(body);
       return restaurant;
     } catch (e: any) {
       throw new BadRequestException(e.message);
