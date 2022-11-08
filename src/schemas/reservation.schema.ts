@@ -30,13 +30,16 @@ export class Reservation {
   type: string;
 
   @Prop()
-  typeName: string;
+  reservedName: string;
 
   @Prop()
-  selected: string[];
+  selectedItems: string[];
 
   @Prop()
-  processed: boolean;
+  totalPrice: number;
+
+  @Prop()
+  isDone: boolean;
 
   @Prop()
   startDate: Date;

@@ -41,7 +41,8 @@ export class ReservationsService {
 
   async create(@Body() reservationDto: ReservationDto): Promise<Reservation> {
     const createdReservation = new this.reservationModel(reservationDto);
-    return createdReservation.save().catch(() => {
+    return createdReservation.save().catch((e) => {
+      console.log(e);
       throw Error(ExceptionMessage.ReservationExist);
     });
   }

@@ -59,8 +59,9 @@ export class HomestaysController {
   @RequirePermissions(Permission.CreateHomestay)
   async createHomestay(@Body() body: HomestayDto) {
     try {
-      const homestay = await this.homestaysService.create(body);
       body.timestamp = new Date();
+      const homestay = await this.homestaysService.create(body);
+
       return homestay;
     } catch (e: any) {
       throw new BadRequestException(e.message);

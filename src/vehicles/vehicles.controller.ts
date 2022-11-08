@@ -57,8 +57,8 @@ export class VehiclesController {
   @RequirePermissions(Permission.CreateVehicle)
   async createVehicle(@Body() body: VehicleDto) {
     try {
-      const vehicle = await this.vehiclesService.create(body);
       body.timestamp = new Date();
+      const vehicle = await this.vehiclesService.create(body);
       return vehicle;
     } catch (e: any) {
       throw new BadRequestException(e.message);
