@@ -40,6 +40,7 @@ export class TripsService {
       .orFail(new Error(ExceptionMessage.TripNotFound));
   }
 
+  // recommendation now will not attempt to create a trip
   async getTripRecommendations(trip: TripDto): Promise<TripDto> {
     // get recommendations
     trip.previousBudget = trip.budget;
@@ -135,38 +136,6 @@ export class TripsService {
     if (!trip.vehicles) trip.vehicles = [];
     if (!trip.homestayObjects) trip.homestayObjects = [];
     if (!trip.homestays) trip.homestays = [];
-
-    // create a trip only if trip userId exists
-    if (trip.userId) {
-      const session = await this.connection.startSession();
-
-      await session.withTransaction(async () => {
-        // get user
-        try {
-          const user = await this.userModel.findOne({ _id: trip.userId });
-
-          // if user is found, create a new trip
-          if (user) {
-            // create a new trip
-            const tripDb = await this.create(trip);
-            trip.id = tripDb['id'];
-
-            // add into user trip list
-            user.trips.push(tripDb['id']);
-            await this.userModel.findOneAndUpdate(
-              { _id: user['id'] },
-              { trips: user.trips },
-              {
-                new: true,
-                runValidators: true,
-              },
-            );
-          }
-        } catch (err) {}
-      });
-
-      session.endSession();
-    }
 
     return trip;
   }
