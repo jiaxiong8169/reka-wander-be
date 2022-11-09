@@ -1,5 +1,6 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { FacilityType } from 'src/dto/facilityType';
 import { RoomSchema, Room } from './room.schema';
 
 export type HomestayDocument = Homestay & mongoose.Document;
@@ -80,14 +81,8 @@ export class Homestay {
   @Prop()
   additionalRules: string[];
 
-  @Prop()
-  amenities: string[];
-
-  @Prop({ required: true })
-  timestamp: Date;
-
-  // @Prop()
-  // facilities: FacilitiesType;
+  @Prop(raw(FacilityType))
+  facilities: FacilityType;
 }
 
 // interface FacilitiesType{

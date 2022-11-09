@@ -34,7 +34,6 @@ export class VehicleDto {
   link: string;
 
   transmission: string;
-  
   seatNumber: number;
 
   type: string;

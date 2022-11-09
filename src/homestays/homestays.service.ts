@@ -113,7 +113,6 @@ export class HomestaysService {
 
   async findHomestayByFeatures(trip: TripDto) {
     if (!trip.rentHomestay || trip.days <= 0) return null;
-    const targetPrice = trip.kids ? 'priceWithBaby' : 'price';
     let query = this.homestayModel.find({
       loc: {
         $nearSphere: {
@@ -135,15 +134,13 @@ export class HomestaysService {
         if (
           room.pax >= trip.pax &&
           room.availability > 0 &&
-          room[targetPrice] <= trip.budget
+          room.price <= trip.budget
         ) {
           trip.homestays = [homestay['_id']];
           trip.homestayObjects = [homestay];
           trip.rooms = [room['_id']];
           trip.roomObjects = [room];
-          trip.kids
-            ? (trip.budget -= room.priceWithBaby)
-            : (trip.budget -= room.price);
+          trip.budget -= room.price;
           return;
         }
       });
