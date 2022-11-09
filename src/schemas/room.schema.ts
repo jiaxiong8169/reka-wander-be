@@ -26,6 +26,9 @@ export class Room {
 
   @Prop()
   availability: number;
+
+  @Prop()
+  bedTypes: string[];
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);

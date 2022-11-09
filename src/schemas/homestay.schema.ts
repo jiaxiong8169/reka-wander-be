@@ -1,5 +1,6 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
+import { FacilityType } from 'src/dto/facilityType';
 import { RoomSchema, Room } from './room.schema';
 
 export type HomestayDocument = Homestay & mongoose.Document;
@@ -61,6 +62,27 @@ export class Homestay {
 
   @Prop()
   link: string;
+
+  @Prop()
+  propertyType: string;
+
+  @Prop()
+  parkingFee: number;
+
+  @Prop()
+  parkingNumber: number;
+
+  @Prop()
+  checkInTime: string;
+
+  @Prop()
+  checkOutTime: string;
+
+  @Prop()
+  additionalRules: string[];
+
+  @Prop(raw(FacilityType))
+  facilities: FacilityType;
 }
 
 export const HomestaySchema = SchemaFactory.createForClass(Homestay);

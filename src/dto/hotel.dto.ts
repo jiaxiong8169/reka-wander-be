@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { FacilityType } from './facilityType';
 import { Loc } from './loc.dto';
 import { RoomDto } from './room.dto';
 
@@ -50,4 +51,16 @@ export class HotelDto {
   vendorPhoneNumber: string;
 
   link: string;
+
+  parkingFee: number;
+
+  parkingNumber: number;
+
+  checkInTime: string;
+
+  checkOutTime: string;
+
+  additionalRules: string[];
+
+  facilities: FacilityType;
 }

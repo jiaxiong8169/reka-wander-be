@@ -50,7 +50,6 @@ export class HotelsController {
   @RequirePermissions(Permission.CreateReview)
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   async likeHotel(@Body() req: LikeShareDto, @User() reqUser) {
-    console.log('hello');
     req.userId = reqUser && reqUser.id ? reqUser.id : req.userId;
     if (!req.userId) throw new BadRequestException('Invalid user information');
     try {

@@ -10,4 +10,6 @@ export class RoomDto {
   availability: number;
 
   quantity: number;
+
+  bedTypes: string[];
 }

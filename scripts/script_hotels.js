@@ -7,7 +7,8 @@ fixLocationStructure(data);
 data.forEach((d) => {
   // change string into list
   d.additionalRules = JSON.parse(d.additionalRules.replace(/\\/g, ''));
-  d.amenities = JSON.parse(d.amenities.replace(/\\/g, ''));
+  print(d.facilities.replace(/\\/g, ''));
+  d.facilities = JSON.parse(d.facilities.replace(/\\/g, ''));
   // get rooms
   d.rooms = rooms.filter((r) => r.name === d.name);
   // append object ID
