@@ -105,6 +105,7 @@ export class RestaurantsController {
   @RequirePermissions(Permission.CreateRestaurant)
   async createRestaurant(@Body() body: RestaurantDto) {
     try {
+      body.timestamp = new Date();
       const restaurant = await this.restaurantsService.create(body);
       body.timestamp = new Date();
       return restaurant;

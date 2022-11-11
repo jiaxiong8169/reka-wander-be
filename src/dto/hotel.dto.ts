@@ -63,12 +63,12 @@ export class HotelDto {
 
   amenities: string[];
 
-  facilities: FacilitiesType;
+  // facilities: FacilitiesType;
 
   timestamp: Date;
 }
 
-interface FacilitiesType{
-  [key: string]: string | number;
+// interface FacilitiesType{
+//   [key: string]: string | number;
 
-}
+// }

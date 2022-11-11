@@ -17,7 +17,7 @@ export type TripDocument = Trip & mongoose.Document;
 export class Trip {
   _id: mongoose.Schema.Types.ObjectId;
 
-  @Prop([{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }])
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   userId: mongoose.Schema.Types.ObjectId;
 
   @Prop({ required: true })

@@ -109,6 +109,7 @@ export class AttractionsController {
   @RequirePermissions(Permission.CreateAttraction)
   async createAttraction(@Body() body: AttractionDto) {
     try {
+      body.timestamp = new Date();
       const attraction = await this.attractionsService.create(body);
       body.timestamp = new Date();
       return attraction;

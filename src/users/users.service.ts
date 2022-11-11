@@ -31,7 +31,6 @@ export class UsersService {
     userId: mongoose.Types.ObjectId,
     req: UpdateUserDto,
   ): Promise<User> {
-    this.checkEmailAndPasswordStrength(req);
     return this.userModel.findOneAndUpdate({ _id: userId }, req, {
       new: true,
       runValidators: true,
@@ -170,7 +169,7 @@ export class UsersService {
       const hashedPassword = await bcrypt.hash(passwordPlainText, 10);
       return this.updateUserById(userId, { password: hashedPassword });
     } catch (e: any) {
-      throw new BadRequestException(e.message);
+      throw e;
     }
   }
 }
