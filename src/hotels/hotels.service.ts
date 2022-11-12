@@ -11,7 +11,6 @@ import { SEARCH_FIELDS } from 'src/constants';
 import { NearbyParamsDto } from 'src/dto/nearby-params.dto';
 import { Review, ReviewDocument } from 'src/schemas/review.schema';
 import { ReviewDto } from 'src/dto/review.dto';
-import { RecommenderFeatures } from 'src/dto/recommender-features.dto';
 import { LikeShareDto } from 'src/dto/like-share.dto';
 import { TripDto } from 'src/dto/trip.dto';
 
@@ -37,7 +36,6 @@ export class HotelsService {
 
   async findHotelByFeatures(trip: TripDto) {
     if (trip.rentHomestay || trip.days <= 0) return null;
-    const targetPrice = trip.kids ? 'priceWithBaby' : 'price';
     let query = this.hotelModel.find({
       loc: {
         $nearSphere: {
@@ -59,15 +57,13 @@ export class HotelsService {
         if (
           room.pax >= trip.pax &&
           room.availability > 0 &&
-          room[targetPrice] <= trip.budget
+          room.price <= trip.budget
         ) {
           trip.hotels = [hotel['_id']];
           trip.hotelObjects = [hotel];
           trip.rooms = [room['_id']];
           trip.roomObjects = [room];
-          trip.kids
-            ? (trip.budget -= room.priceWithBaby)
-            : (trip.budget -= room.price);
+          trip.budget -= room.price;
           return;
         }
       });

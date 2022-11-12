@@ -113,7 +113,6 @@ export class VehiclesService {
 
   async findVehicleByFeatures(trip: TripDto) {
     if (!trip.rentCar) return;
-    const targetPrice = trip.kids ? 'priceWithBaby' : 'price';
     let query = this.vehicleModel.find({
       loc: {
         $nearSphere: {
@@ -131,7 +130,7 @@ export class VehiclesService {
       availability: {
         $gt: 0,
       },
-      [targetPrice]: {
+      price: {
         $lte: trip.budget,
       },
     });
@@ -142,9 +141,7 @@ export class VehiclesService {
     if (vehicles.length > 0) {
       trip.vehicles = [vehicles[0]['_id']];
       trip.vehicleObjects = [vehicles[0]];
-      trip.kids
-        ? (trip.budget -= vehicles[0].priceWithBaby)
-        : (trip.budget -= vehicles[0].price);
+      trip.budget -= vehicles[0].price;
     }
   }
 }

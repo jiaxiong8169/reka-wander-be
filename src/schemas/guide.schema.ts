@@ -42,7 +42,7 @@ export class Guide {
   price: number;
 
   @Prop([{ type: PackageSchema }])
-  packages: Package;
+  packages: Package[];
 
   @Prop()
   thumbnailSrc: string;

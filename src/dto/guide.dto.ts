@@ -19,9 +19,9 @@ export class GuideDto {
   price: number;
 
   @ApiProperty({
-    enum: PackageDto,
+    enum: [PackageDto],
   })
-  packages: PackageDto;
+  packages: PackageDto[];
 
   thumbnailSrc: string;
 

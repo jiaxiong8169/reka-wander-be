@@ -23,6 +23,7 @@ import { ApiTags } from '@nestjs/swagger';
 export class TripsController {
   constructor(private tripsService: TripsService) {}
 
+  // recommend now will not attempt to create a trip
   @Post('recommend')
   @RequirePermissions(Permission.CreateTrip)
   async getTripRecommendations(@Body() body: TripDto) {
