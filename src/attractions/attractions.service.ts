@@ -43,7 +43,7 @@ export class AttractionsService {
             coordinates: [trip.long, trip.lat],
           },
           $minDistance: 0, // minimum 0 meters
-          $maxDistance: 300000, // default 300 kilometers
+          $maxDistance: trip.maxDistance, // default 300 kilometers
         },
       },
     });
@@ -51,12 +51,29 @@ export class AttractionsService {
 
     const attractions = await query.exec();
 
-    attractions.sort((attraction1, attraction2) => {
-      if (trip.interests.includes(attraction1.interest.toString())) return -1;
-      return 1;
+    let tmpHours = trip.visitHours;
+    let tripPax = trip.pax;
+    trip.attractionObjects = [];
+    trip.attractions = [];
+
+    attractions.forEach((attraction) => {
+      if (
+        attraction.price * tripPax <= trip.attractionBudget &&
+        tmpHours >= attraction.hours
+      ) {
+        trip.attractions.push(attraction['_id'].toString());
+        trip.attractionObjects.push(attraction);
+        trip.attractionBudget -= attraction.price * tripPax;
+        tmpHours -= attraction.hours;
+      }
     });
 
-    return attractions;
+    // attractions.sort((attraction1, attraction2) => {
+    //   if (trip.interests.includes(attraction1.interest.toString())) return -1;
+    //   return 1;
+    // });
+
+    return;
   }
 
   async updateAttractionById(

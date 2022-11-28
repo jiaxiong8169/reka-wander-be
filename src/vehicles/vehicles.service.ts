@@ -121,7 +121,7 @@ export class VehiclesService {
             coordinates: [trip.long, trip.lat],
           },
           $minDistance: 0, // minimum 0 meters
-          $maxDistance: 300000, // default 300 kilometers
+          $maxDistance: trip.maxDistance, // default 300 kilometers
         },
       },
       pax: {
@@ -131,7 +131,7 @@ export class VehiclesService {
         $gt: 0,
       },
       price: {
-        $lte: trip.budget,
+        $lte: trip.vehicleBudget,
       },
     });
     query = query.sort('price');
@@ -141,7 +141,7 @@ export class VehiclesService {
     if (vehicles.length > 0) {
       trip.vehicles = [vehicles[0]['_id']];
       trip.vehicleObjects = [vehicles[0]];
-      trip.budget -= vehicles[0].price;
+      trip.vehicleBudget -= vehicles[0].price;
     }
   }
 }

@@ -37,7 +37,13 @@ export class TripsController {
           new Date(body.startDate).getTime()) /
           (1000 * 3600 * 24) +
         1;
-      body.hours = body.days * 8;
+      body.mealHours = body.days * 6;
+      body.visitHours = body.days * 5;
+      body.estimatedBudget =
+        body.accommodationBudget +
+        body.attractionBudget +
+        body.restaurantBudget +
+        body.vehicleBudget;
       const trip = await this.tripsService.getTripRecommendations(body);
       return trip;
     } catch (e: any) {

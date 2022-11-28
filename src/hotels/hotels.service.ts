@@ -35,6 +35,7 @@ export class HotelsService {
   }
 
   async findHotelByFeatures(trip: TripDto) {
+    console.log('hellohotel');
     if (trip.rentHomestay || trip.days <= 0) return null;
     let query = this.hotelModel.find({
       loc: {
@@ -44,7 +45,7 @@ export class HotelsService {
             coordinates: [trip.long, trip.lat],
           },
           $minDistance: 0, // minimum 0 meters
-          $maxDistance: 300000, // default 300 kilometers
+          $maxDistance: trip.maxDistance, // default 300 kilometers
         },
       },
     });
@@ -53,17 +54,19 @@ export class HotelsService {
     const hotels = await query.exec();
 
     hotels.forEach((hotel) => {
+      console.log(hotel);
       hotel.rooms.forEach((room) => {
         if (
           room.pax >= trip.pax &&
           room.availability > 0 &&
-          room.price <= trip.budget
+          room.price <= trip.accommodationBudget
         ) {
+          console.log('true');
           trip.hotels = [hotel['_id']];
           trip.hotelObjects = [hotel];
           trip.rooms = [room['_id']];
           trip.roomObjects = [room];
-          trip.budget -= room.price;
+          trip.accommodationBudget -= room.price;
           return;
         }
       });

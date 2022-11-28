@@ -18,7 +18,15 @@ export class TripDto {
 
   pax: number;
 
-  budget: number;
+  accommodationBudget: number;
+
+  restaurantBudget: number;
+
+  vehicleBudget: number;
+
+  attractionBudget: number;
+
+  estimatedBudget: number;
 
   interests: string[];
 
@@ -56,11 +64,15 @@ export class TripDto {
 
   days: number;
 
-  hours: number;
+  mealHours: number;
+
+  visitHours: number;
 
   long: number;
 
   lat: number;
 
-  previousBudget: number;
+  maxDistance: number;
+
+  // previousBudget: number;
 }

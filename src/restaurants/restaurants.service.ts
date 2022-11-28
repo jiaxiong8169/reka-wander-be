@@ -44,7 +44,7 @@ export class RestaurantsService {
             coordinates: [trip.long, trip.lat],
           },
           $minDistance: 0, // minimum 0 meters
-          $maxDistance: 300000, // default 300 kilometers
+          $maxDistance: trip.maxDistance, // default 300 kilometers
         },
       },
     });
@@ -52,12 +52,29 @@ export class RestaurantsService {
 
     const restaurants = await query.exec();
 
-    restaurants.sort((restaurant1, restaurant2) => {
-      if (trip.interests.includes(restaurant1.interest.toString())) return -1;
-      return 1;
+    let tmpHours = trip.mealHours;
+    let tripPax = trip.pax;
+    trip.restaurantObjects = [];
+    trip.restaurants = [];
+
+    restaurants.forEach((restaurant) => {
+      if (
+        restaurant.price * tripPax <= trip.restaurantBudget &&
+        tmpHours >= 2
+      ) {
+        trip.restaurants.push(restaurant['_id'].toString());
+        trip.restaurantObjects.push(restaurant);
+        trip.restaurantBudget -= restaurant.price * tripPax;
+        tmpHours -= 2;
+      }
     });
 
-    return restaurants;
+    // restaurants.sort((restaurant1, restaurant2) => {
+    //   if (trip.interests.includes(restaurant1.interest.toString())) return -1;
+    //   return 1;
+    // });
+
+    return;
   }
 
   async updateRestaurantById(
