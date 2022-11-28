@@ -33,10 +33,22 @@ export class Trip {
   pax: number;
 
   @Prop({ required: true })
-  budget: number;
+  accommodationBudget: number;
+  
+  @Prop({ required: true })
+  restaurantBudget: number;
 
   @Prop({ required: true })
-  previousBudget: number;
+  vehicleBudget: number;
+
+  @Prop({ required: true })
+  attractionBudget: number;
+
+  @Prop()
+  estimatedBudget: number;
+
+  // @Prop({ required: true })
+  // previousBudget: number;
 
   @Prop()
   interests: string[];
@@ -70,6 +82,9 @@ export class Trip {
 
   @Prop({ required: true })
   timestamp: Date;
+
+  @Prop()
+  maxDistance: number;
 }
 
 export const TripSchema = SchemaFactory.createForClass(Trip);

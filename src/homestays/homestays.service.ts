@@ -121,7 +121,7 @@ export class HomestaysService {
             coordinates: [trip.long, trip.lat],
           },
           $minDistance: 0, // minimum 0 meters
-          $maxDistance: 300000, // default 300 kilometers
+          $maxDistance: trip.maxDistance, // default 300 kilometers= 300000
         },
       },
     });
@@ -134,13 +134,13 @@ export class HomestaysService {
         if (
           room.pax >= trip.pax &&
           room.availability > 0 &&
-          room.price <= trip.budget
+          room.price <= trip.accommodationBudget
         ) {
           trip.homestays = [homestay['_id']];
           trip.homestayObjects = [homestay];
           trip.rooms = [room['_id']];
           trip.roomObjects = [room];
-          trip.budget -= room.price;
+          trip.accommodationBudget -= room.price;
           return;
         }
       });

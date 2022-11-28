@@ -21,3 +21,5 @@ data.forEach((d) => {
 
 const result = db.homestays.insertMany(data);
 print(result);
+
+// script file like this ^ every file aims to save the json into mongodb haoo

@@ -26,4 +26,3 @@ print('restaurant');
 load('script_restaurants.js');
 print('vehicle');
 load('script_vehicles.js');
-load('script_reservations.js');

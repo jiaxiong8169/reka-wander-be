@@ -1,4 +1,5 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { bedType } from 'src/dto/bedType';
 
 @Schema({
   id: true,
@@ -27,8 +28,8 @@ export class Room {
   @Prop()
   availability: number;
 
-  @Prop()
-  bedTypes: string[];
+  @Prop(raw(bedType))
+  bedTypes: bedType;
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);

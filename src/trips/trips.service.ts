@@ -43,91 +43,92 @@ export class TripsService {
   // recommendation now will not attempt to create a trip
   async getTripRecommendations(trip: TripDto): Promise<TripDto> {
     // get recommendations
-    trip.previousBudget = trip.budget;
+    // trip.previousBudget = trip.budget;
+    console.log('hello111');
     await this.hotelsService.findHotelByFeatures(trip);
     await this.homestaysService.findHomestayByFeatures(trip);
+    let tmpBudget = trip.accommodationBudget;
     await this.vehiclesService.findVehicleByFeatures(trip);
-    const attractions = await this.attractionsService.findAttractionsByFeatures(
-      trip,
-    );
-    const restaurants = await this.restaurantsService.findRestaurantsByFeatures(
-      trip,
-    );
+    tmpBudget += trip.vehicleBudget;
+    await this.attractionsService.findAttractionsByFeatures(trip);
+    tmpBudget += trip.attractionBudget;
+    await this.restaurantsService.findRestaurantsByFeatures(trip);
+    tmpBudget += trip.restaurantBudget;
 
     // use 2 pointers method to give equal priority to restaurants and attractions
-    trip.attractionObjects = [];
-    trip.attractions = [];
-    trip.restaurantObjects = [];
-    trip.restaurants = [];
-    let left1 = 0;
-    let left2 = 0;
-    let tmpBudget = trip.budget;
-    let tmpHours = trip.hours;
-    while (
-      tmpBudget > 0 &&
-      tmpHours > 0 &&
-      left1 < restaurants.length &&
-      left2 < attractions.length
-    ) {
-      if (left1 <= left2 && left1 !== -1) {
-        // for restaurant, make sure that the price is within budget and hours within 2
-        if (restaurants[left1].price * trip.pax <= tmpBudget && tmpHours >= 2) {
-          trip.restaurants.push(restaurants[left1]['_id'].toString());
-          trip.restaurantObjects.push(restaurants[left1]);
-          tmpBudget -= restaurants[left1].price * trip.pax;
-          tmpHours -= 2;
-          left1++;
-        } else {
-          left1 = -1;
-        }
-      } else if (left2 !== -1) {
-        // for attractions, make sure that the price is within budget and hours within trip.hours
-        if (
-          attractions[left2].price * trip.pax <= tmpBudget &&
-          tmpHours >= attractions[left2].hours
-        ) {
-          trip.attractions.push(attractions[left2]['_id'].toString());
-          trip.attractionObjects.push(attractions[left2]);
-          tmpBudget -= attractions[left2].price * trip.pax;
-          tmpHours -= attractions[left2].hours;
-          left2++;
-        } else {
-          left2 = -1;
-        }
-      } else {
-        break;
-      }
-    }
+    // trip.attractionObjects = [];
+    // trip.attractions = [];
+    // trip.restaurantObjects = [];
+    // trip.restaurants = [];
+    // let left1 = 0;
+    // let left2 = 0;
+    //
+    // let tmpHours = trip.hours;
+    // while (
+    //   tmpBudget > 0 &&
+    //   tmpHours > 0 &&
+    //   left1 < restaurants.length &&
+    //   left2 < attractions.length
+    // ) {
+    //   if (left1 <= left2 && left1 !== -1) {
+    //     // for restaurant, make sure that the price is within budget and hours within 2
+    //     if (restaurants[left1].price * trip.pax <= tmpBudget && tmpHours >= 2) {
+    //       trip.restaurants.push(restaurants[left1]['_id'].toString());
+    //       trip.restaurantObjects.push(restaurants[left1]);
+    //       tmpBudget -= restaurants[left1].price * trip.pax;
+    //       tmpHours -= 2;
+    //       left1++;
+    //     } else {
+    //       left1 = -1;
+    //     }
+    //   } else if (left2 !== -1) {
+    //     // for attractions, make sure that the price is within budget and hours within trip.hours
+    //     if (
+    //       attractions[left2].price * trip.pax <= tmpBudget &&
+    //       tmpHours >= attractions[left2].hours
+    //     ) {
+    //       trip.attractions.push(attractions[left2]['_id'].toString());
+    //       trip.attractionObjects.push(attractions[left2]);
+    //       tmpBudget -= attractions[left2].price * trip.pax;
+    //       tmpHours -= attractions[left2].hours;
+    //       left2++;
+    //     } else {
+    //       left2 = -1;
+    //     }
+    //   } else {
+    //     break;
+    //   }
+    // }
 
-    while (left1 !== -1 && left1 < restaurants.length) {
-      if (restaurants[left1].price * trip.pax <= tmpBudget && tmpHours >= 2) {
-        trip.restaurants.push(restaurants[left1]['_id'].toString());
-        trip.restaurantObjects.push(restaurants[left1]);
-        tmpBudget -= restaurants[left1].price * trip.pax;
-        tmpHours -= 2;
-        left1++;
-      } else {
-        break;
-      }
-    }
+    // while (left1 !== -1 && left1 < restaurants.length) {
+    //   if (restaurants[left1].price * trip.pax <= tmpBudget && tmpHours >= 2) {
+    //     trip.restaurants.push(restaurants[left1]['_id'].toString());
+    //     trip.restaurantObjects.push(restaurants[left1]);
+    //     tmpBudget -= restaurants[left1].price * trip.pax;
+    //     tmpHours -= 2;
+    //     left1++;
+    //   } else {
+    //     break;
+    //   }
+    // }
 
-    while (left2 !== -1 && left2 < attractions.length) {
-      if (
-        attractions[left2].price * trip.pax <= tmpBudget &&
-        tmpHours >= attractions[left2].hours
-      ) {
-        trip.attractions.push(attractions[left2]['_id'].toString());
-        trip.attractionObjects.push(attractions[left2]);
-        tmpBudget -= attractions[left2].price * trip.pax;
-        tmpHours -= attractions[left2].hours;
-        left2++;
-      } else {
-        break;
-      }
-    }
+    // while (left2 !== -1 && left2 < attractions.length) {
+    //   if (
+    //     attractions[left2].price * trip.pax <= tmpBudget &&
+    //     tmpHours >= attractions[left2].hours
+    //   ) {
+    //     trip.attractions.push(attractions[left2]['_id'].toString());
+    //     trip.attractionObjects.push(attractions[left2]);
+    //     tmpBudget -= attractions[left2].price * trip.pax;
+    //     tmpHours -= attractions[left2].hours;
+    //     left2++;
+    //   } else {
+    //     break;
+    //   }
+    // }
 
     // set remaining budget
-    trip.budget = tmpBudget;
+    trip.estimatedBudget = tmpBudget;
 
     // set default values
     if (!trip.hotelObjects) trip.hotelObjects = [];
@@ -151,10 +152,35 @@ export class TripsService {
   }
 
   async create(@Body() tripDto: TripDto): Promise<Trip> {
-    const createdTrip = new this.tripModel(tripDto);
-    return createdTrip.save().catch((e) => {
-      throw Error(e.message);
-    });
+    console.log(tripDto.userId)
+    if (tripDto.userId) {
+      // create a trip only if trip userId exists
+      // get user
+      try {
+        const user = await this.userModel.findOne({ _id: tripDto.userId });
+
+        // if user is found, create a new trip
+        if (user) {
+          // create a new trip
+          const createdTrip = new this.tripModel(tripDto);
+          tripDto.id = createdTrip['id'];
+
+          // add into user trip list
+          user.trips.push(createdTrip['id']);
+          await this.userModel.findOneAndUpdate(
+            { _id: user['id'] },
+            { trips: user.trips },
+            {
+              new: true,
+              runValidators: true,
+            },
+          );
+          return createdTrip.save().catch((e) => {
+            throw Error(e.message);
+          });
+        }
+      } catch (err) {}
+    }
   }
 
   async deleteOneTripByTripId(tripId: mongoose.Types.ObjectId): Promise<Trip> {

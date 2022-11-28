@@ -1,3 +1,4 @@
+import { bedType } from './bedType';
 export class RoomDto {
   price: number;
 
@@ -11,5 +12,5 @@ export class RoomDto {
 
   quantity: number;
 
-  bedTypes: string[];
+  bedTypes: bedType;
 }
