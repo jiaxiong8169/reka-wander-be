@@ -6,4 +6,6 @@ export class PackageDto {
   hours: number;
 
   location: string;
+
+  link: string;
 }
