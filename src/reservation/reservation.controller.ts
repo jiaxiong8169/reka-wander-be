@@ -50,6 +50,7 @@ export class ReservationsController {
     try {
       // assign timestamp to current timestamp
       body.timestamp = new Date();
+      // body.timestamp = new Date();
       const reservation = await this.reservationsService.create(body);
       return reservation;
     } catch (e: any) {

@@ -85,6 +85,9 @@ export class Trip {
 
   @Prop()
   maxDistance: number;
+
+  @Prop()
+  destination: string;
 }
 
 export const TripSchema = SchemaFactory.createForClass(Trip);

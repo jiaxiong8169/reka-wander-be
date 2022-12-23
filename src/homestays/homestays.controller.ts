@@ -61,6 +61,7 @@ export class HomestaysController {
     try {
       body.timestamp = new Date();
       const homestay = await this.homestaysService.create(body);
+
       return homestay;
     } catch (e: any) {
       throw new BadRequestException(e.message);
