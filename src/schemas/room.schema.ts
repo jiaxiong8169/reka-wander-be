@@ -23,7 +23,7 @@ export class Room {
   pax: number;
 
   @Prop()
-  thumbnailSrc: string;
+  thumnailSrc: string;
 
   @Prop()
   availability: number;

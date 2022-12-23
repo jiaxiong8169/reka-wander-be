@@ -74,5 +74,7 @@ export class TripDto {
 
   maxDistance: number;
 
+  destination: string;
+
   // previousBudget: number;
 }

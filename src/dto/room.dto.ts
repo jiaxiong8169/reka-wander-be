@@ -6,7 +6,7 @@ export class RoomDto {
 
   pax: number;
 
-  thumbnailSrc: string;
+  thumnailSrc: string;
 
   availability: number;
 
