@@ -13,7 +13,7 @@ export class ReservationDto {
 
   selectedItems: string[];
 
-  isDone: boolean;
+  status: string;
 
   startDate: Date;
 

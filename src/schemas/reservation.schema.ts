@@ -39,7 +39,7 @@ export class Reservation {
   totalPrice: number;
 
   @Prop()
-  isDone: boolean;
+  status: string;
 
   @Prop()
   startDate: Date;
