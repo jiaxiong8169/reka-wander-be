@@ -63,7 +63,7 @@ export class ReservationsService {
       filter,
       SEARCH_FIELDS['reservations'],
     );
-    let query = this.reservationModel.find(effectiveFilter);
+    let query = this.reservationModel.find(effectiveFilter).populate('targetId');
     if (sort) {
       query = query.sort(sort);
     }

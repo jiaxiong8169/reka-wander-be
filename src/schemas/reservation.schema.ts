@@ -17,8 +17,11 @@ export type ReservationDocument = Reservation & mongoose.Document;
 export class Reservation {
   _id: mongoose.Schema.Types.ObjectId;
 
-  @Prop({ required: true })
-  targetId: string;
+  // @Prop({ required: true })
+  // targetId: string;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, refPath: 'type' })
+  targetId: mongoose.Schema.Types.ObjectId;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   userId: mongoose.Schema.Types.ObjectId;
@@ -26,7 +29,15 @@ export class Reservation {
   @Prop()
   timestamp: Date;
 
-  @Prop()
+  // @Prop()
+  // type: string;
+
+  @Prop({
+    type: String,
+    required: true,
+    enum: ['Hotel', 'Homestay', 'Guide', 'Vehicle']
+  })
+  
   type: string;
 
   @Prop()
