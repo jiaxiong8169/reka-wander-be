@@ -25,7 +25,7 @@ export class ReservationsService {
     return this.reservationModel
       .findOne({
         _id: reservationId,
-      })
+      }).populate(['targetId', 'userId'])
       .orFail(new Error(ExceptionMessage.ReservationNotFound));
   }
 
@@ -63,7 +63,7 @@ export class ReservationsService {
       filter,
       SEARCH_FIELDS['reservations'],
     );
-    let query = this.reservationModel.find(effectiveFilter).populate('targetId');
+    let query = this.reservationModel.find(effectiveFilter).populate(['targetId', 'userId']);
     if (sort) {
       query = query.sort(sort);
     }
