@@ -37,12 +37,11 @@ export class ReservationsController {
   async getOneReservationById(
     @Param('reservationId') reservationId: mongoose.Types.ObjectId,
   ) {
-    // return {data: this.reservationsService
-    //   .findOneReservationById(reservationId)
-    //   .catch((e) => {
-    //     throw new NotFoundException(e.message);
-    //   }), testing: this.reservationsService.getReservationAvailability(reservationId)};
-    return this.reservationsService.getReservationAvailability(reservationId);
+    return {data: await this.reservationsService
+      .findOneReservationById(reservationId)
+      .catch((e) => {
+        throw new NotFoundException(e.message);
+      }), total: await this.reservationsService.getReservationAvailability(reservationId)};
   }
 
   @Post()
@@ -51,9 +50,22 @@ export class ReservationsController {
     try {
       // assign timestamp to current timestamp
       body.timestamp = new Date();
-      // body.timestamp = new Date();
-      const reservation = await this.reservationsService.create(body);
-      return reservation;
+      let difference = new Date(body.endDate).getTime() - new Date(body.startDate).getTime();
+      let dayDifference = Math.ceil(difference / (1000 * 3600 * 24));
+      let startDate = new Date(body.startDate);
+      let endDate = new Date();
+      endDate.setDate(startDate.getDate() + 1);
+      let reservation;
+      let arr = [];
+      for (let i = 0; i < dayDifference; i++) {
+        body.startDate = startDate
+        body.endDate = endDate
+        reservation = await this.reservationsService.create(body);
+        arr.push(reservation)
+        startDate.setDate(startDate.getDate() + 1)
+        endDate.setDate(endDate.getDate() + 1)
+      }
+      return arr;
     } catch (e: any) {
       throw new BadRequestException(e.message);
     }

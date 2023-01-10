@@ -40,6 +40,7 @@ export class ReservationsService {
   }
 
   async create(@Body() reservationDto: ReservationDto): Promise<Reservation> {
+    
     const createdReservation = new this.reservationModel(reservationDto);
     return createdReservation.save().catch((e) => {
       console.log(e);
@@ -100,16 +101,14 @@ export class ReservationsService {
     let reservedCount = 0;
     if(reservation.type == "Hotel" || reservation.type == "Homestay"){
       availability = reservation.targetId['rooms'].find(element => element.id == roomId).availability;
-      reservedCount = await this.reservationModel.find({ roomId: roomId , startDate: startDate}).countDocuments();
+      reservedCount = await this.reservationModel.find({ roomId: roomId , startDate: startDate, status: 'pending' || 'approved'}).countDocuments();
       availability = availability - reservedCount;
     }else if(reservation.type == "Vehicle"){
 
     }else if(reservation.type == "Guide"){
 
     }
-
     console.log(availability);
-
     return availability;
     // return this.reservationModel.find(effectiveFilter).countDocuments();
   }
