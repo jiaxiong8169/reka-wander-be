@@ -37,14 +37,20 @@ export class Reservation {
     required: true,
     enum: ['Hotel', 'Homestay', 'Guide', 'Vehicle']
   })
-  
+
   type: string;
 
   @Prop()
   reservedName: string;
 
+  // @Prop()
+  // selectedItems: string[];
+
   @Prop()
-  selectedItems: string[];
+  roomId: string;
+
+  @Prop()
+  packageId: string;
 
   @Prop()
   totalPrice: number;

@@ -37,11 +37,12 @@ export class ReservationsController {
   async getOneReservationById(
     @Param('reservationId') reservationId: mongoose.Types.ObjectId,
   ) {
-    return this.reservationsService
-      .findOneReservationById(reservationId)
-      .catch((e) => {
-        throw new NotFoundException(e.message);
-      });
+    // return {data: this.reservationsService
+    //   .findOneReservationById(reservationId)
+    //   .catch((e) => {
+    //     throw new NotFoundException(e.message);
+    //   }), testing: this.reservationsService.getReservationAvailability(reservationId)};
+    return this.reservationsService.getReservationAvailability(reservationId);
   }
 
   @Post()
@@ -85,5 +86,16 @@ export class ReservationsController {
     } catch (e: any) {
       throw new BadRequestException(e.message);
     }
+  }
+
+  @Delete()
+  @RequirePermissions(Permission.DeleteReservation)
+  async deleteAllReservation(
+  ) {
+    return this.reservationsService
+      .deleteAllReservations()
+      .catch((e: any) => {
+        throw new NotFoundException(e.message);
+      });
   }
 }

@@ -85,4 +85,39 @@ export class ReservationsService {
     );
     return this.reservationModel.find(effectiveFilter).countDocuments();
   }
+
+  async getReservationAvailability(
+    reservationId: mongoose.Types.ObjectId | string,
+  ): Promise<number> {
+    let reservation = await this.reservationModel
+    .findOne({
+      _id: reservationId,
+    }).populate(['targetId', 'userId'])
+    .orFail(new Error(ExceptionMessage.ReservationNotFound));
+    let roomId = reservation.roomId;
+    let startDate = reservation.startDate;
+    let availability = 0;
+    let reservedCount = 0;
+    if(reservation.type == "Hotel" || reservation.type == "Homestay"){
+      availability = reservation.targetId['rooms'].find(element => element.id == roomId).availability;
+      reservedCount = await this.reservationModel.find({ roomId: roomId , startDate: startDate}).countDocuments();
+      availability = availability - reservedCount;
+    }else if(reservation.type == "Vehicle"){
+
+    }else if(reservation.type == "Guide"){
+
+    }
+
+    console.log(availability);
+
+    return availability;
+    // return this.reservationModel.find(effectiveFilter).countDocuments();
+  }
+
+  async deleteAllReservations() {
+    // fallback to empty filter if filter is not provided
+    // find with empty filter will return all documents
+    
+    return this.reservationModel.deleteMany();
+  }
 }

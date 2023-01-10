@@ -11,7 +11,13 @@ export class ReservationDto {
 
   totalPrice: number;
 
-  selectedItems: string[];
+  // selectedItems: string[];
+
+  roomId: string;
+
+  packageId: string;
+
+  vehicleId: string;
 
   status: string;
 
