@@ -110,17 +110,22 @@ export class ReservationsService {
         _id: reservationId,
       }).populate(['targetId', 'userId'])
       .orFail(new Error(ExceptionMessage.ReservationNotFound));
-    let roomId = reservation.roomId;
+    let id;
     let startDate = reservation.startDate;
     let availability = 0;
     let reservedCount = 0;
     if (reservation.type == "Hotel" || reservation.type == "Homestay") {
-      availability = reservation.targetId['rooms'].find(element => element.id == roomId).availability;
-      reservedCount = await this.reservationModel.find({ roomId: roomId, startDate: startDate, status: 'pending' || 'approved' }).countDocuments();
+      id = reservation.roomId;
+      availability = reservation.targetId['rooms'].find(element => element.id == id).availability;
+      reservedCount = await this.reservationModel.find({ roomId: id, startDate: startDate, status: 'pending' || 'approved' }).countDocuments();
       availability = availability - reservedCount;
     } else if (reservation.type == "Vehicle") {
-
+      id = reservation.targetId;
+      availability = reservation.targetId['availability'];
+      reservedCount = await this.reservationModel.find({ targetId: id, startDate: startDate, type: 'Vehicle', status: 'pending' || 'approved' }).countDocuments();
+      availability = availability - reservedCount;
     } else if (reservation.type == "Guide") {
+      id = reservation.packageId;
 
     }
     console.log(availability);
@@ -205,22 +210,22 @@ export class ReservationsService {
           })
           .orFail(new Error(ExceptionMessage.VehicleNotFound));
 
-          start = new Date(tempDate);
-          for (let j = 0; j < dayDifference; j++) {
-            availability = item.availability;
-            console.log(availability)
-            reservedCount = await this.reservationModel.find({ vehicleId: item.id, startDate: start, status: 'pending' || 'approved' }).countDocuments();
-            console.log(reservedCount);
-            availability = availability - reservedCount;
-            minAvailability.push(availability)
-            start.setDate(start.getDate() + 1)
-            console.log(minAvailability);
-          }
-          let min = Math.min(...minAvailability);
-          console.log(min)
-          item.availability = min
-          console.log(item)
-          return item;
+        start = new Date(tempDate);
+        for (let j = 0; j < dayDifference; j++) {
+          availability = item.availability;
+          console.log(availability)
+          reservedCount = await this.reservationModel.find({ vehicleId: item.id, startDate: start, status: 'pending' || 'approved' }).countDocuments();
+          console.log(reservedCount);
+          availability = availability - reservedCount;
+          minAvailability.push(availability)
+          start.setDate(start.getDate() + 1)
+          console.log(minAvailability);
+        }
+        let min = Math.min(...minAvailability);
+        console.log(min)
+        item['availability'] = min;
+        console.log(item)
+        return item;
         break;
       case "guide":
         item = await this.guideModel
