@@ -8,4 +8,6 @@ export class PackageDto {
   location: string;
 
   link: string;
+
+  availability: number;
 }

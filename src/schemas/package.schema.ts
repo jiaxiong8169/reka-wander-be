@@ -26,6 +26,9 @@ export class Package {
 
   @Prop()
   link: string;
+
+  @Prop()
+  availability: number;
 }
 
 export const PackageSchema = SchemaFactory.createForClass(Package);

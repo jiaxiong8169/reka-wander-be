@@ -131,15 +131,9 @@ export class ReservationsService {
   async getAvailabilityAccordingToStartDateEndDate(params: SearchAvailabilityQueryDto): Promise<Reservation[]> {
 
     let { startDate, endDate, type, id } = params;
-    console.log(startDate + ' startDate')
-    console.log(endDate + 'endDate')
-    console.log(type + ' type')
-    console.log(id + ' target id')
     let availability = 0;
     let reservedCount = 0;
-    let item;
-    let rooms;
-    let roomId;
+    let item, rooms, roomId, packageId, packages;
     let difference = new Date(endDate).getTime() - new Date(startDate).getTime();
     let dayDifference = Math.ceil(difference / (1000 * 3600 * 24));
     let tempDate = new Date(startDate).toDateString()
@@ -174,6 +168,7 @@ export class ReservationsService {
           console.log(rooms)
           minAvailability = []
         }
+        return rooms;
         break;
       case "homestay":
         item = await this.homestayModel
@@ -201,6 +196,7 @@ export class ReservationsService {
           console.log(rooms)
           minAvailability = []
         }
+        return rooms;
         break;
       case "vehicle":
         item = await this.vehicleModel
@@ -208,7 +204,23 @@ export class ReservationsService {
             _id: id,
           })
           .orFail(new Error(ExceptionMessage.VehicleNotFound));
-        rooms = item.rooms;
+
+          start = new Date(tempDate);
+          for (let j = 0; j < dayDifference; j++) {
+            availability = item.availability;
+            console.log(availability)
+            reservedCount = await this.reservationModel.find({ vehicleId: item.id, startDate: start, status: 'pending' || 'approved' }).countDocuments();
+            console.log(reservedCount);
+            availability = availability - reservedCount;
+            minAvailability.push(availability)
+            start.setDate(start.getDate() + 1)
+            console.log(minAvailability);
+          }
+          let min = Math.min(...minAvailability);
+          console.log(min)
+          item.availability = min
+          console.log(item)
+          return item;
         break;
       case "guide":
         item = await this.guideModel
@@ -216,24 +228,34 @@ export class ReservationsService {
             _id: id,
           })
           .orFail(new Error(ExceptionMessage.GuideNotFound));
-        rooms = item.packages;
+        packages = item.packages;
+
+        for (let i = 0; i < packages.length; i++) {
+          start = new Date(tempDate);
+          for (let j = 0; j < dayDifference; j++) {
+            availability = packages[i].availability;
+            // console.log(packages[i].availability)
+            packageId = packages[i].id.toString();
+            // console.log(packageId)
+            reservedCount = await this.reservationModel.find({ packageId: packageId, startDate: start, status: 'pending' || 'approved' }).countDocuments();
+            // console.log(reservedCount);
+            availability = availability - reservedCount;
+            minAvailability.push(availability)
+            start.setDate(start.getDate() + 1)
+            console.log(minAvailability);
+          }
+          let min = Math.min(...minAvailability);
+          // console.log(min)
+          packages[i].availability = min
+          // console.log(packages)
+          minAvailability = []
+        }
+
+        return packages;
         break;
       default:
         break;
-
     }
-
-
-    // if (type == "Hotel" || type == "Homestay") {
-    //   availability = reservation.targetId['rooms'].find(element => element.id == roomId).availability;
-    //   reservedCount = await this.reservationModel.find({ roomId: roomId, startDate: startDate, status: 'pending' || 'approved' }).countDocuments();
-    //   availability = availability - reservedCount;
-    // } else if (reservation.type == "Vehicle") {
-
-    // } else if (reservation.type == "Guide") {
-
-    // }
-
     return;
   }
 
