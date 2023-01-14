@@ -111,7 +111,8 @@ export class ReservationsService {
       }).populate(['targetId', 'userId'])
       .orFail(new Error(ExceptionMessage.ReservationNotFound));
     let id;
-    let startDate = reservation.startDate;
+    let tempDate = new Date(reservation.startDate).toDateString()
+    let startDate = new Date(tempDate);
     let availability = 0;
     let reservedCount = 0;
     if (reservation.type == "Hotel" || reservation.type == "Homestay") {
