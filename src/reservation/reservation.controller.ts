@@ -17,11 +17,12 @@ import { ReservationsService } from './reservation.service';
 import * as mongoose from 'mongoose';
 import { ReservationDto } from 'src/dto/reservation.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { SearchAvailabilityQueryDto } from 'src/dto/search-availability.dto';
 
 @ApiTags('reservations')
 @Controller('reservations')
 export class ReservationsController {
-  constructor(private reservationsService: ReservationsService) {}
+  constructor(private reservationsService: ReservationsService) { }
 
   @Get()
   @RequirePermissions(Permission.ReadAllReservations)
@@ -32,16 +33,25 @@ export class ReservationsController {
     };
   }
 
+  @Get('availability')
+  @RequirePermissions(Permission.ReadAllReservations)
+  async getAvailabilityAccordingToStartDateEndDate(@Query() query: SearchAvailabilityQueryDto) {
+    return await this.reservationsService.getAvailabilityAccordingToStartDateEndDate(query)
+      ;
+  }
+
   @Get(':reservationId')
   @RequirePermissions(Permission.ReadReservation)
   async getOneReservationById(
     @Param('reservationId') reservationId: mongoose.Types.ObjectId,
   ) {
-    return {data: await this.reservationsService
-      .findOneReservationById(reservationId)
-      .catch((e) => {
-        throw new NotFoundException(e.message);
-      }), total: await this.reservationsService.getReservationAvailability(reservationId)};
+    return {
+      data: await this.reservationsService
+        .findOneReservationById(reservationId)
+        .catch((e) => {
+          throw new NotFoundException(e.message);
+        }), total: await this.reservationsService.getReservationAvailability(reservationId)
+    };
   }
 
   @Post()
@@ -52,9 +62,10 @@ export class ReservationsController {
       body.timestamp = new Date();
       let difference = new Date(body.endDate).getTime() - new Date(body.startDate).getTime();
       let dayDifference = Math.ceil(difference / (1000 * 3600 * 24));
-      let startDate = new Date(body.startDate);
-      let endDate = new Date();
-      endDate.setDate(startDate.getDate() + 1);
+      let tempDate = new Date(body.startDate).toDateString()
+      let startDate = new Date(tempDate);
+      let endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 1)
       let reservation;
       let arr = [];
       for (let i = 0; i < dayDifference; i++) {
@@ -110,4 +121,6 @@ export class ReservationsController {
         throw new NotFoundException(e.message);
       });
   }
+
+
 }
